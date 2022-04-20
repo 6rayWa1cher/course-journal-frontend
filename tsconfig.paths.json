@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "components/*": [
+        "./src/components/*"
+      ],
+      "@redux/*": [
+        "./src/redux/*"
+      ],
+      "service/*": [
+        "./src/service/*"
+      ],
+      "utils/*": [
+        "./src/utils/*"
+      ],
+      "validation/*": [
+        "./src/validation/*"
+      ],
+      "api/*": [
+        "./src/api/*"
+      ]
+    }
+  }
+}
