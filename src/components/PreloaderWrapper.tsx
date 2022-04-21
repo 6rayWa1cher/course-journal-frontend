@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import { CircularProgress } from "@mui/material";
-import { initAppThunk, stateSelector } from "@redux/app";
+import { initAppThunk, stateSelector, WebApplicationState } from "@redux/app";
 import { useAppDispatch } from "@redux/utils";
 import MyBackdrop from "./MyBackdrop";
 
@@ -16,14 +16,14 @@ const PreloaderWrapper = ({ children }: PreloaderWrapperProps) => {
   const error = useSelector(stateSelector);
 
   useEffect(() => {
-    if (loadingState === "idle") {
+    if (loadingState === WebApplicationState.IDLE) {
       dispatch(initAppThunk());
     }
   }, [loadingState, dispatch]);
-
-  const initialLoading = loadingState === "idle" || loadingState === "loading";
+  const initialLoading =
+    loadingState === WebApplicationState.IDLE ||
+    loadingState === WebApplicationState.LOADING;
   const loadingCausedError = error == null;
-
   return (
     <>
       {initialLoading && (

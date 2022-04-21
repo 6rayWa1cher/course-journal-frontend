@@ -7,9 +7,9 @@ import { CircularProgress } from "@mui/material";
 
 const Logout = () => {
   const dispatch = useTypedDispatch();
+  // uwc-debug
   const loadingFunc = useCallback(() => dispatch(logoutThunk()), [dispatch]);
-  const { idle, loading } = useLoadingPlain(loadingFunc, { immediate: true });
-
+  const { idle, loading } = useLoadingPlain(loadingFunc);
   if (idle || loading) {
     return (
       <MyBackdrop>

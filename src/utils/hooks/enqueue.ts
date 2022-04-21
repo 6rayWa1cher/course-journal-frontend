@@ -17,13 +17,15 @@ const enqueueSuccess: EnqueueFunc = (msg, params) => toast.success(msg, params);
 
 const enqueueDefault: EnqueueFunc = (msg, params) => toast(msg, params);
 
+const allEnqueues = {
+  enqueueDefault,
+  enqueueError,
+  enqueueInfo,
+  enqueueSuccess,
+  enqueueWarning,
+  enqueueSnackbar,
+} as const;
+
 export const useMySnackbar = () => {
-  return {
-    enqueueDefault,
-    enqueueError,
-    enqueueInfo,
-    enqueueSuccess,
-    enqueueWarning,
-    enqueueSnackbar,
-  } as const;
+  return allEnqueues;
 };

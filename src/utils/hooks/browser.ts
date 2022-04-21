@@ -26,6 +26,6 @@ export const useNumberParams = (): Nullable<Record<string, number>> => {
 
 export const useDocumentTitle = (title: string) => {
   useEffect(() => {
-    document.title = (title ? `${title} - ` : "") + "XyDx Product";
+    document.title = (title ? `${title} - ` : "") + "Журнал предмета";
   }, [title]);
 };

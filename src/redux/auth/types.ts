@@ -13,7 +13,7 @@ export interface AuthBag {
 
 export interface AuthState {
   bag: AuthBag | null;
-  username: string | null;
+  currentRequestId: string | null;
 }
 
 export const authPrefix = "auth";

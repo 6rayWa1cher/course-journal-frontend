@@ -1,10 +1,16 @@
 import { SerializedError } from "@reduxjs/toolkit";
 
-export type WebApplicationState = "idle" | "loading" | "running" | "error";
+export enum WebApplicationState {
+  IDLE = "idle",
+  LOADING = "loading",
+  RUNNING = "running",
+  ERROR = "error",
+}
 
 export interface AppState {
   state: WebApplicationState;
   error?: SerializedError;
+  currentRequestId?: string;
 }
 
 export const appPrefix = "app";

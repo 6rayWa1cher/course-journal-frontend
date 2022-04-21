@@ -4,7 +4,7 @@ import type { RootState } from "@redux/types";
 import { selfUserSelector } from "@redux/users";
 import { appPrefix, Stage } from "./types";
 
-const appSelector = (state: RootState) => state[appPrefix];
+export const appSelector = (state: RootState) => state[appPrefix];
 
 export const stateSelector = createSelector(
   appSelector,

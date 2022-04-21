@@ -20,16 +20,17 @@ import { useSelector } from "react-redux";
 import PathBreadcrumb from "./PathBreadcrumb";
 
 const Copyright = (props: TypographyProps) => {
+  const yearRange = (() => {
+    const yearOfProduction = 2022;
+    const currentYear = new Date().getFullYear();
+    return yearOfProduction === currentYear
+      ? currentYear
+      : `${yearOfProduction}-${currentYear}`;
+  })();
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Сделано с ❤️ командой XyDx "}
-      {", 2022-"}
-      {new Date().getFullYear()}
+    <Typography variant="body2" color="text.secondary" {...props}>
+      {"Сделано с ❤️ 6rayWa1cher и KRiNGU, "}
+      {yearRange}
       {"."}
     </Typography>
   );
@@ -139,22 +140,28 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List>{mainListItems}</List>
-          <Divider />
-          <List>{secondaryListItems}</List>
+          <Container sx={{ width: drawerWidth }} disableGutters>
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List>{mainListItems}</List>
+            <Divider />
+            <List>{secondaryListItems}</List>
+            <Divider />
+            <Container maxWidth="xs" sx={{ whiteSpace: "normal" }}>
+              <Copyright sx={{ pt: 4 }} />
+            </Container>
+          </Container>
         </Drawer>
         <Box
           component="main"
@@ -171,7 +178,6 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             {children}
-            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>

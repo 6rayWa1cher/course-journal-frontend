@@ -4,6 +4,7 @@ import {
   refreshTokenSelector,
   userIdSelector,
 } from "@redux/auth";
+import { setBag } from "@redux/auth/action";
 import type { Store } from "@redux/types";
 import createAuthRefreshInterceptor, {
   AxiosAuthRefreshRequestConfig,
@@ -27,6 +28,7 @@ export const createWrappedAuthApiInterceptor = (store: Store) => {
       .then((res) => {
         const authBag = convertAuthBagFromApi(res.data);
         saveAuthBag(authBag);
+        store.dispatch(setBag(authBag));
         failedRequest.response.config.headers["Authorization"] =
           "Bearer " + getAccessToken(store);
         return Promise.resolve();

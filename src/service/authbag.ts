@@ -18,14 +18,14 @@ export const convertAuthBagFromApi = (apiBag: ApiAuthBag): AuthBag => {
   } = apiBag;
   return {
     accessToken: {
-      value: accessToken as string,
-      expiringAt: accessTokenExpiringAt as string,
+      value: accessToken,
+      expiringAt: accessTokenExpiringAt,
     },
     refreshToken: {
-      value: refreshToken as string,
-      expiringAt: refreshTokenExpiringAt as string,
+      value: refreshToken,
+      expiringAt: refreshTokenExpiringAt,
     },
-    userId: userId as number,
+    userId: userId,
   };
 };
 
