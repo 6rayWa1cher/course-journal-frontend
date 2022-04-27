@@ -1,8 +1,8 @@
-import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { loadAuthBag, removeAuthBag } from "service/authbag";
 import { setBag } from "./action";
 import { logoutThunk, loginThunk } from "./thunk";
-import { AuthBag, authPrefix, AuthState } from "./types";
+import { authPrefix, AuthState } from "./types";
 
 const initialState: AuthState = { bag: null, currentRequestId: null };
 

@@ -19,6 +19,9 @@
       ],
       "api/*": [
         "./src/api/*"
+      ],
+      "models/*": [
+        "./src/models/*"
       ]
     }
   }

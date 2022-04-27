@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState, useCallback } from "react";
+import { styled, useTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -16,7 +16,6 @@ import { mainListItems, secondaryListItems } from "./ListItems";
 import { Outlet, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useMediaQuery } from "@mui/material";
-import { useSelector } from "react-redux";
 import PathBreadcrumb from "./PathBreadcrumb";
 
 const Copyright = (props: TypographyProps) => {
@@ -29,7 +28,7 @@ const Copyright = (props: TypographyProps) => {
   })();
   return (
     <Typography variant="body2" color="text.secondary" {...props}>
-      {"Сделано с ❤️ 6rayWa1cher и KRiNGU, "}
+      {"Сделано 6rayWa1cher и KRiNGU, "}
       {yearRange}
       {"."}
     </Typography>
@@ -85,6 +84,7 @@ const Drawer = styled(MuiDrawer, {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    overflow: "hidden",
     boxSizing: "border-box",
     ...(!open && {
       overflowX: "hidden",
@@ -100,8 +100,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const mdTheme = createTheme();
-
 export interface DashboardFrameProps {
   children: Children;
 }
@@ -111,77 +109,77 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const largeScreen = useMediaQuery(mdTheme.breakpoints.up("sm"));
-
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up("sm"));
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <PathBreadcrumb largeScreen={largeScreen} sx={{ flexGrow: 1 }} />
-            <LogoutButton />
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Container sx={{ width: drawerWidth }} disableGutters>
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                px: [1],
-              }}
-            >
-              <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-            <Divider />
-            <List>{mainListItems}</List>
-            <Divider />
-            <List>{secondaryListItems}</List>
-            <Divider />
-            <Container maxWidth="xs" sx={{ whiteSpace: "normal" }}>
-              <Copyright sx={{ pt: 4 }} />
-            </Container>
-          </Container>
-        </Drawer>
-        <Box
-          component="main"
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar position="absolute" open={open}>
+        <Toolbar
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
+            pr: "24px", // keep right padding when drawer closed
           }}
         >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {children}
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: "36px",
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <PathBreadcrumb largeScreen={largeScreen} sx={{ flexGrow: 1 }} />
+          <LogoutButton />
+        </Toolbar>
+      </AppBar>
+      <Drawer variant="permanent" open={open}>
+        <Container sx={{ width: drawerWidth }} disableGutters>
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              px: [1],
+            }}
+          >
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{secondaryListItems}</List>
+          <Divider />
+          <Container maxWidth="xs" sx={{ whiteSpace: "normal" }}>
+            <Copyright sx={{ pt: 4 }} />
           </Container>
-        </Box>
+        </Container>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) => {
+            console.log(theme.palette.mode);
+            return theme.palette.mode === "light"
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900];
+          },
+          flexGrow: 1,
+          height: "100vh",
+          overflow: "auto",
+        }}
+      >
+        <Toolbar />
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          {children}
+        </Container>
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 };
 

@@ -6,7 +6,7 @@ import {
 } from "service/authbag";
 import { authInvalidateApi, authLoginApi } from "api/auth";
 import { authSelector, refreshTokenSelector, userIdSelector } from "./selector";
-import { createAxiosAsyncThunk } from "@redux/utils";
+import { createAxiosAsyncThunk, serializeAxiosError } from "@redux/utils";
 import type { LoginRequest } from "api/types";
 import { usersGetSelfUserThunk } from "@redux/users/thunk";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -14,10 +14,7 @@ import { setBag } from "./action";
 
 export const loginThunk = createAxiosAsyncThunk(
   `${authPrefix}/login`,
-  async (loginData: LoginRequest, { dispatch, requestId, getState }) => {
-    if (requestId !== authSelector(getState()).currentRequestId) {
-      return;
-    }
+  async (loginData: LoginRequest, { dispatch }) => {
     const response = await authLoginApi(loginData);
     const apiAuthBag = response.data;
     const authBag = convertAuthBagFromApi(apiAuthBag);
@@ -25,15 +22,16 @@ export const loginThunk = createAxiosAsyncThunk(
     dispatch(setBag(authBag));
     await dispatch(usersGetSelfUserThunk()).then(unwrapResult);
     return authBag;
+  },
+  {
+    condition: (_, { getState }) =>
+      authSelector(getState()).currentRequestId == null,
   }
 );
 
 export const logoutThunk = createAxiosAsyncThunk(
   `${authPrefix}/logout`,
-  async (_, { getState, requestId }) => {
-    if (requestId !== authSelector(getState()).currentRequestId) {
-      return;
-    }
+  async (_, { getState, requestId, rejectWithValue }) => {
     const state = getState();
     const refreshToken = refreshTokenSelector(state);
     const userId = userIdSelector(state);
@@ -43,5 +41,9 @@ export const logoutThunk = createAxiosAsyncThunk(
       } catch (ignored) {}
     }
     removeAuthBag();
+  },
+  {
+    condition: (_, { getState }) =>
+      authSelector(getState()).currentRequestId == null,
   }
 );

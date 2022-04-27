@@ -1,24 +1,26 @@
 import { logoutThunk } from "@redux/auth";
-import React, { useCallback } from "react";
-import { Navigate } from "react-router-dom";
-import { useLoadingPlain, useTypedDispatch } from "utils/hooks";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTypedDispatch } from "utils/hooks";
 import MyBackdrop from "./MyBackdrop";
 import { CircularProgress } from "@mui/material";
 
 const Logout = () => {
   const dispatch = useTypedDispatch();
-  // uwc-debug
-  const loadingFunc = useCallback(() => dispatch(logoutThunk()), [dispatch]);
-  const { idle, loading } = useLoadingPlain(loadingFunc);
-  if (idle || loading) {
-    return (
-      <MyBackdrop>
-        <CircularProgress />
-      </MyBackdrop>
-    );
-  } else {
-    return <Navigate to="/" replace />;
-  }
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(logoutThunk()).then((action) => {
+      if (action.meta.requestStatus === "rejected" && action.meta.condition) {
+        return;
+      }
+      navigate("/", { replace: true });
+    });
+  }, [navigate, dispatch]);
+  return (
+    <MyBackdrop>
+      <CircularProgress />
+    </MyBackdrop>
+  );
 };
 
 export default Logout;

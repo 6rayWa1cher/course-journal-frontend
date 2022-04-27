@@ -1,6 +1,5 @@
-import { Divider, Grid, Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useDocumentTitle } from "utils/hooks";
-import React from "react";
 import { useSelector } from "react-redux";
 import { loggedInUserSelector } from "@redux/users/selector";
 

@@ -20,3 +20,10 @@ export interface LoginRequest {
   username: string;
   password: string;
 }
+
+export interface CreateCourseRequest {
+  name: string;
+  owner: number;
+}
+
+export type EditCourseRequest = CreateCourseRequest;

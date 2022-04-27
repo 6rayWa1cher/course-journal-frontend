@@ -10,9 +10,16 @@ import MainElement from "./MainElement";
 import { Stage } from "@redux/app";
 import Logout from "./Logout";
 import MainPage from "./pages/MainPage";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 const App = () => (
-  <>
+  <ThemeProvider theme={darkTheme}>
     <PreloaderWrapper>
       <BrowserRouter>
         <Routes>
@@ -34,7 +41,7 @@ const App = () => (
       </BrowserRouter>
     </PreloaderWrapper>
     <ToastContainer />
-  </>
+  </ThemeProvider>
 );
 
 export default App;

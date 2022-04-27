@@ -1,12 +1,5 @@
-import React, { useCallback } from "react";
-import {
-  Button,
-  Container,
-  CssBaseline,
-  Grid,
-  LinearProgress,
-  Typography,
-} from "@mui/material";
+import { useCallback } from "react";
+import { Button, Container, LinearProgress, Typography } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useNavigate } from "react-router-dom";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -15,13 +8,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginThunk } from "@redux/auth/thunk";
 import { useMySnackbar, useTypedDispatch } from "utils/hooks";
 import { emailPasswordSchema, EmailPasswordSchemaType } from "validation/yup";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import FormTextField from "components/FormTextField";
-import RouterLink from "components/RouterLink";
 import CenteredMarginBox from "components/CenteredMarginBox";
 import CenteredRoundBox from "components/CenteredRoundBox";
 import { AxiosError } from "axios";
 import ImageWidgetPage from "components/ImageWidgetPage";
+import { defaultErrorEnqueue } from "utils/errorProcessor";
 
 const LoginWidget = ({ redirectTo = "/" }) => {
   const dispatch = useTypedDispatch();
@@ -48,7 +41,7 @@ const LoginWidget = ({ redirectTo = "/" }) => {
           if (e.response?.status === 401) {
             enqueueError("Неверный username или пароль");
           } else {
-            enqueueError("Возникла непредвиденная ошибка");
+            defaultErrorEnqueue(e, enqueueError);
           }
         }),
     [dispatch, navigate, enqueueError, redirectTo]
