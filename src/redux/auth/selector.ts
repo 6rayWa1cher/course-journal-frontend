@@ -1,8 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@redux/types";
-import { authPrefix } from "./types";
 
-export const authSelector = (state: RootState) => state[authPrefix];
+export const authSelector = (state: RootState) => state.auth;
 
 const bagSelector = createSelector(authSelector, (state) => state.bag);
 
@@ -24,7 +23,7 @@ export const loggedInSelector = createSelector(
       new Date() < new Date(bag.refreshToken.expiringAt))
 );
 
-export const userIdSelector = createSelector(
+export const authUserIdSelector = createSelector(
   bagSelector,
-  (state) => state?.userId
+  (state) => state?.authUserId
 );

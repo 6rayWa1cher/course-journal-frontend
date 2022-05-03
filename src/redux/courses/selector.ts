@@ -1,8 +1,8 @@
 import type { RootState } from "@redux/types";
-import { CourseId } from "./types";
-import { coursesPrefix } from "./types";
+import { createSelector } from "@reduxjs/toolkit";
+import { CourseId } from "models/course";
 
-const coursesSelector = (state: RootState) => state[coursesPrefix];
+const coursesSelector = (state: RootState) => state.courses;
 
 const courseIdFromParamsSelector = (
   _: any,
@@ -10,3 +10,9 @@ const courseIdFromParamsSelector = (
 ) => courseId;
 const courseIdsFromParamsSelector = (_: any, { ids }: { ids: CourseId[] }) =>
   ids;
+
+export const courseByIdSelector = createSelector(
+  coursesSelector,
+  courseIdFromParamsSelector,
+  (state, courseId) => state.entities[courseId]
+);

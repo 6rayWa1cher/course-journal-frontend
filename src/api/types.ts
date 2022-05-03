@@ -1,3 +1,11 @@
+import type { UserRole } from "models/authUser";
+
+export interface PageRequest<Keys extends string = string> {
+  page: number;
+  size?: number;
+  sort?: Record<Keys, "asc" | "desc">;
+}
+
 export interface ApiAuthBag {
   refreshToken: string;
   refreshTokenExpiringAt: string;
@@ -6,24 +14,8 @@ export interface ApiAuthBag {
   userId: number;
 }
 
-export interface RefreshUserIdRequest {
-  refreshToken: string;
-  userId: number;
-}
-
 export interface SelfInfo {
   id: number;
   username: string;
+  userRole: UserRole;
 }
-
-export interface LoginRequest {
-  username: string;
-  password: string;
-}
-
-export interface CreateCourseRequest {
-  name: string;
-  owner: number;
-}
-
-export type EditCourseRequest = CreateCourseRequest;

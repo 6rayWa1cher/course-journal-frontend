@@ -4,7 +4,7 @@ import { useDocumentTitle } from "utils/hooks";
 
 export interface ImageWidgetPageProps {
   title: string;
-  children: React.ReactNode;
+  children: Children;
 }
 
 const ImageWidgetPage = ({ title, children }: ImageWidgetPageProps) => {
@@ -19,7 +19,7 @@ const ImageWidgetPage = ({ title, children }: ImageWidgetPageProps) => {
         md={8}
         xl={9}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundImage: "url(https://source.unsplash.com/random/?lecture)",
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"

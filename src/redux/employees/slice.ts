@@ -1,18 +1,18 @@
 import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
-import { coursesGetSelfPageThunk } from "./thunk";
-import { CourseDto } from "models/course";
+import { getEmployeeByIdThunk } from "./thunk";
+import { EmployeeDto } from "models/employee";
 
-export const adapter = createEntityAdapter<CourseDto>();
+export const adapter = createEntityAdapter<EmployeeDto>();
 
 export const slice = createSlice({
-  name: "courses",
+  name: "employees",
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      isAnyOf(coursesGetSelfPageThunk.fulfilled),
+      isAnyOf(getEmployeeByIdThunk.fulfilled),
       (state, { payload }) => {
-        adapter.upsertMany(state, payload.content);
+        adapter.upsertOne(state, payload);
       }
     );
   },

@@ -1,14 +1,14 @@
 import { Typography } from "@mui/material";
 import { useDocumentTitle } from "utils/hooks";
 import { useSelector } from "react-redux";
-import { loggedInUserSelector } from "@redux/users/selector";
+import { authUserIdSelector } from "@redux/auth";
 
 const MainPage = () => {
   useDocumentTitle("Главная");
-  const { id: userId } = useSelector(loggedInUserSelector);
+  const authUserId = useSelector(authUserIdSelector);
   return (
     <>
-      <Typography>URL сервера приложений: {userId}</Typography>
+      <Typography>URL сервера приложений: {authUserId}</Typography>
     </>
   );
 };

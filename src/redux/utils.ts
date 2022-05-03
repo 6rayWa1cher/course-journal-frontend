@@ -2,11 +2,9 @@ import {
   AsyncThunkPayloadCreator,
   createAsyncThunk,
   SerializedError,
-  AsyncThunk,
   AsyncThunkOptions,
 } from "@reduxjs/toolkit";
-import { BaseThunkAPI } from "@reduxjs/toolkit/dist/createAsyncThunk";
-import { AxiosError } from "axios";
+import type { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import type { AppDispatch, RootState, SerializedAxiosError } from "./types";
 

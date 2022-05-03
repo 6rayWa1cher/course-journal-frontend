@@ -1,26 +1,29 @@
-import { authPrefix } from "./types";
 import {
   convertAuthBagFromApi,
   removeAuthBag,
   saveAuthBag,
 } from "service/authbag";
-import { authInvalidateApi, authLoginApi } from "api/auth";
-import { authSelector, refreshTokenSelector, userIdSelector } from "./selector";
-import { createAxiosAsyncThunk, serializeAxiosError } from "@redux/utils";
-import type { LoginRequest } from "api/types";
-import { usersGetSelfUserThunk } from "@redux/users/thunk";
+import { invalidateTokenApi, loginApi, LoginRequest } from "api/auth";
+import {
+  authSelector,
+  authUserIdSelector,
+  refreshTokenSelector,
+} from "./selector";
+import { createAxiosAsyncThunk } from "@redux/utils";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { setBag } from "./action";
+import { loadUserDataThunk } from "@redux/authUsers";
 
 export const loginThunk = createAxiosAsyncThunk(
-  `${authPrefix}/login`,
+  "auth/login",
   async (loginData: LoginRequest, { dispatch }) => {
-    const response = await authLoginApi(loginData);
+    const response = await loginApi(loginData);
     const apiAuthBag = response.data;
     const authBag = convertAuthBagFromApi(apiAuthBag);
     saveAuthBag(authBag);
     dispatch(setBag(authBag));
-    await dispatch(usersGetSelfUserThunk()).then(unwrapResult);
+    const { authUserId } = authBag;
+    await dispatch(loadUserDataThunk({ authUserId })).then(unwrapResult);
     return authBag;
   },
   {
@@ -30,15 +33,15 @@ export const loginThunk = createAxiosAsyncThunk(
 );
 
 export const logoutThunk = createAxiosAsyncThunk(
-  `${authPrefix}/logout`,
-  async (_, { getState, requestId, rejectWithValue }) => {
+  "auth/logout",
+  async (_, { getState }) => {
     const state = getState();
     const refreshToken = refreshTokenSelector(state);
-    const userId = userIdSelector(state);
-    if (refreshToken && userId) {
+    const authUserId = authUserIdSelector(state);
+    if (refreshToken && authUserId) {
       try {
-        await authInvalidateApi({ refreshToken, userId });
-      } catch (ignored) {}
+        await invalidateTokenApi({ refreshToken, userId: authUserId });
+      } catch {}
     }
     removeAuthBag();
   },

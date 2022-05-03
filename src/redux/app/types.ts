@@ -13,8 +13,6 @@ export interface AppState {
   currentRequestId?: string;
 }
 
-export const appPrefix = "app";
-
 export enum Stage {
   UNAUTHORIZED = "UNAUTHORIZED",
   AUTHORIZED = "AUTHORIZED",

@@ -1,9 +1,9 @@
 import {
   accessTokenSelector,
-  logoutThunk,
+  authUserIdSelector,
   refreshTokenSelector,
-  userIdSelector,
-} from "@redux/auth";
+} from "@redux/auth/selector";
+import { logoutThunk } from "@redux/auth/thunk";
 import { setBag } from "@redux/auth/action";
 import type { Store } from "@redux/types";
 import createAuthRefreshInterceptor, {
@@ -21,7 +21,7 @@ export const createWrappedAuthApiInterceptor = (store: Store) => {
         "/auth/get_access",
         {
           refreshToken: refreshTokenSelector(store.getState()),
-          userId: userIdSelector(store.getState()),
+          userId: authUserIdSelector(store.getState()),
         },
         { skipAuthRefresh: true } as AxiosAuthRefreshRequestConfig
       )

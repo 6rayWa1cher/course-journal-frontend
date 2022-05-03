@@ -1,13 +1,10 @@
-import { authGetSelfUserApi } from "api/auth";
-import { getUserByIdApi } from "api/users";
 import { createAxiosAsyncThunk } from "@redux/utils";
-import { coursesPrefix } from "./types";
+import { getCoursesByOwnerApi, GetCoursesByOwnerIdRequest } from "api/courses";
 
 export const coursesGetSelfPageThunk = createAxiosAsyncThunk(
-  `${coursesPrefix}/getSelfPage`,
-  async (args: CoursesGetSelfPageThunkArgs) => {
-    const selfInfo = (await authGetSelfUserApi()).data;
-    const user = (await getUserByIdApi(selfInfo.id)).data;
-    return user;
+  "courses/getSelfPage",
+  async (args: GetCoursesByOwnerIdRequest) => {
+    const data = (await getCoursesByOwnerApi(args)).data;
+    return data;
   }
 );

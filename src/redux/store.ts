@@ -2,18 +2,20 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   createWrappedApiInterceptor,
   createWrappedAuthApiInterceptor,
-} from "api/enhancer";
+} from "api/helpers/enhancer";
 import app from "./app/slice";
 import auth from "./auth/slice";
-import users from "./users/slice";
+import authUsers from "./authUsers/slice";
 import courses from "./courses/slice";
+import employees from "./employees/slice";
 
 const store = (() => {
   const reducer = combineReducers({
     app,
     auth,
-    users,
+    authUsers,
     courses,
+    employees,
   });
 
   const store = configureStore({ reducer });
