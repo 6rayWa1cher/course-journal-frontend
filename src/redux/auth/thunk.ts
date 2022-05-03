@@ -3,7 +3,7 @@ import {
   removeAuthBag,
   saveAuthBag,
 } from "service/authbag";
-import { invalidateTokenApi, loginApi, LoginRequest } from "api/auth";
+import { invalidateTokenApi, loginApi } from "api/auth";
 import {
   authSelector,
   authUserIdSelector,
@@ -13,6 +13,7 @@ import { createAxiosAsyncThunk } from "@redux/utils";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { setBag } from "./action";
 import { loadUserDataThunk } from "@redux/authUsers";
+import { LoginRequest } from "api/types";
 
 export const loginThunk = createAxiosAsyncThunk(
   "auth/login",
