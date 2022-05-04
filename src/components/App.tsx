@@ -11,6 +11,10 @@ import { Stage } from "@redux/app";
 import Logout from "./Logout";
 import MainPage from "pages/MainPage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { UserRole } from "models/authUser";
+import RoleRoute from "./RoleRoute";
+import EmployeeExplorerPage from "pages/EmployeeExplorerPage";
+import EmployeePage from "pages/EmployeePage";
 
 const darkTheme = createTheme({
   palette: {
@@ -25,6 +29,16 @@ const App = () => (
         <Routes>
           <Route path="/" element={<MainElement />}>
             <Route index element={<MainPage />} />
+            <Route
+              element={
+                <RoleRoute role={UserRole.ADMIN} fallback="/">
+                  <Outlet />
+                </RoleRoute>
+              }
+            >
+              <Route path="/employees" element={<EmployeeExplorerPage />} />
+              <Route path="/employees/:employeeId" element={<EmployeePage />} />
+            </Route>
           </Route>
           <Route
             element={

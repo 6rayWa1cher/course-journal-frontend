@@ -1,8 +1,9 @@
 import { createAxiosAsyncThunk } from "@redux/utils";
 import { AuthUserId, UserRole } from "models/authUser";
-import { getAuthUserByIdApi } from "api/authUsers";
+import { getAuthUserByEmployeeIdApi, getAuthUserByIdApi } from "api/authUsers";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getEmployeeByIdThunk } from "@redux/employees";
+import { EmployeeId } from "models/employee";
 
 export interface GetAuthUserByIdArgs {
   authUserId: AuthUserId;
@@ -31,5 +32,17 @@ export const loadUserDataThunk = createAxiosAsyncThunk(
         unwrapResult
       );
     }
+  }
+);
+
+export interface GetAuthUserByEmployeeIdArgs {
+  employeeId: EmployeeId;
+}
+
+export const getAuthUserByEmployeeIdThunk = createAxiosAsyncThunk(
+  "authUsers/getAuthUserByEmployeeId",
+  async ({ employeeId }: GetAuthUserByEmployeeIdArgs) => {
+    const user = (await getAuthUserByEmployeeIdApi(employeeId)).data;
+    return user;
   }
 );

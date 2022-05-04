@@ -1,6 +1,6 @@
 import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
 import { AuthUserDto } from "models/authUser";
-import { getAuthUserByIdThunk } from "./thunk";
+import { getAuthUserByEmployeeIdThunk, getAuthUserByIdThunk } from "./thunk";
 
 export const adapter = createEntityAdapter<AuthUserDto>();
 
@@ -10,7 +10,10 @@ export const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      isAnyOf(getAuthUserByIdThunk.fulfilled),
+      isAnyOf(
+        getAuthUserByIdThunk.fulfilled,
+        getAuthUserByEmployeeIdThunk.fulfilled
+      ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
       }

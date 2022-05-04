@@ -7,6 +7,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import { Link } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 export const mainListItems = (
   <div>
@@ -29,6 +30,17 @@ export const mainListItems = (
       <ListItemText primary="Таблица рекордов" />
     </ListItem>
   </div>
+);
+
+export const adminListItems = (
+  <>
+    <ListItem button component={Link} to="/employees">
+      <ListItemIcon>
+        <AccountBoxIcon />
+      </ListItemIcon>
+      <ListItemText primary="Преподаватели" />
+    </ListItem>
+  </>
 );
 
 export const secondaryListItems = <div></div>;

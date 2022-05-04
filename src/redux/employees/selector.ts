@@ -1,6 +1,6 @@
 import type { RootState } from "@redux/types";
 import { createSelector } from "@reduxjs/toolkit";
-import { EmployeeId } from "models/employee";
+import { EmployeeDto, EmployeeId } from "models/employee";
 
 const employeesSelector = (state: RootState) => state.employees;
 
@@ -17,4 +17,10 @@ export const employeeByIdSelector = createSelector(
   employeesSelector,
   employeeIdFromParamsSelector,
   (state, employeeId) => state.entities[employeeId]
+);
+
+export const employeeByIdsSelector = createSelector(
+  employeesSelector,
+  employeeIdsFromParamsSelector,
+  (state, ids) => ids.map((id) => state.entities[id])
 );

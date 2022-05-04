@@ -21,7 +21,7 @@ export const emailPasswordSchema = yup
   })
   .required();
 
-export interface EmailPasswordSchemaType extends FieldValues {
+export interface EmailPasswordSchemaType {
   username: string;
   password: string;
 }

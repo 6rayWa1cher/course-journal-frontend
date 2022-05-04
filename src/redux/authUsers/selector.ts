@@ -18,5 +18,5 @@ export const selfAuthUserSelector = createSelector(
   authUsersSelector,
   authUserIdSelector,
   ({ entities }, uid): Nullable<AuthUserDto> =>
-    uid !== null && uid !== undefined ? entities[uid] : null
+    uid != null ? entities[uid] : null
 );

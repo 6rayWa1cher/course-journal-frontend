@@ -1,6 +1,6 @@
 import type { UserRole } from "models/authUser";
 import type { CourseDto } from "models/course";
-import type { EmployeeId } from "models/employee";
+import type { EmployeeDto, EmployeeId } from "models/employee";
 
 // GENERIC TYPES
 export interface PageRequest<Keys extends string = string> {
@@ -76,3 +76,5 @@ export interface CreateCourseRequest {
 }
 
 export type EditCourseRequest = CreateCourseRequest;
+
+export type GetEmployeesRequest = PageRequest<keyof EmployeeDto>;

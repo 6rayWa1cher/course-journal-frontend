@@ -14,8 +14,8 @@ export type UseLoadingOptions = Partial<{
   errorToMsg: ((error: Error) => string) | string | null;
 }>;
 
-export const useLoadingPlain = (
-  asyncFunc: () => Promise<any>,
+export const useLoadingPlain = <T>(
+  asyncFunc: () => Promise<T>,
   {
     immediate = true,
     enqueue = false,
@@ -23,7 +23,7 @@ export const useLoadingPlain = (
   }: UseLoadingOptions = {}
 ) => {
   const [status, setStatus] = useState(UseLoadingEnum.IDLE);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState<T | null>(null);
   const [error, setError] = useState(null);
 
   const { enqueueError } = useMySnackbar();
