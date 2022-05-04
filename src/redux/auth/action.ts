@@ -1,4 +1,4 @@
-import { createAction } from "@reduxjs/toolkit";
-import { AuthBag, authPrefix } from "./types";
+import { createAction } from '@reduxjs/toolkit';
+import type { AuthBag } from 'models/auth';
 
-export const setBag = createAction<AuthBag>(`${authPrefix}/setBag`);
+export const setBag = createAction<AuthBag>('auth/setBag');

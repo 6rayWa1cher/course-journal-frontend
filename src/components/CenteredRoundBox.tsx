@@ -1,11 +1,11 @@
-import React from "react";
-import { Avatar, AvatarTypeMap } from "@mui/material";
+import React from 'react';
+import { Avatar, AvatarTypeMap } from '@mui/material';
 
 export interface CenteredRoundBoxProps {
   children: Children;
 }
 
-type AvatarPropsType = AvatarTypeMap["props"];
+type AvatarPropsType = AvatarTypeMap['props'];
 
 export const CenteredRoundBox = ({
   children,
@@ -14,7 +14,7 @@ export const CenteredRoundBox = ({
   <Avatar
     sx={{
       m: 1,
-      backgroundColor: "primary.main",
+      backgroundColor: 'primary.main',
     }}
     {...props}
   >

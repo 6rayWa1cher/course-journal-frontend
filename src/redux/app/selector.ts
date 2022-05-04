@@ -1,10 +1,10 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { loggedInSelector } from "@redux/auth";
-import type { RootState } from "@redux/types";
-import { selfUserSelector } from "@redux/users";
-import { appPrefix, Stage } from "./types";
+import { createSelector } from '@reduxjs/toolkit';
+import { loggedInSelector } from '@redux/auth';
+import type { RootState } from '@redux/types';
+import { Stage } from './types';
+import { selfAuthUserSelector } from '@redux/authUsers';
 
-export const appSelector = (state: RootState) => state[appPrefix];
+export const appSelector = (state: RootState) => state.app;
 
 export const stateSelector = createSelector(
   appSelector,
@@ -16,12 +16,15 @@ export const errorSelector = createSelector(
   (state) => state.error
 );
 
-const userStageSelector = createSelector(selfUserSelector, (userDto): Stage => {
-  if (!userDto) {
-    return Stage.UNAUTHORIZED;
+const userStageSelector = createSelector(
+  selfAuthUserSelector,
+  (authUserDto): Stage => {
+    if (!authUserDto) {
+      return Stage.UNAUTHORIZED;
+    }
+    return Stage.AUTHORIZED;
   }
-  return Stage.AUTHORIZED;
-});
+);
 
 export const stageSelector = createSelector(
   loggedInSelector,

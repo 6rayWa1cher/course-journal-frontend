@@ -1,13 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initAppThunk } from "./thunk";
-import { appPrefix, AppState, WebApplicationState } from "./types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { initAppThunk } from './thunk';
+import { AppState, WebApplicationState } from './types';
 
 const initialState: AppState = {
   state: WebApplicationState.IDLE,
 };
 
 const slice = createSlice({
-  name: appPrefix,
+  name: 'app',
   initialState,
   reducers: {
     setState(state, payload: PayloadAction<WebApplicationState>) {

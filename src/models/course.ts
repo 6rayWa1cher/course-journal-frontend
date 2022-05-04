@@ -1,9 +1,11 @@
-import { CourseId } from "@redux/courses";
+import type { EmployeeId } from './employee';
+
+export type CourseId = number;
 
 export interface CourseDto {
   id: CourseId;
   name: string;
-  owner: number;
+  owner: EmployeeId;
   createdAt: string;
   lastModifiedAt: string;
 }

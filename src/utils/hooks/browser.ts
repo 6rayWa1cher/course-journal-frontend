@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useEffect, useMemo } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 
 export const useQueryParams = () => {
   const { search } = useLocation();
@@ -26,6 +25,6 @@ export const useNumberParams = (): Nullable<Record<string, number>> => {
 
 export const useDocumentTitle = (title: string) => {
   useEffect(() => {
-    document.title = (title ? `${title} - ` : "") + "Журнал предмета";
+    document.title = (title ? `${title} - ` : '') + 'Журнал предмета';
   }, [title]);
 };

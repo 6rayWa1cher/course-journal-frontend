@@ -1,16 +1,16 @@
-import React from "react";
-import { CssBaseline, Grid, Paper } from "@mui/material";
-import { useDocumentTitle } from "utils/hooks";
+import React from 'react';
+import { CssBaseline, Grid, Paper } from '@mui/material';
+import { useDocumentTitle } from 'utils/hooks';
 
 export interface ImageWidgetPageProps {
   title: string;
-  children: React.ReactNode;
+  children: Children;
 }
 
 const ImageWidgetPage = ({ title, children }: ImageWidgetPageProps) => {
   useDocumentTitle(title);
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
+    <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
       <Grid
         item
@@ -19,14 +19,14 @@ const ImageWidgetPage = ({ title, children }: ImageWidgetPageProps) => {
         md={8}
         xl={9}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
-          backgroundRepeat: "no-repeat",
+          backgroundImage: 'url(https://source.unsplash.com/random/?lecture)',
+          backgroundRepeat: 'no-repeat',
           backgroundColor: (t) =>
-            t.palette.mode === "light"
+            t.palette.mode === 'light'
               ? t.palette.grey[50]
               : t.palette.grey[900],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       />
       <Grid

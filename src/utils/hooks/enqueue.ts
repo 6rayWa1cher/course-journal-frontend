@@ -1,11 +1,11 @@
-import { toast, ToastOptions } from "react-toastify";
+import { toast, ToastOptions } from 'react-toastify';
 
 export type EnqueueFunc = (msg: string, params?: ToastOptions) => void;
 
 const enqueueSnackbar: EnqueueFunc = (msg, params) => toast(msg, params);
 
 const enqueueError: EnqueueFunc = (msg, params) => {
-  console.error("Enqueued error", msg);
+  console.error('Enqueued error', msg);
   toast.error(msg, params);
 };
 

@@ -1,16 +1,16 @@
 import {
   accessTokenSelector,
-  logoutThunk,
+  authUserIdSelector,
   refreshTokenSelector,
-  userIdSelector,
-} from "@redux/auth";
-import { setBag } from "@redux/auth/action";
-import type { Store } from "@redux/types";
+} from '@redux/auth/selector';
+import { logoutThunk } from '@redux/auth/thunk';
+import { setBag } from '@redux/auth/action';
+import type { Store } from '@redux/types';
 import createAuthRefreshInterceptor, {
   AxiosAuthRefreshRequestConfig,
-} from "axios-auth-refresh";
-import { convertAuthBagFromApi, saveAuthBag } from "service/authbag";
-import { basicAxios, mainAxios } from "./myaxios";
+} from 'axios-auth-refresh';
+import { convertAuthBagFromApi, saveAuthBag } from 'service/authbag';
+import { basicAxios, mainAxios } from './myaxios';
 
 const getAccessToken = (store: Store) => accessTokenSelector(store.getState());
 
@@ -18,10 +18,10 @@ export const createWrappedAuthApiInterceptor = (store: Store) => {
   const refreshAuthLogic = (failedRequest: any) =>
     basicAxios
       .post(
-        "/auth/get_access",
+        '/auth/get_access',
         {
           refreshToken: refreshTokenSelector(store.getState()),
-          userId: userIdSelector(store.getState()),
+          userId: authUserIdSelector(store.getState()),
         },
         { skipAuthRefresh: true } as AxiosAuthRefreshRequestConfig
       )
@@ -29,8 +29,8 @@ export const createWrappedAuthApiInterceptor = (store: Store) => {
         const authBag = convertAuthBagFromApi(res.data);
         saveAuthBag(authBag);
         store.dispatch(setBag(authBag));
-        failedRequest.response.config.headers["Authorization"] =
-          "Bearer " + getAccessToken(store);
+        failedRequest.response.config.headers['Authorization'] =
+          'Bearer ' + getAccessToken(store);
         return Promise.resolve();
       })
       .catch(async (e) => {
@@ -50,7 +50,7 @@ export const createWrappedAuthApiInterceptor = (store: Store) => {
 export const createWrappedApiInterceptor = (store: Store) => {
   mainAxios.interceptors.request.use((request) => {
     if (request.headers) {
-      request.headers["Authorization"] = `Bearer ${getAccessToken(store)}`;
+      request.headers['Authorization'] = `Bearer ${getAccessToken(store)}`;
     }
     return request;
   });

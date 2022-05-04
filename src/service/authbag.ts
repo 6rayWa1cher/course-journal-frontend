@@ -1,12 +1,12 @@
-import { AuthBag } from "@redux/auth/types";
-import { ApiAuthBag } from "api/types";
-import { save, load, remove } from "utils/localStorage";
+import type { ApiAuthBag } from 'api/types';
+import type { AuthBag } from 'models/auth';
+import { save, load, remove } from 'utils/localStorage';
 
-const accessTokenValueKey = "auth.accessToken.value";
-const accessTokenExpiringAtKey = "auth.accessToken.expiringAt";
-const refreshTokenValueKey = "auth.refreshToken.value";
-const refreshTokenExpiringAtKey = "auth.refreshToken.expiringAt";
-const userIdKey = "auth.userId";
+const accessTokenValueKey = 'auth.accessToken.value';
+const accessTokenExpiringAtKey = 'auth.accessToken.expiringAt';
+const refreshTokenValueKey = 'auth.refreshToken.value';
+const refreshTokenExpiringAtKey = 'auth.refreshToken.expiringAt';
+const authUserIdKey = 'auth.authUserId';
 
 export const convertAuthBagFromApi = (apiBag: ApiAuthBag): AuthBag => {
   const {
@@ -25,17 +25,17 @@ export const convertAuthBagFromApi = (apiBag: ApiAuthBag): AuthBag => {
       value: refreshToken,
       expiringAt: refreshTokenExpiringAt,
     },
-    userId: userId,
+    authUserId: userId,
   };
 };
 
 export const saveAuthBag = (bag: AuthBag) => {
-  const { accessToken, refreshToken, userId } = bag;
+  const { accessToken, refreshToken, authUserId } = bag;
   save(accessTokenValueKey, accessToken.value);
   save(accessTokenExpiringAtKey, accessToken.expiringAt);
   save(refreshTokenValueKey, refreshToken.value);
   save(refreshTokenExpiringAtKey, refreshToken.expiringAt);
-  save(userIdKey, userId.toString());
+  save(authUserIdKey, authUserId.toString());
 };
 
 export const removeAuthBag = () => {
@@ -43,7 +43,7 @@ export const removeAuthBag = () => {
   remove(accessTokenExpiringAtKey);
   remove(refreshTokenValueKey);
   remove(refreshTokenExpiringAtKey);
-  remove(userIdKey);
+  remove(authUserIdKey);
 };
 
 export const loadAuthBag = (): AuthBag | null => {
@@ -51,13 +51,13 @@ export const loadAuthBag = (): AuthBag | null => {
   const accessTokenExpiringAt = load(accessTokenExpiringAtKey);
   const refreshTokenValue = load(refreshTokenValueKey);
   const refreshTokenExpiringAt = load(refreshTokenExpiringAtKey);
-  const userId = load(userIdKey);
+  const authUserId = load(authUserIdKey);
   if (
-    accessTokenValue === null ||
-    accessTokenExpiringAt === null ||
-    refreshTokenValue === null ||
+    accessTokenValue == null ||
+    accessTokenExpiringAt == null ||
+    refreshTokenValue == null ||
     refreshTokenExpiringAt == null ||
-    userId === null
+    authUserId == null
   ) {
     removeAuthBag();
     return null;
@@ -71,6 +71,6 @@ export const loadAuthBag = (): AuthBag | null => {
       value: refreshTokenValue,
       expiringAt: refreshTokenExpiringAt,
     },
-    userId: +userId,
+    authUserId: +authUserId,
   };
 };

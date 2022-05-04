@@ -1,25 +1,25 @@
-import { AxiosPromise } from "axios";
-import { basicAxios, mainAxios } from "./myaxios";
+import type { AxiosPromise } from 'axios';
+import { basicAxios, mainAxios } from './helpers/myaxios';
 import type {
   ApiAuthBag,
   LoginRequest,
   RefreshUserIdRequest,
   SelfInfo,
-} from "./types";
+} from './types';
 
-export const authCheckCredentialsApi = (): AxiosPromise<never> =>
+export const checkCredentialsApi = (): AxiosPromise<void> =>
   mainAxios.get(`/auth/check`);
 
-export const authGetAccessApi = (
+export const getTokenFromRefreshApi = (
   data: RefreshUserIdRequest
 ): AxiosPromise<ApiAuthBag> => basicAxios.post(`/auth/get_access`, data);
 
-export const authInvalidateApi = (
+export const invalidateTokenApi = (
   data: RefreshUserIdRequest
-): AxiosPromise<never> => mainAxios.delete(`/auth/invalidate`, { data });
+): AxiosPromise<void> => mainAxios.delete(`/auth/invalidate`, { data });
 
-export const authLoginApi = (data: LoginRequest): AxiosPromise<ApiAuthBag> =>
+export const loginApi = (data: LoginRequest): AxiosPromise<ApiAuthBag> =>
   basicAxios.post(`/auth/login`, data);
 
-export const authGetSelfUserApi = (): AxiosPromise<SelfInfo> =>
+export const getSelfUserApi = (): AxiosPromise<SelfInfo> =>
   mainAxios.get(`/auth/user`);

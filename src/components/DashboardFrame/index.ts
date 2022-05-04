@@ -1,1 +1,1 @@
-export { default } from "./DashboardFrame";
+export { default } from './DashboardFrame';
