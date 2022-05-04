@@ -1,4 +1,4 @@
-import type { EmployeeId } from "./employee";
+import type { EmployeeId } from './employee';
 
 export type CourseId = number;
 

@@ -1,8 +1,8 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { loggedInSelector } from "@redux/auth";
-import type { RootState } from "@redux/types";
-import { Stage } from "./types";
-import { selfAuthUserSelector } from "@redux/authUsers";
+import { createSelector } from '@reduxjs/toolkit';
+import { loggedInSelector } from '@redux/auth';
+import type { RootState } from '@redux/types';
+import { Stage } from './types';
+import { selfAuthUserSelector } from '@redux/authUsers';
 
 export const appSelector = (state: RootState) => state.app;
 

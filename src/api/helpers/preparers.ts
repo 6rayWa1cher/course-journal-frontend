@@ -1,4 +1,4 @@
-import type { PageRequest } from "api/types";
+import type { PageRequest } from 'api/types';
 
 export interface PreparedPageRequest {
   page: number;

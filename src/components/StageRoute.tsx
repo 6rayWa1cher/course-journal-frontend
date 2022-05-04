@@ -1,9 +1,8 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { stageSelector } from "@redux/app";
-import StageRedirect from "components/StageRedirect";
-import { Stage } from "@redux/app";
+import { stageSelector, Stage } from '@redux/app';
+import StageRedirect from 'components/StageRedirect';
 
 export interface StageRouteProps {
   stage: Stage | Stage[];
@@ -12,7 +11,7 @@ export interface StageRouteProps {
 
 const StageRoute = ({ stage: expectedStage, children }: StageRouteProps) => {
   const stage = useSelector(stageSelector);
-  console.debug("stage: " + stage);
+  console.debug('stage: ' + stage);
   const decision = (() => {
     if (expectedStage instanceof Array) {
       return expectedStage.includes(stage);

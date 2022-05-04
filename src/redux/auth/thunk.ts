@@ -2,21 +2,21 @@ import {
   convertAuthBagFromApi,
   removeAuthBag,
   saveAuthBag,
-} from "service/authbag";
-import { invalidateTokenApi, loginApi } from "api/auth";
+} from 'service/authbag';
+import { invalidateTokenApi, loginApi } from 'api/auth';
 import {
   authSelector,
   authUserIdSelector,
   refreshTokenSelector,
-} from "./selector";
-import { createAxiosAsyncThunk } from "@redux/utils";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { setBag } from "./action";
-import { loadUserDataThunk } from "@redux/authUsers";
-import { LoginRequest } from "api/types";
+} from './selector';
+import { createAxiosAsyncThunk } from '@redux/utils';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { setBag } from './action';
+import { loadUserDataThunk } from '@redux/authUsers';
+import { LoginRequest } from 'api/types';
 
 export const loginThunk = createAxiosAsyncThunk(
-  "auth/login",
+  'auth/login',
   async (loginData: LoginRequest, { dispatch }) => {
     const response = await loginApi(loginData);
     const apiAuthBag = response.data;
@@ -34,7 +34,7 @@ export const loginThunk = createAxiosAsyncThunk(
 );
 
 export const logoutThunk = createAxiosAsyncThunk(
-  "auth/logout",
+  'auth/logout',
   async (_, { getState }) => {
     const state = getState();
     const refreshToken = refreshTokenSelector(state);

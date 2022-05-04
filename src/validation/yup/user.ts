@@ -1,18 +1,18 @@
-import { FieldValues } from "react-hook-form";
-import yup from "./utils";
+import { FieldValues } from 'react-hook-form';
+import yup from './utils';
 
 const username = yup.string().min(3).max(25).required();
 
 const password = yup.string().min(5).max(128).required();
 const confirmPassword = yup
   .string()
-  .oneOf([yup.ref("password")], "Пароли не одинаковы")
+  .oneOf([yup.ref('password')], 'Пароли не одинаковы')
   .required();
 
 const privacyPolicyAgreement = yup
   .bool()
   .default(false)
-  .oneOf([true], "Должно быть отмечено");
+  .oneOf([true], 'Должно быть отмечено');
 
 export const emailPasswordSchema = yup
   .object({

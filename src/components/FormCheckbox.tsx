@@ -1,12 +1,12 @@
-import React from "react";
-import { Checkbox, CheckboxProps } from "@mui/material";
+import React from 'react';
+import { Checkbox, CheckboxProps } from '@mui/material';
 import {
   Control,
   Controller,
   ControllerProps,
   FieldPath,
   FieldValues,
-} from "react-hook-form";
+} from 'react-hook-form';
 
 export interface FormCheckboxProps<
   T extends FieldValues,

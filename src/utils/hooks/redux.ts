@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState, SelectorType } from "@redux/types";
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState, SelectorType } from '@redux/types';
 
 export const useParamSelector = <T, J>(
   selector: SelectorType<T, J>,

@@ -1,7 +1,7 @@
-import { Link } from "@mui/material";
-import { Box } from "@mui/system";
-import React from "react";
-import { Link as ReactRouterLink, LinkProps } from "react-router-dom";
+import { Link } from '@mui/material';
+import { Box } from '@mui/system';
+import React from 'react';
+import { Link as ReactRouterLink, LinkProps } from 'react-router-dom';
 
 export interface RouterLinkProps {
   to: string;
@@ -16,7 +16,7 @@ const RouterLink = ({
   <Link component={ReactRouterLink} to={to} variant="body2" {...props}>
     <Box
       sx={{
-        color: "primary.main",
+        color: 'primary.main',
       }}
     >
       {children}

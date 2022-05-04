@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { CircularProgress } from "@mui/material";
-import { initAppThunk, stateSelector, WebApplicationState } from "@redux/app";
-import { useAppDispatch } from "@redux/utils";
-import MyBackdrop from "./MyBackdrop";
-import { AppDispatch, RootState } from "@redux/types";
+import { CircularProgress } from '@mui/material';
+import { initAppThunk, stateSelector, WebApplicationState } from '@redux/app';
+import { useAppDispatch } from '@redux/utils';
+import MyBackdrop from './MyBackdrop';
+import { AppDispatch, RootState } from '@redux/types';
 
 export interface PreloaderWrapperProps {
   children: Children;
@@ -25,7 +25,7 @@ const PreloaderWrapper = ({ children }: PreloaderWrapperProps) => {
     loadingState === WebApplicationState.IDLE ||
     loadingState === WebApplicationState.LOADING;
   const loadingCausedError = error == null;
-  console.log("wrapper rendered");
+  console.log('wrapper rendered');
   return (
     <>
       {initialLoading && (

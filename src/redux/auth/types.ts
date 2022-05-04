@@ -1,4 +1,4 @@
-import { AuthBag } from "models/auth";
+import { AuthBag } from 'models/auth';
 
 export interface AuthState {
   bag: AuthBag | null;

@@ -1,10 +1,10 @@
-import { Typography } from "@mui/material";
-import { useDocumentTitle } from "utils/hooks";
-import { useSelector } from "react-redux";
-import { authUserIdSelector } from "@redux/auth";
+import { Typography } from '@mui/material';
+import { useDocumentTitle } from 'utils/hooks';
+import { useSelector } from 'react-redux';
+import { authUserIdSelector } from '@redux/auth';
 
 const MainPage = () => {
-  useDocumentTitle("Главная");
+  useDocumentTitle('Главная');
   const authUserId = useSelector(authUserIdSelector);
   return (
     <>

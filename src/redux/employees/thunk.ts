@@ -8,7 +8,7 @@ export interface EmployeesGetByIdArgs {
 }
 
 export const getEmployeeByIdThunk = createAxiosAsyncThunk(
-  "employees/getById",
+  'employees/getById',
   async (args: EmployeesGetByIdArgs) => {
     const { employeeId } = args;
     const data = (await getEmployeeByIdApi(employeeId)).data;

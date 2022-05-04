@@ -5,7 +5,7 @@ import { getAuthUserByEmployeeIdThunk, getAuthUserByIdThunk } from "./thunk";
 export const adapter = createEntityAdapter<AuthUserDto>();
 
 export const slice = createSlice({
-  name: "authUsers",
+  name: 'authUsers',
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {

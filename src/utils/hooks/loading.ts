@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { useMySnackbar } from "./enqueue";
+import { useCallback, useEffect, useState } from 'react';
+import { useMySnackbar } from './enqueue';
 
 export enum UseLoadingEnum {
   IDLE,

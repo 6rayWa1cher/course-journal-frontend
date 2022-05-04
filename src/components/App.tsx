@@ -18,7 +18,7 @@ import EmployeePage from "pages/EmployeePage";
 
 const darkTheme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'dark',
   },
 });
 

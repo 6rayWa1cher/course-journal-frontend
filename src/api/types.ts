@@ -6,7 +6,7 @@ import type { EmployeeDto, EmployeeId } from "models/employee";
 export interface PageRequest<Keys extends string = string> {
   page: number;
   size?: number;
-  sort?: Record<Keys, "asc" | "desc">;
+  sort?: Record<Keys, 'asc' | 'desc'>;
 }
 
 export interface Page<T> {

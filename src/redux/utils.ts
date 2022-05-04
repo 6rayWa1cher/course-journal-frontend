@@ -3,10 +3,10 @@ import {
   createAsyncThunk,
   SerializedError,
   AsyncThunkOptions,
-} from "@reduxjs/toolkit";
-import type { AxiosError } from "axios";
-import { useDispatch } from "react-redux";
-import type { AppDispatch, RootState, SerializedAxiosError } from "./types";
+} from '@reduxjs/toolkit';
+import type { AxiosError } from 'axios';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch, RootState, SerializedAxiosError } from './types';
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
@@ -61,7 +61,7 @@ export const createAxiosAsyncThunk = <Returned, ThunkArg = void>(
       try {
         return await thunk(arg, thunkAPI);
       } catch (err: any) {
-        if ("isAxiosError" in err) {
+        if ('isAxiosError' in err) {
           return thunkAPI.rejectWithValue(
             serializeAxiosError(err as AxiosError)
           );

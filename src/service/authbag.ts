@@ -1,12 +1,12 @@
-import type { ApiAuthBag } from "api/types";
-import type { AuthBag } from "models/auth";
-import { save, load, remove } from "utils/localStorage";
+import type { ApiAuthBag } from 'api/types';
+import type { AuthBag } from 'models/auth';
+import { save, load, remove } from 'utils/localStorage';
 
-const accessTokenValueKey = "auth.accessToken.value";
-const accessTokenExpiringAtKey = "auth.accessToken.expiringAt";
-const refreshTokenValueKey = "auth.refreshToken.value";
-const refreshTokenExpiringAtKey = "auth.refreshToken.expiringAt";
-const authUserIdKey = "auth.authUserId";
+const accessTokenValueKey = 'auth.accessToken.value';
+const accessTokenExpiringAtKey = 'auth.accessToken.expiringAt';
+const refreshTokenValueKey = 'auth.refreshToken.value';
+const refreshTokenExpiringAtKey = 'auth.refreshToken.expiringAt';
+const authUserIdKey = 'auth.authUserId';
 
 export const convertAuthBagFromApi = (apiBag: ApiAuthBag): AuthBag => {
   const {

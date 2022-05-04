@@ -1,13 +1,13 @@
-import type { AxiosPromise } from "axios";
-import type { CourseDto, CourseId } from "models/course";
-import { mainAxios } from "./helpers/myaxios";
-import { preparePageRequest } from "./helpers/preparers";
+import type { AxiosPromise } from 'axios';
+import type { CourseDto, CourseId } from 'models/course';
+import { mainAxios } from './helpers/myaxios';
+import { preparePageRequest } from './helpers/preparers';
 import type {
   Page,
   GetCoursesByOwnerIdRequest,
   CreateCourseRequest,
   EditCourseRequest,
-} from "./types";
+} from './types';
 
 export const getCoursesByOwnerApi = ({
   employeeId,

@@ -1,22 +1,22 @@
-import { useCallback } from "react";
-import { Button, Container, LinearProgress, Typography } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { useNavigate } from "react-router-dom";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useCallback } from 'react';
+import { Button, Container, LinearProgress, Typography } from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { useNavigate } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import { loginThunk } from "@redux/auth/thunk";
-import { useMySnackbar, useTypedDispatch } from "utils/hooks";
-import { emailPasswordSchema, EmailPasswordSchemaType } from "validation/yup";
-import { useForm } from "react-hook-form";
-import FormTextField from "components/FormTextField";
-import CenteredMarginBox from "components/CenteredMarginBox";
-import CenteredRoundBox from "components/CenteredRoundBox";
-import { AxiosError } from "axios";
-import ImageWidgetPage from "components/ImageWidgetPage";
-import { defaultErrorEnqueue } from "utils/errorProcessor";
+import { loginThunk } from '@redux/auth/thunk';
+import { useMySnackbar, useTypedDispatch } from 'utils/hooks';
+import { emailPasswordSchema, EmailPasswordSchemaType } from 'validation/yup';
+import { useForm } from 'react-hook-form';
+import FormTextField from 'components/FormTextField';
+import CenteredMarginBox from 'components/CenteredMarginBox';
+import CenteredRoundBox from 'components/CenteredRoundBox';
+import { AxiosError } from 'axios';
+import ImageWidgetPage from 'components/ImageWidgetPage';
+import { defaultErrorEnqueue } from 'utils/errorProcessor';
 
-const LoginWidget = ({ redirectTo = "/" }) => {
+const LoginWidget = ({ redirectTo = '/' }) => {
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
   const { enqueueError } = useMySnackbar();
@@ -26,8 +26,8 @@ const LoginWidget = ({ redirectTo = "/" }) => {
     formState: { isSubmitting },
   } = useForm<EmailPasswordSchemaType>({
     resolver: yupResolver(emailPasswordSchema),
-    mode: "all",
-    defaultValues: { username: "", password: "" },
+    mode: 'all',
+    defaultValues: { username: '', password: '' },
   });
 
   const onSubmit = useCallback(
@@ -39,7 +39,7 @@ const LoginWidget = ({ redirectTo = "/" }) => {
         })
         .catch((e: AxiosError) => {
           if (e.response?.status === 401) {
-            enqueueError("Неверный username или пароль");
+            enqueueError('Неверный username или пароль');
           } else {
             defaultErrorEnqueue(e, enqueueError);
           }

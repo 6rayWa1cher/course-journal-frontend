@@ -1,11 +1,11 @@
-import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
-import { getSelfCoursesPageThunk } from "./thunk";
-import { CourseDto } from "models/course";
+import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
+import { getSelfCoursesPageThunk } from './thunk';
+import { CourseDto } from 'models/course';
 
 export const adapter = createEntityAdapter<CourseDto>();
 
 export const slice = createSlice({
-  name: "courses",
+  name: 'courses',
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {

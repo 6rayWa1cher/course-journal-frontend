@@ -1,11 +1,11 @@
-import type { AxiosPromise } from "axios";
-import { basicAxios, mainAxios } from "./helpers/myaxios";
+import type { AxiosPromise } from 'axios';
+import { basicAxios, mainAxios } from './helpers/myaxios';
 import type {
   ApiAuthBag,
   LoginRequest,
   RefreshUserIdRequest,
   SelfInfo,
-} from "./types";
+} from './types';
 
 export const checkCredentialsApi = (): AxiosPromise<void> =>
   mainAxios.get(`/auth/check`);

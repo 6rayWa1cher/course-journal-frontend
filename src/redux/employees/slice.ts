@@ -5,7 +5,7 @@ import { EmployeeDto } from "models/employee";
 export const adapter = createEntityAdapter<EmployeeDto>();
 
 export const slice = createSlice({
-  name: "employees",
+  name: 'employees',
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {

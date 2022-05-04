@@ -1,5 +1,5 @@
-import { AxiosError, AxiosResponse } from "axios";
-import store from "./store";
+import { AxiosError, AxiosResponse } from 'axios';
+import store from './store';
 
 export interface GenericError {
   error: string;
@@ -17,8 +17,8 @@ export type SelectorType<T = any, J = void> = (
 ) => T;
 
 export interface SerializedAxiosError {
-  code: AxiosError["code"];
-  message: AxiosError["message"];
-  stack: AxiosError["stack"];
-  response?: Omit<AxiosResponse, "request" | "config">;
+  code: AxiosError['code'];
+  message: AxiosError['message'];
+  stack: AxiosError['stack'];
+  response?: Omit<AxiosResponse, 'request' | 'config'>;
 }
