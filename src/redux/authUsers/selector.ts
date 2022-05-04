@@ -1,7 +1,7 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { authUserIdSelector } from "@redux/auth/selector";
-import type { RootState } from "@redux/types";
-import { AuthUserDto, AuthUserId } from "models/authUser";
+import { createSelector } from '@reduxjs/toolkit';
+import { authUserIdSelector } from '@redux/auth/selector';
+import type { RootState } from '@redux/types';
+import { AuthUserDto, AuthUserId } from 'models/authUser';
 
 const authUsersSelector = (state: RootState) => state.authUsers;
 

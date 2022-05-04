@@ -1,10 +1,10 @@
-import { SerializedError } from "@reduxjs/toolkit";
+import { SerializedError } from '@reduxjs/toolkit';
 
 export enum WebApplicationState {
-  IDLE = "idle",
-  LOADING = "loading",
-  RUNNING = "running",
-  ERROR = "error",
+  IDLE = 'idle',
+  LOADING = 'loading',
+  RUNNING = 'running',
+  ERROR = 'error',
 }
 
 export interface AppState {
@@ -14,6 +14,6 @@ export interface AppState {
 }
 
 export enum Stage {
-  UNAUTHORIZED = "UNAUTHORIZED",
-  AUTHORIZED = "AUTHORIZED",
+  UNAUTHORIZED = 'UNAUTHORIZED',
+  AUTHORIZED = 'AUTHORIZED',
 }

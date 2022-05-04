@@ -1,6 +1,6 @@
-import type { RootState } from "@redux/types";
-import { createSelector } from "@reduxjs/toolkit";
-import { CourseId } from "models/course";
+import type { RootState } from '@redux/types';
+import { createSelector } from '@reduxjs/toolkit';
+import { CourseId } from 'models/course';
 
 const coursesSelector = (state: RootState) => state.courses;
 

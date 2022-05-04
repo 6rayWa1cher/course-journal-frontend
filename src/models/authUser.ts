@@ -1,10 +1,10 @@
-import type { EmployeeId } from "./employee";
-import type { StudentId } from "./student";
+import type { EmployeeId } from './employee';
+import type { StudentId } from './student';
 
 export enum UserRole {
-  ADMIN = "ADMIN",
-  TEACHER = "TEACHER",
-  HEADMAN = "HEADMAN",
+  ADMIN = 'ADMIN',
+  TEACHER = 'TEACHER',
+  HEADMAN = 'HEADMAN',
 }
 
 export type AuthUserId = number;

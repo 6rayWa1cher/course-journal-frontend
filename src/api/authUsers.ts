@@ -1,6 +1,6 @@
-import type { AxiosPromise } from "axios";
-import type { AuthUserDto, AuthUserId } from "models/authUser";
-import { mainAxios } from "./helpers/myaxios";
+import type { AxiosPromise } from 'axios';
+import type { AuthUserDto, AuthUserId } from 'models/authUser';
+import { mainAxios } from './helpers/myaxios';
 
 export const getAuthUserByIdApi = (
   authUserId: AuthUserId

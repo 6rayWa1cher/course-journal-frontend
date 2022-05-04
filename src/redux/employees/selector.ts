@@ -1,6 +1,6 @@
-import type { RootState } from "@redux/types";
-import { createSelector } from "@reduxjs/toolkit";
-import { EmployeeId } from "models/employee";
+import type { RootState } from '@redux/types';
+import { createSelector } from '@reduxjs/toolkit';
+import { EmployeeId } from 'models/employee';
 
 const employeesSelector = (state: RootState) => state.employees;
 

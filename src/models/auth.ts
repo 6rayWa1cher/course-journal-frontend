@@ -1,4 +1,4 @@
-import { AuthUserId } from "./authUser";
+import { AuthUserId } from './authUser';
 
 export interface Token {
   value: string;

@@ -1,11 +1,11 @@
-import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
-import { AuthUserDto } from "models/authUser";
-import { getAuthUserByIdThunk } from "./thunk";
+import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
+import { AuthUserDto } from 'models/authUser';
+import { getAuthUserByIdThunk } from './thunk';
 
 export const adapter = createEntityAdapter<AuthUserDto>();
 
 export const slice = createSlice({
-  name: "authUsers",
+  name: 'authUsers',
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {

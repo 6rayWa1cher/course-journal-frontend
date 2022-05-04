@@ -1,12 +1,12 @@
-import type { UserRole } from "models/authUser";
-import type { CourseDto } from "models/course";
-import type { EmployeeId } from "models/employee";
+import type { UserRole } from 'models/authUser';
+import type { CourseDto } from 'models/course';
+import type { EmployeeId } from 'models/employee';
 
 // GENERIC TYPES
 export interface PageRequest<Keys extends string = string> {
   page: number;
   size?: number;
-  sort?: Record<Keys, "asc" | "desc">;
+  sort?: Record<Keys, 'asc' | 'desc'>;
 }
 
 export interface Page<T> {

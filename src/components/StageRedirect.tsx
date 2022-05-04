@@ -1,14 +1,14 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { Stage, stageSelector } from "@redux/app";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { Stage, stageSelector } from '@redux/app';
 
 export const getStageRedirectTo = (stage: Stage) => {
   switch (stage) {
     case Stage.UNAUTHORIZED:
-      return "/login";
+      return '/login';
     default:
-      return "/";
+      return '/';
   }
 };
 
