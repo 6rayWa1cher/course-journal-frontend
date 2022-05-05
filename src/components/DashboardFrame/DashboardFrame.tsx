@@ -1,25 +1,25 @@
-import { useState, useCallback } from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography, { TypographyProps } from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Container from "@mui/material/Container";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { adminListItems, mainListItems, secondaryListItems } from "./ListItems";
-import { Outlet, useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useMediaQuery } from "@mui/material";
-import PathBreadcrumb from "./PathBreadcrumb";
-import { useSelector } from "react-redux";
-import { selfAuthUserSelector } from "@redux/authUsers";
-import { UserRole } from "models/authUser";
+import { useState, useCallback } from 'react';
+import { styled, useTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import MuiDrawer from '@mui/material/Drawer';
+import Box from '@mui/material/Box';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Typography, { TypographyProps } from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Container from '@mui/material/Container';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { adminListItems, mainListItems, secondaryListItems } from './ListItems';
+import { Outlet, useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useMediaQuery } from '@mui/material';
+import PathBreadcrumb from './PathBreadcrumb';
+import { useSelector } from 'react-redux';
+import { selfAuthUserSelector } from '@redux/authUsers';
+import { UserRole } from 'models/authUser';
 
 const Copyright = (props: TypographyProps) => {
   const yearRange = (() => {
@@ -113,7 +113,7 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
     setOpen(!open);
   };
   const theme = useTheme();
-  const largeScreen = useMediaQuery(theme.breakpoints.up("sm"));
+  const largeScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const role = useSelector(selfAuthUserSelector)?.userRole;
   return (
     <Box sx={{ display: 'flex' }}>
@@ -168,7 +168,7 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
         component="main"
         sx={{
           backgroundColor: (theme) =>
-            theme.palette.mode === "light"
+            theme.palette.mode === 'light'
               ? theme.palette.grey[100]
               : theme.palette.grey[900],
           flexGrow: 1,

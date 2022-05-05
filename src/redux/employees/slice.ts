@@ -1,6 +1,11 @@
-import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
-import { getEmployeeByIdThunk, geеEmployeesThunk } from "./thunk";
-import { EmployeeDto } from "models/employee";
+import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
+import {
+  deleteEmployeeThunk,
+  getEmployeeByIdThunk,
+  getEmployeesThunk,
+  putEmployeeThunk,
+} from './thunk';
+import { EmployeeDto } from 'models/employee';
 
 export const adapter = createEntityAdapter<EmployeeDto>();
 
@@ -9,11 +14,14 @@ export const slice = createSlice({
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(geеEmployeesThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(getEmployeesThunk.fulfilled, (state, { payload }) => {
       adapter.upsertMany(state, payload.content);
     });
+    builder.addCase(deleteEmployeeThunk.fulfilled, (state, { payload }) => {
+      adapter.removeOne(state, payload);
+    });
     builder.addMatcher(
-      isAnyOf(getEmployeeByIdThunk.fulfilled),
+      isAnyOf(getEmployeeByIdThunk.fulfilled, putEmployeeThunk.fulfilled),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
       }

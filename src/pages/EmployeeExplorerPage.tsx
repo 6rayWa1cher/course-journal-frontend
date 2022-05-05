@@ -7,18 +7,18 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
-} from "@mui/material";
-import { geеEmployeesThunk } from "@redux/employees";
-import { useAppDispatch } from "@redux/utils";
-import { unwrapResult } from "@reduxjs/toolkit";
-import BigProcess from "components/BigProcess";
-import { EmployeeId } from "models/employee";
-import { useCallback, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { defaultErrorEnqueue } from "utils/errorProcessor";
-import { useLoadingPlain, useMySnackbar, useParamSelector } from "utils/hooks";
-import { getFirstCapitalSymbols } from "utils/string";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+} from '@mui/material';
+import { getEmployeesThunk } from '@redux/employees';
+import { useAppDispatch } from '@redux/utils';
+import { unwrapResult } from '@reduxjs/toolkit';
+import BigProcess from 'components/BigProcess';
+import { EmployeeId } from 'models/employee';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { defaultErrorEnqueue } from 'utils/errorProcessor';
+import { useLoadingPlain, useMySnackbar } from 'utils/hooks';
+import { getFirstCapitalSymbols } from 'utils/string';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const EmployeeExplorerPage = () => {
   const [page, setPage] = useState(0);
@@ -26,7 +26,7 @@ const EmployeeExplorerPage = () => {
   const dispatch = useAppDispatch();
   const action = useCallback(
     () =>
-      dispatch(geеEmployeesThunk({ page }))
+      dispatch(getEmployeesThunk({ page }))
         .then(unwrapResult)
         .catch((e) => {
           defaultErrorEnqueue(e, enqueueError);
@@ -49,7 +49,7 @@ const EmployeeExplorerPage = () => {
     <Paper>
       <List>
         {value?.content.map(({ id, firstName, middleName, lastName }) => {
-          const fullName = [lastName, firstName, middleName].join(" ");
+          const fullName = [lastName, firstName, middleName].join(' ');
           const handleClick = () => handleItemClick(id);
           return (
             <ListItem

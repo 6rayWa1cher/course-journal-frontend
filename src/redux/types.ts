@@ -16,7 +16,7 @@ export type SelectorType<T = any, J = void> = (
   params: J
 ) => T;
 
-export interface SerializedAxiosError {
+export interface SerializedAxiosError extends Error {
   code: AxiosError['code'];
   message: AxiosError['message'];
   stack: AxiosError['stack'];

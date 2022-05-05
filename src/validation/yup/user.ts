@@ -1,9 +1,11 @@
 import { FieldValues } from 'react-hook-form';
 import yup from './utils';
 
-const username = yup.string().min(3).max(25).required();
+export const username = yup.string().min(3).max(25).required();
 
-const password = yup.string().min(5).max(128).required();
+export const passwordRaw = yup.string().min(5).max(128);
+export const password = passwordRaw.required();
+
 const confirmPassword = yup
   .string()
   .oneOf([yup.ref('password')], 'Пароли не одинаковы')

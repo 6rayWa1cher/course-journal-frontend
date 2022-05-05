@@ -5,6 +5,7 @@ import { useLocation, Link as RouterLink } from 'react-router-dom';
 
 const localizationTable: Record<string, string> = {
   '': 'Журнал курса',
+  employees: 'Преподаватели',
 };
 
 const localizeName = (name: Nullable<string | number>): string => {

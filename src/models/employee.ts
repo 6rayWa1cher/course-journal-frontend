@@ -12,5 +12,5 @@ export interface EmployeeDto {
 
 export type EmployeeData = Omit<
   EmployeeDto,
-  "id" | "createdAt" | "lastModifiedAt"
+  'id' | 'createdAt' | 'lastModifiedAt'
 >;

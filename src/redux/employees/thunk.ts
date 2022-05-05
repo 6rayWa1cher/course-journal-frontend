@@ -1,7 +1,12 @@
-import { createAxiosAsyncThunk } from "@redux/utils";
-import { getEmployeeByIdApi, getEmployeesApi } from "api/employees";
-import { GetEmployeesRequest } from "api/types";
-import { EmployeeId } from "models/employee";
+import { createAxiosAsyncThunk } from '@redux/utils';
+import {
+  deleteEmployeeApi,
+  getEmployeeByIdApi,
+  getEmployeesApi,
+  putEmployeeApi,
+} from 'api/employees';
+import { GetEmployeesRequest } from 'api/types';
+import { EmployeeData, EmployeeId } from 'models/employee';
 
 export interface EmployeesGetByIdArgs {
   employeeId: EmployeeId;
@@ -16,10 +21,33 @@ export const getEmployeeByIdThunk = createAxiosAsyncThunk(
   }
 );
 
-export const geеEmployeesThunk = createAxiosAsyncThunk(
-  "employees/getEmployees",
+export const getEmployeesThunk = createAxiosAsyncThunk(
+  'employees/getEmployees',
   async (args: GetEmployeesRequest) => {
     const data = (await getEmployeesApi(args)).data;
     return data;
+  }
+);
+
+export interface PutEmployeeArgs {
+  employeeId: EmployeeId;
+  data: EmployeeData;
+}
+
+export const putEmployeeThunk = createAxiosAsyncThunk(
+  'employees/put',
+  async ({ employeeId, data }: PutEmployeeArgs) => {
+    const employee = (await putEmployeeApi(employeeId, data)).data;
+    return employee;
+  }
+);
+
+export type DeleteEmployeeArgs = EmployeesGetByIdArgs;
+
+export const deleteEmployeeThunk = createAxiosAsyncThunk(
+  'employees/delete',
+  async ({ employeeId }: DeleteEmployeeArgs) => {
+    await deleteEmployeeApi(employeeId);
+    return employeeId;
   }
 );

@@ -1,7 +1,7 @@
-import { selfAuthUserSelector } from "@redux/authUsers";
-import { UserRole } from "models/authUser";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { selfAuthUserSelector } from '@redux/authUsers';
+import { UserRole } from 'models/authUser';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
 export interface RoleRouteProps {
   role: UserRole;

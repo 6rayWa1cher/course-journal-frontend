@@ -7,8 +7,8 @@ const authUsersSelector = (state: RootState) => state.authUsers;
 
 const authUserIdFromParamsSelector = (
   _: any,
-  { authUserId }: { authUserId: AuthUserId }
-) => authUserId;
+  { authUserId }: { authUserId?: AuthUserId }
+) => authUserId ?? -1;
 const authUserIdsFromParamsSelector = (
   _: any,
   { ids }: { ids: AuthUserId[] }
@@ -19,4 +19,10 @@ export const selfAuthUserSelector = createSelector(
   authUserIdSelector,
   ({ entities }, uid): Nullable<AuthUserDto> =>
     uid != null ? entities[uid] : null
+);
+
+export const authUserByIdSelector = createSelector(
+  authUsersSelector,
+  authUserIdFromParamsSelector,
+  (state, authUserId) => state.entities[authUserId]
 );

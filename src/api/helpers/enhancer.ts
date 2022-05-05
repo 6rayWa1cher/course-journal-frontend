@@ -36,7 +36,7 @@ export const createWrappedAuthApiInterceptor = (store: Store) => {
       .catch(async (e) => {
         console.error(e);
         try {
-          await store.dispatch(logoutThunk());
+          await store.dispatch(logoutThunk({ bothTokensInvalid: true }));
         } finally {
           throw e;
         }

@@ -9,7 +9,7 @@ const Logout = () => {
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(logoutThunk()).then((action) => {
+    dispatch(logoutThunk({ bothTokensInvalid: false })).then((action) => {
       if (action.meta.requestStatus === 'rejected' && action.meta.condition) {
         return;
       }

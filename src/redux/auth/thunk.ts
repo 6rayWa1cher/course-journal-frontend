@@ -33,17 +33,24 @@ export const loginThunk = createAxiosAsyncThunk(
   }
 );
 
+export interface LogoutArgs {
+  bothTokensInvalid: boolean;
+}
+
 export const logoutThunk = createAxiosAsyncThunk(
   'auth/logout',
-  async (_, { getState }) => {
+  async ({ bothTokensInvalid }: LogoutArgs, { getState }) => {
     const state = getState();
     const refreshToken = refreshTokenSelector(state);
     const authUserId = authUserIdSelector(state);
-    if (refreshToken && authUserId) {
+    console.log('begun');
+    if (refreshToken && authUserId && !bothTokensInvalid) {
+      console.log('started');
       try {
         await invalidateTokenApi({ refreshToken, userId: authUserId });
       } catch {}
     }
+    console.log('exited');
     removeAuthBag();
   },
   {

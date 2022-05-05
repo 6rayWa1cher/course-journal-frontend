@@ -1,13 +1,13 @@
-import type { RootState } from "@redux/types";
-import { createSelector } from "@reduxjs/toolkit";
-import { EmployeeDto, EmployeeId } from "models/employee";
+import type { RootState } from '@redux/types';
+import { createSelector } from '@reduxjs/toolkit';
+import { EmployeeDto, EmployeeId } from 'models/employee';
 
 const employeesSelector = (state: RootState) => state.employees;
 
 const employeeIdFromParamsSelector = (
   _: any,
-  { employeeId }: { employeeId: EmployeeId }
-) => employeeId;
+  { employeeId }: { employeeId?: EmployeeId }
+) => employeeId ?? -1;
 const employeeIdsFromParamsSelector = (
   _: any,
   { ids }: { ids: EmployeeId[] }

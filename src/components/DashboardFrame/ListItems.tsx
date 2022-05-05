@@ -1,12 +1,12 @@
-import * as React from "react";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import HistoryIcon from "@mui/icons-material/History";
-import { Link } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import * as React from 'react';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import HistoryIcon from '@mui/icons-material/History';
+import { Link } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 export const mainListItems = (
   <div>

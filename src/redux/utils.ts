@@ -28,7 +28,7 @@ export const createTypedAsyncThunk = <ReturnType, ThunkArg = void>(
   );
 
 export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
-  const { code, message, stack, response } = e;
+  const { code, message, stack, response, name } = e;
   const serializedResponse =
     response == null
       ? response
@@ -43,6 +43,7 @@ export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
     message,
     stack,
     response: serializedResponse,
+    name,
   };
 };
 

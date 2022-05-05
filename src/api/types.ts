@@ -1,6 +1,7 @@
-import type { UserRole } from "models/authUser";
-import type { CourseDto } from "models/course";
-import type { EmployeeDto, EmployeeId } from "models/employee";
+import type { UserRole } from 'models/authUser';
+import type { CourseDto } from 'models/course';
+import type { EmployeeData, EmployeeDto, EmployeeId } from 'models/employee';
+import { StudentId } from 'models/student';
 
 // GENERIC TYPES
 export interface PageRequest<Keys extends string = string> {
@@ -78,3 +79,18 @@ export interface CreateCourseRequest {
 export type EditCourseRequest = CreateCourseRequest;
 
 export type GetEmployeesRequest = PageRequest<keyof EmployeeDto>;
+
+export type PutEmployeeRequest = EmployeeData;
+
+interface AuthUserGenericPart {
+  username: string;
+  password: string;
+}
+export type CreateAuthUserRequest = AuthUserGenericPart &
+  (
+    | { userRole: UserRole.ADMIN }
+    | { userRole: UserRole.TEACHER; userInfo: EmployeeId }
+    | { userRole: UserRole.HEADMAN; userInfo: StudentId }
+  );
+
+export type PatchAuthUserRequest = Partial<CreateAuthUserRequest>;

@@ -1,9 +1,15 @@
-import { createAxiosAsyncThunk } from "@redux/utils";
-import { AuthUserId, UserRole } from "models/authUser";
-import { getAuthUserByEmployeeIdApi, getAuthUserByIdApi } from "api/authUsers";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { getEmployeeByIdThunk } from "@redux/employees";
-import { EmployeeId } from "models/employee";
+import { createAxiosAsyncThunk } from '@redux/utils';
+import { AuthUserId, UserRole } from 'models/authUser';
+import {
+  createAuthUserApi,
+  getAuthUserByEmployeeIdApi,
+  getAuthUserByIdApi,
+  patchAuthUserApi,
+} from 'api/authUsers';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { getEmployeeByIdThunk } from '@redux/employees';
+import { EmployeeId } from 'models/employee';
+import { CreateAuthUserRequest, PatchAuthUserRequest } from 'api/types';
 
 export interface GetAuthUserByIdArgs {
   authUserId: AuthUserId;
@@ -40,9 +46,30 @@ export interface GetAuthUserByEmployeeIdArgs {
 }
 
 export const getAuthUserByEmployeeIdThunk = createAxiosAsyncThunk(
-  "authUsers/getAuthUserByEmployeeId",
+  'authUsers/getAuthUserByEmployeeId',
   async ({ employeeId }: GetAuthUserByEmployeeIdArgs) => {
     const user = (await getAuthUserByEmployeeIdApi(employeeId)).data;
+    return user;
+  }
+);
+
+export const createAuthUserThunk = createAxiosAsyncThunk(
+  'authUsers/create',
+  async (data: CreateAuthUserRequest) => {
+    const user = (await createAuthUserApi(data)).data;
+    return user;
+  }
+);
+
+export interface PatchAuthUserArgs {
+  authUserId: EmployeeId;
+  data: PatchAuthUserRequest;
+}
+
+export const patchAuthUserThunk = createAxiosAsyncThunk(
+  'authUsers/patch',
+  async ({ authUserId, data }: PatchAuthUserArgs) => {
+    const user = (await patchAuthUserApi(authUserId, data)).data;
     return user;
   }
 );
