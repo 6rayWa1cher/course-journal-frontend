@@ -1,10 +1,14 @@
 import { FieldValues } from 'react-hook-form';
 import yup from './utils';
 
-export const username = yup.string().min(3).max(25).required();
+export const username = yup
+  .string()
+  .min(5)
+  .max(25)
+  .matches(/^[a-zA-Z0-9.]{5,25}$/, 'Может содержать только a-z, A-Z, 0-9 и .')
+  .required();
 
-export const passwordRaw = yup.string().min(5).max(128);
-export const password = passwordRaw.required();
+export const password = yup.string().min(5).max(128);
 
 const confirmPassword = yup
   .string()

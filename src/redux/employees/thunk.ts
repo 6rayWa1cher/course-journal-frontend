@@ -1,5 +1,6 @@
 import { createAxiosAsyncThunk } from '@redux/utils';
 import {
+  createEmployeeApi,
   deleteEmployeeApi,
   getEmployeeByIdApi,
   getEmployeesApi,
@@ -26,6 +27,14 @@ export const getEmployeesThunk = createAxiosAsyncThunk(
   async (args: GetEmployeesRequest) => {
     const data = (await getEmployeesApi(args)).data;
     return data;
+  }
+);
+
+export const createEmployeeThunk = createAxiosAsyncThunk(
+  'employees/create',
+  async (args: EmployeeData) => {
+    const employee = (await createEmployeeApi(args)).data;
+    return employee;
   }
 );
 

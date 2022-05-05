@@ -1,10 +1,4 @@
-import { FieldValues } from 'react-hook-form';
-import {
-  username,
-  password,
-  passwordRaw,
-  EmailPasswordSchemaType,
-} from './user';
+import { username, password, EmailPasswordSchemaType } from './user';
 import yup from './utils';
 
 const firstName = yup.string().required().max(50);
@@ -43,6 +37,9 @@ export type EmployeeAuthUserOptionalPasswordType = EmployeeSchemaType &
 export const employeeAuthUserOptionalPasswordSchema = employeeSchema
   .shape({
     username,
-    password: passwordRaw,
+    password: yup.string().when({
+      is: (password: string) => password != null && password.length > 0,
+      then: password,
+    }),
   })
   .required();

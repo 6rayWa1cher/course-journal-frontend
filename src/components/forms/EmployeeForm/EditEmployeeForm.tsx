@@ -17,7 +17,6 @@ import {
   employeeAuthUserSchema,
 } from 'validation/yup/employee';
 import InnerEmployeeForm from './InnerEmployeeForm';
-import { pick } from 'lodash';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -80,7 +79,10 @@ const EditEmployeeForm = ({
               authUserId,
               data: {
                 username,
-                password,
+                password:
+                  password != null && password.length > 0
+                    ? password
+                    : undefined,
               },
             })
           ).then(unwrapResult);

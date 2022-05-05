@@ -15,6 +15,7 @@ import { UserRole } from 'models/authUser';
 import RoleRoute from './RoleRoute';
 import EmployeeExplorerPage from 'pages/EmployeeExplorerPage';
 import EditEmployeePage from 'pages/EditEmployeePage';
+import CreateEmployeePage from 'pages/CreateEmployeePage';
 
 const darkTheme = createTheme({
   palette: {
@@ -37,6 +38,10 @@ const App = () => (
               }
             >
               <Route path="/employees" element={<EmployeeExplorerPage />} />
+              <Route
+                path="/employees/create"
+                element={<CreateEmployeePage />}
+              />
               <Route
                 path="/employees/:employeeId"
                 element={<EditEmployeePage />}

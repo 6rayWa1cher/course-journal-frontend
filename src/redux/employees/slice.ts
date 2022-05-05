@@ -1,5 +1,6 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import {
+  createEmployeeThunk,
   deleteEmployeeThunk,
   getEmployeeByIdThunk,
   getEmployeesThunk,
@@ -21,7 +22,11 @@ export const slice = createSlice({
       adapter.removeOne(state, payload);
     });
     builder.addMatcher(
-      isAnyOf(getEmployeeByIdThunk.fulfilled, putEmployeeThunk.fulfilled),
+      isAnyOf(
+        getEmployeeByIdThunk.fulfilled,
+        createEmployeeThunk.fulfilled,
+        putEmployeeThunk.fulfilled
+      ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
       }

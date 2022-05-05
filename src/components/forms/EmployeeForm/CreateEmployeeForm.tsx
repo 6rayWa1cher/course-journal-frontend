@@ -1,8 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { createAuthUserThunk } from '@redux/authUsers';
+import { createEmployeeThunk, deleteEmployeeThunk } from '@redux/employees';
 import { useAppDispatch } from '@redux/utils';
-import { EmployeeData } from 'models/employee';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { UserRole } from 'models/authUser';
 import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { defaultErrorEnqueue } from 'utils/errorProcessor';
+import { useMySnackbar } from 'utils/hooks';
+import { formatFullNameWithInitials } from 'utils/string';
 import {
   employeeAuthUserSchema,
   EmployeeAuthUserType,
@@ -24,11 +31,54 @@ const CreateEmployeeForm = () => {
   });
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { enqueueSuccess, enqueueError } = useMySnackbar();
   const handleSubmit = useCallback(
-    (data: EmployeeAuthUserType) => {
-      return Promise.resolve();
+    async (data: EmployeeAuthUserType) => {
+      const {
+        firstName,
+        middleName,
+        lastName,
+        department,
+        username,
+        password,
+      } = data;
+      let employeeId;
+      try {
+        const employee = await dispatch(
+          createEmployeeThunk({ firstName, middleName, lastName, department })
+        ).then(unwrapResult);
+        employeeId = employee.id;
+        await dispatch(
+          createAuthUserThunk({
+            username,
+            password,
+            userRole: UserRole.TEACHER,
+            userInfo: employeeId,
+          })
+        ).then(unwrapResult);
+        enqueueSuccess(
+          `Пользователь ${formatFullNameWithInitials({
+            firstName,
+            middleName,
+            lastName,
+          })} успешно создан`
+        );
+        navigate(`/employees/${employeeId}`, { replace: true });
+      } catch (e) {
+        if (employeeId != null) {
+          try {
+            await dispatch(deleteEmployeeThunk({ employeeId })).then(
+              unwrapResult
+            );
+          } catch (e1) {
+            defaultErrorEnqueue(e1 as Error, enqueueError);
+          }
+        }
+        defaultErrorEnqueue(e as Error, enqueueError);
+      }
     },
-    [dispatch]
+    [dispatch, navigate, enqueueError, enqueueSuccess]
   );
 
   return (

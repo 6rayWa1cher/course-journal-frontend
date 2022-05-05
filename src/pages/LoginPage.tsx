@@ -39,7 +39,7 @@ const LoginWidget = ({ redirectTo = '/' }) => {
         })
         .catch((e: AxiosError) => {
           if (e.response?.status === 401) {
-            enqueueError('Неверный username или пароль');
+            enqueueError('Неверный логин или пароль');
           } else {
             defaultErrorEnqueue(e, enqueueError);
           }
@@ -63,7 +63,7 @@ const LoginWidget = ({ redirectTo = '/' }) => {
               control={control}
               variant="outlined"
               margin="normal"
-              label="Имя пользователя"
+              label="Логин"
               type="text"
               fullWidth
               required

@@ -1,4 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
   Divider,
@@ -6,33 +5,14 @@ import {
   IconButton,
   LinearProgress,
 } from '@mui/material';
-import { padding, styled } from '@mui/system';
-import { authUserByIdSelector } from '@redux/authUsers';
-import { employeeByIdSelector } from '@redux/employees';
-import { useAppDispatch } from '@redux/utils';
+import { styled } from '@mui/system';
 import PasswordInput from 'components/PasswordInput';
-import { AuthUserId } from 'models/authUser';
-import { EmployeeData, EmployeeDto, EmployeeId } from 'models/employee';
 import { useCallback, useState } from 'react';
-import {
-  FieldValues,
-  FormProvider,
-  useForm,
-  useFormContext,
-} from 'react-hook-form';
-import { useMySnackbar, useParamSelector } from 'utils/hooks';
-import { EmailPasswordSchemaType } from 'validation/yup';
-import {
-  employeeAuthUserOptionalPasswordSchema,
-  employeeAuthUserSchema,
-  EmployeeAuthUserType,
-  employeeSchema,
-  EmployeeSchemaType,
-} from 'validation/yup/employee';
+import { useFormContext } from 'react-hook-form';
+import { EmployeeAuthUserType } from 'validation/yup/employee';
 import FormTextField from 'components/FormTextField';
 import CasinoIcon from '@mui/icons-material/Casino';
 import { generatePassword } from 'utils/random';
-import { boolean } from 'yup/lib/locale';
 
 const PaddingGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),

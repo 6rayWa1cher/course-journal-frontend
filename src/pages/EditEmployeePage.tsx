@@ -20,7 +20,7 @@ import NotFound from 'components/NotFound';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import { useLoadingPlain, useMySnackbar } from 'utils/hooks';
+import { useDocumentTitle, useLoadingPlain, useMySnackbar } from 'utils/hooks';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Title from 'components/Title';
 import { Box } from '@mui/system';
@@ -28,7 +28,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { formatFullNameWithInitials } from 'utils/string';
 import { LoadingButton } from '@mui/lab';
 
-const EmployeePage = () => {
+const EditEmployeePage = () => {
   const params = useParams();
 
   const employeeId = Number(params.employeeId);
@@ -78,6 +78,7 @@ const EmployeePage = () => {
           }),
     [employee]
   );
+  useDocumentTitle(fullNameWithInitials ?? 'Изменение преподавателя');
   const deleteAction = useCallback(async () => {
     try {
       await dispatch(deleteEmployeeThunk({ employeeId })).then(unwrapResult);
@@ -150,4 +151,4 @@ const EmployeePage = () => {
   );
 };
 
-export default EmployeePage;
+export default EditEmployeePage;

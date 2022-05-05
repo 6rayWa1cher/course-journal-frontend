@@ -1,5 +1,5 @@
 import { Breadcrumbs, Link, Typography } from '@mui/material';
-import { Box, SxProps, Theme } from '@mui/system';
+import { SxProps, Theme } from '@mui/system';
 import React, { useMemo } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 
