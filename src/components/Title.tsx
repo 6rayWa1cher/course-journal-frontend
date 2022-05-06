@@ -6,7 +6,7 @@ export interface TitleProps {
 
 const Title = ({ children }: TitleProps) => {
   return (
-    <Typography component="h2" variant="h4" color="primary">
+    <Typography component="h1" variant="h4" color="primary">
       {children}
     </Typography>
   );

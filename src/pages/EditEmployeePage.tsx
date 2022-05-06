@@ -1,14 +1,4 @@
-import {
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  Paper,
-} from '@mui/material';
+import { Container, IconButton, Paper } from '@mui/material';
 import { getAuthUserByEmployeeIdThunk } from '@redux/authUsers';
 import { deleteEmployeeThunk, getEmployeeByIdThunk } from '@redux/employees';
 import { SerializedAxiosError } from '@redux/types';
@@ -17,16 +7,15 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import BigProcess from 'components/BigProcess';
 import EditEmployeeForm from 'components/forms/EmployeeForm/EditEmployeeForm';
 import NotFound from 'components/NotFound';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { useDocumentTitle, useLoadingPlain, useMySnackbar } from 'utils/hooks';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Title from 'components/Title';
 import { Box } from '@mui/system';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { formatFullNameWithInitials } from 'utils/string';
-import { LoadingButton } from '@mui/lab';
+import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm';
 
 const EditEmployeePage = () => {
   const params = useParams();
@@ -57,15 +46,6 @@ const EditEmployeePage = () => {
   const navigate = useNavigate();
   const handleBackButtonClick = useCallback(() => navigate(-1), [navigate]);
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const handleCloseDialog = useCallback(
-    () => setOpenDialog(false),
-    [setOpenDialog]
-  );
-  const handleOpenDialog = useCallback(
-    () => setOpenDialog(true),
-    [setOpenDialog]
-  );
   const [employee, authUser] = loadingProps.value ?? [];
   const fullNameWithInitials = useMemo(
     () =>
@@ -79,7 +59,7 @@ const EditEmployeePage = () => {
     [employee]
   );
   useDocumentTitle(fullNameWithInitials ?? 'Изменение преподавателя');
-  const deleteAction = useCallback(async () => {
+  const handleDeleteClick = useCallback(async () => {
     try {
       await dispatch(deleteEmployeeThunk({ employeeId })).then(unwrapResult);
       enqueueSuccess(`Пользователь ${fullNameWithInitials} успешно удален`);
@@ -95,8 +75,6 @@ const EditEmployeePage = () => {
     fullNameWithInitials,
     navigate,
   ]);
-  const deleteProps = useLoadingPlain(deleteAction, { immediate: false });
-  const handleDeleteButtonClick = deleteProps.execute;
 
   if (loadingProps.loading) {
     return <BigProcess />;
@@ -119,33 +97,14 @@ const EditEmployeePage = () => {
             <Title>Редактирование преподавателя</Title>
           </Box>
           <Box>
-            <IconButton onClick={handleOpenDialog} color="error">
-              <DeleteForeverIcon />
-            </IconButton>
+            <DeleteButtonWithConfirm
+              onDelete={handleDeleteClick}
+              dialogTitle={`Удалить преподавателя ${formatFullNameWithInitials}?`}
+              dialogDescription="Эта операция необратима и приведет к удалению всех курсов преподавателя"
+            />
           </Box>
         </Box>
         <EditEmployeeForm employeeId={employee?.id} authUserId={authUser?.id} />
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle>
-            Удалить преподавателя {fullNameWithInitials}?
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Эта операция необратима и приведет к удалению всех курсов
-              преподавателя
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog}>Отменить</Button>
-            <LoadingButton
-              onClick={handleDeleteButtonClick}
-              loading={deleteProps.loading}
-              color="error"
-            >
-              Удалить
-            </LoadingButton>
-          </DialogActions>
-        </Dialog>
       </Container>
     </Paper>
   );

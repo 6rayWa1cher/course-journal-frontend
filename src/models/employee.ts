@@ -10,7 +10,7 @@ export interface EmployeeDto {
   lastModifiedAt: string;
 }
 
-export type EmployeeData = Omit<
+export type EmployeeRestDto = Omit<
   EmployeeDto,
   'id' | 'createdAt' | 'lastModifiedAt'
 >;

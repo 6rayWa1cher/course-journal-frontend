@@ -16,6 +16,8 @@ import RoleRoute from './RoleRoute';
 import EmployeeExplorerPage from 'pages/EmployeeExplorerPage';
 import EditEmployeePage from 'pages/EditEmployeePage';
 import CreateEmployeePage from 'pages/CreateEmployeePage';
+import FacultyExplorerPage from 'pages/FacultyExplorerPage';
+import FacultyPage from 'pages/FacultyPage';
 
 const darkTheme = createTheme({
   palette: {
@@ -46,6 +48,8 @@ const App = () => (
                 path="/employees/:employeeId"
                 element={<EditEmployeePage />}
               />
+              <Route path="/faculties" element={<FacultyExplorerPage />} />
+              <Route path="/faculties/:facultyId" element={<FacultyPage />} />
             </Route>
           </Route>
           <Route

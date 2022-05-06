@@ -1,5 +1,5 @@
 import type { AxiosPromise } from 'axios';
-import type { EmployeeData, EmployeeDto, EmployeeId } from 'models/employee';
+import type { EmployeeRestDto, EmployeeDto, EmployeeId } from 'models/employee';
 import { mainAxios } from './helpers/myaxios';
 import { preparePageRequest } from './helpers/preparers';
 import { GetEmployeesRequest, Page, PutEmployeeRequest } from './types';
@@ -13,7 +13,7 @@ export const getEmployeeByIdApi = (id: EmployeeId): AxiosPromise<EmployeeDto> =>
   mainAxios.get(`/employees/${id}`);
 
 export const createEmployeeApi = (
-  data: EmployeeData
+  data: EmployeeRestDto
 ): AxiosPromise<EmployeeDto> => mainAxios.post(`/employees/`, data);
 
 export const putEmployeeApi = (

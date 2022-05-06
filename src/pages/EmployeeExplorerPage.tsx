@@ -25,6 +25,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import AddIcon from '@mui/icons-material/Add';
 import Title from 'components/Title';
 import { Page } from 'api/types';
+import EmptyListCaption from 'components/EmptyListCaption';
 
 const EmployeeExplorerPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -109,11 +110,7 @@ const EmployeeExplorerPage = () => {
           })}
         </List>
       )}
-      {value?.empty && !loading && (
-        <Typography display="block" variant="caption" align="center">
-          Список пуст
-        </Typography>
-      )}
+      {value?.empty && !loading && <EmptyListCaption />}
       <Grid container justifyContent="center">
         <Grid item>
           <Pagination count={pages} page={page} onChange={handleChangePage} />

@@ -7,7 +7,7 @@ import {
   putEmployeeApi,
 } from 'api/employees';
 import { GetEmployeesRequest } from 'api/types';
-import { EmployeeData, EmployeeId } from 'models/employee';
+import { EmployeeRestDto, EmployeeId } from 'models/employee';
 
 export interface EmployeesGetByIdArgs {
   employeeId: EmployeeId;
@@ -32,7 +32,7 @@ export const getEmployeesThunk = createAxiosAsyncThunk(
 
 export const createEmployeeThunk = createAxiosAsyncThunk(
   'employees/create',
-  async (args: EmployeeData) => {
+  async (args: EmployeeRestDto) => {
     const employee = (await createEmployeeApi(args)).data;
     return employee;
   }
@@ -40,7 +40,7 @@ export const createEmployeeThunk = createAxiosAsyncThunk(
 
 export interface PutEmployeeArgs {
   employeeId: EmployeeId;
-  data: EmployeeData;
+  data: EmployeeRestDto;
 }
 
 export const putEmployeeThunk = createAxiosAsyncThunk(

@@ -1,6 +1,6 @@
 import type { UserRole } from 'models/authUser';
 import type { CourseDto } from 'models/course';
-import type { EmployeeData, EmployeeDto, EmployeeId } from 'models/employee';
+import type { EmployeeRestDto, EmployeeDto, EmployeeId } from 'models/employee';
 import { StudentId } from 'models/student';
 
 // GENERIC TYPES
@@ -80,7 +80,7 @@ export type EditCourseRequest = CreateCourseRequest;
 
 export type GetEmployeesRequest = PageRequest<keyof EmployeeDto>;
 
-export type PutEmployeeRequest = EmployeeData;
+export type PutEmployeeRequest = EmployeeRestDto;
 
 interface AuthUserGenericPart {
   username: string;

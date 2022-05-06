@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 export const mainListItems = (
   <div>
@@ -38,6 +39,12 @@ export const adminListItems = (
         <AccountBoxIcon />
       </ListItemIcon>
       <ListItemText primary="Преподаватели" />
+    </ListItem>
+    <ListItem button component={Link} to="/faculties">
+      <ListItemIcon>
+        <AccountBalanceIcon />
+      </ListItemIcon>
+      <ListItemText primary="Факультеты" />
     </ListItem>
   </>
 );
