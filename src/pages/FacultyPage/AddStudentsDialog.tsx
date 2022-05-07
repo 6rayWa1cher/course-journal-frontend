@@ -1,3 +1,5 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 import {
   Button,
   Dialog,
@@ -6,49 +8,44 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import { batchCreateStudentThunk } from '@redux/students';
 import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
+import FormTextField from 'components/FormTextField';
+import { GroupId } from 'models/group';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { useMySnackbar } from 'utils/hooks';
-import { createFacultyThunk } from '@redux/faculties';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { facultySchema, FacultySchemaType } from 'validation/yup/faculty';
-import FormTextField from 'components/FormTextField';
-import { LoadingButton } from '@mui/lab';
-import { groupSchema, GroupSchemaType } from 'validation/yup/group';
-import { createGroupThunk } from '@redux/groups';
-import { FacultyId } from 'models/faculty';
-import { GroupDto } from 'models/group';
-import { SerializedAxiosError } from '@redux/types';
+import {
+  batchFullNamesSchema,
+  BatchFullNamesSchemaType,
+  BatchFullNamesTransformedSchemaType,
+} from 'validation/yup/student';
 
-export interface CreateGroupDialogProps {
-  facultyId: FacultyId;
+export interface AddStudentsDialogProps {
+  groupId: GroupId;
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSuccess?: (data: GroupDto) => void;
 }
 
 const dummyCourseId = 5; // backend-side bug
 
-const CreateGroupDialog = ({
-  facultyId,
+const AddStudentsDialog = ({
+  groupId,
   open,
   setOpen,
-  onSuccess,
-}: CreateGroupDialogProps) => {
+}: AddStudentsDialogProps) => {
   const {
     handleSubmit,
     control,
     formState: { isSubmitting },
     setError,
-  } = useForm<GroupSchemaType>({
-    resolver: yupResolver(groupSchema),
+  } = useForm<BatchFullNamesTransformedSchemaType>({
+    resolver: yupResolver(batchFullNamesSchema),
     mode: 'all',
     defaultValues: {
-      name: '',
+      batchFullNames: [],
     },
   });
 
@@ -57,24 +54,30 @@ const CreateGroupDialog = ({
   const dispatch = useAppDispatch();
   const { enqueueSuccess, enqueueError } = useMySnackbar();
   const onSubmit = useCallback(
-    async (data: GroupSchemaType) => {
+    async (data: BatchFullNamesTransformedSchemaType) => {
       try {
-        const group = await dispatch(
-          createGroupThunk({
-            ...data,
-            faculty: facultyId,
+        console.log('started', data);
+        const preparedStudents = data.batchFullNames.map((array) => ({
+          lastName: array[0],
+          firstName: array[1],
+          middleName: array[2] ?? null,
+        }));
+        console.log(preparedStudents);
+        const students = await dispatch(
+          batchCreateStudentThunk({
+            students: preparedStudents,
+            group: groupId,
             course: dummyCourseId,
           })
         ).then(unwrapResult);
-        enqueueSuccess(`Группа ${data.name} создана`);
-        onSuccess?.(group);
+        enqueueSuccess(`Создано ${students.length} студентов`);
         handleClose();
       } catch (e) {
         if (isSerializedAxiosError(e)) {
           if (e.response?.status === 409) {
             const message =
-              'Группа с таким названием в этом факультете уже существует';
-            setError('name', {
+              'Существуют студенты в этой группе с такими же именами';
+            setError('batchFullNames', {
               type: 'custom',
               message,
             });
@@ -87,34 +90,27 @@ const CreateGroupDialog = ({
         }
       }
     },
-    [
-      dispatch,
-      facultyId,
-      enqueueSuccess,
-      onSuccess,
-      handleClose,
-      setError,
-      enqueueError,
-    ]
+    [dispatch, groupId, enqueueSuccess, handleClose, setError, enqueueError]
   );
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Создание группы</DialogTitle>
+      <DialogTitle>Создание студентов</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <DialogContentText>
-            Чтобы создать группу, введите ее название ниже
+            Чтобы создать студентов, введите их ФИО, по одному на строке
           </DialogContentText>
           <FormTextField
-            name="name"
+            name="batchFullNames"
             control={control}
             margin="dense"
-            label="Название"
+            label="ФИО студентов"
             type="text"
             fullWidth
             variant="standard"
             required
+            multiline
           />
         </DialogContent>
         <DialogActions>
@@ -127,4 +123,5 @@ const CreateGroupDialog = ({
     </Dialog>
   );
 };
-export default CreateGroupDialog;
+
+export default AddStudentsDialog;

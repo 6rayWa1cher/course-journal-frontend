@@ -47,6 +47,16 @@ export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
   };
 };
 
+export const isSerializedAxiosError = (e: any): e is SerializedAxiosError => {
+  return (
+    'code' in e &&
+    'message' in e &&
+    'stack' in e &&
+    'response' in e &&
+    'name' in e
+  );
+};
+
 export interface AxiosThunkApiConfig extends ThunkAPIConfig {
   rejectValue: SerializedAxiosError | Error;
 }

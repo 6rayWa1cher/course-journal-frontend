@@ -17,7 +17,7 @@ export const useNumberSearchState = (
   const setValue = useCallback(
     (p: number | null) => {
       searchParams.set(label, p == null ? '' : p.toString());
-      setSearchParams(searchParams);
+      setSearchParams(searchParams, { replace: true });
     },
     [searchParams, label, setSearchParams]
   );

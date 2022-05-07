@@ -2,6 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { authUserIdSelector } from '@redux/auth/selector';
 import type { RootState } from '@redux/types';
 import { AuthUserDto, AuthUserId } from 'models/authUser';
+import { employeeIdFromParamsSelector } from '@redux/employees';
 
 const authUsersSelector = (state: RootState) => state.authUsers;
 
@@ -25,4 +26,10 @@ export const authUserByIdSelector = createSelector(
   authUsersSelector,
   authUserIdFromParamsSelector,
   (state, authUserId) => state.entities[authUserId]
+);
+
+export const authUserByEmployeeIdSelector = createSelector(
+  authUsersSelector,
+  employeeIdFromParamsSelector,
+  (state, employeeId) => state.entities[employeeId]
 );

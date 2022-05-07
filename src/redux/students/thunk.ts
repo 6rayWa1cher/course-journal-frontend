@@ -1,11 +1,13 @@
 import { createAxiosAsyncThunk } from '@redux/utils';
 import {
+  batchCreateStudentApi,
   createStudentApi,
   deleteStudentApi,
   getStudentByIdApi,
   getStudentsByGroupIdApi,
   putStudentApi,
 } from 'api/students';
+import { BatchCreateStudentRequest } from 'api/types';
 import { GroupId } from 'models/group';
 import { StudentId, StudentRestDto } from 'models/student';
 
@@ -36,8 +38,16 @@ export const getStudentsByGroupIdThunk = createAxiosAsyncThunk(
 export const createStudentThunk = createAxiosAsyncThunk(
   'students/create',
   async (args: StudentRestDto) => {
-    const employee = (await createStudentApi(args)).data;
-    return employee;
+    const student = (await createStudentApi(args)).data;
+    return student;
+  }
+);
+
+export const batchCreateStudentThunk = createAxiosAsyncThunk(
+  'students/batchCreate',
+  async (args: BatchCreateStudentRequest) => {
+    const students = (await batchCreateStudentApi(args)).data;
+    return students;
   }
 );
 
@@ -49,8 +59,8 @@ export interface PutStudentArgs {
 export const putStudentThunk = createAxiosAsyncThunk(
   'students/put',
   async ({ studentId, data }: PutStudentArgs) => {
-    const employee = (await putStudentApi(studentId, data)).data;
-    return employee;
+    const student = (await putStudentApi(studentId, data)).data;
+    return student;
   }
 );
 

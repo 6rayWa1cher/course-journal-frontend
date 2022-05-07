@@ -1,6 +1,7 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { StudentDto } from 'models/student';
 import {
+  batchCreateStudentThunk,
   createStudentThunk,
   deleteStudentThunk,
   getStudentByIdThunk,
@@ -15,12 +16,6 @@ export const slice = createSlice({
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      getStudentsByGroupIdThunk.fulfilled,
-      (state, { payload }) => {
-        adapter.upsertMany(state, payload);
-      }
-    );
     builder.addCase(deleteStudentThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
     });
@@ -32,6 +27,15 @@ export const slice = createSlice({
       ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(
+        getStudentsByGroupIdThunk.fulfilled,
+        batchCreateStudentThunk.fulfilled
+      ),
+      (state, { payload }) => {
+        adapter.upsertMany(state, payload);
       }
     );
   },

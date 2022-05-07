@@ -9,7 +9,7 @@ export interface StudentDto {
   group: GroupId;
   firstName: string;
   lastName: string;
-  middleName?: string;
+  middleName: string | null;
   headman: boolean;
   createdAt: string;
   lastModifiedAt: string;

@@ -2,6 +2,7 @@ import { AxiosPromise } from 'axios';
 import { GroupId } from 'models/group';
 import { StudentDto, StudentId, StudentRestDto } from 'models/student';
 import { mainAxios } from './helpers/myaxios';
+import { BatchCreateStudentRequest } from './types';
 
 export const getStudentByIdApi = (
   studentId: StudentId
@@ -14,6 +15,10 @@ export const getStudentsByGroupIdApi = (
 export const createStudentApi = (
   data: StudentRestDto
 ): AxiosPromise<StudentDto> => mainAxios.post('/students/', data);
+
+export const batchCreateStudentApi = (
+  data: BatchCreateStudentRequest
+): AxiosPromise<StudentDto[]> => mainAxios.post('/students/batch', data);
 
 export const putStudentApi = (
   studentId: StudentId,

@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Divider,
   Grid,
   IconButton,
   LinearProgress,
@@ -15,7 +16,7 @@ import { getEmployeesThunk } from '@redux/employees';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { EmployeeDto } from 'models/employee';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
@@ -24,12 +25,15 @@ import {
   useMySnackbar,
   useNumberSearchState,
 } from 'utils/hooks';
-import { getFirstCapitalSymbols } from 'utils/string';
+import { getFirstCapitalSymbols, getFullName } from 'utils/string';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import AddIcon from '@mui/icons-material/Add';
 import Title from 'components/Title';
 import { Page } from 'api/types';
 import EmptyListCaption from 'components/EmptyListCaption';
+import AddButton from 'components/buttons/AddButton';
+import PreLoading from 'components/PreLoading';
+import NavListWithAvatars from 'components/NavListWithAvatars';
 
 const EmployeeExplorerPage = () => {
   useDocumentTitle('Преподаватели');
@@ -39,7 +43,7 @@ const EmployeeExplorerPage = () => {
   const { enqueueError } = useMySnackbar();
   const dispatch = useAppDispatch();
   const [value, setValue] = useState<Page<EmployeeDto> | null>(null);
-  const action = useCallback(
+  const loadingAction = useCallback(
     () =>
       dispatch(
         getEmployeesThunk({
@@ -62,7 +66,6 @@ const EmployeeExplorerPage = () => {
         }),
     [dispatch, clearedPage, enqueueError]
   );
-  const { loading } = useLoadingPlain(action);
 
   const navigate = useNavigate();
   const handleItemClick = useCallback(
@@ -81,6 +84,17 @@ const EmployeeExplorerPage = () => {
     [page, setPage]
   );
 
+  const items = useMemo(
+    () =>
+      value?.content.map((v) => ({
+        id: v.id,
+        name: getFullName(v),
+        link: `/employees/${v.id}`,
+        avatar: getFirstCapitalSymbols(getFullName(v), 2),
+      })) ?? [],
+    [value]
+  );
+
   return (
     <Paper sx={{ p: 2 }}>
       <Grid container justifyContent="space-between" spacing={2}>
@@ -88,38 +102,12 @@ const EmployeeExplorerPage = () => {
           <Title>Преподаватели</Title>
         </Grid>
         <Grid item>
-          <IconButton onClick={handleAddClick}>
-            <AddIcon />
-          </IconButton>
+          <AddButton onClick={handleAddClick} />
         </Grid>
       </Grid>
-      {!value?.empty && (
-        <List>
-          {value?.content.map(({ id, firstName, middleName, lastName }) => {
-            const fullName = [lastName, firstName, middleName].join(' ');
-            const handleClick = () => handleItemClick(id);
-            return (
-              <ListItem
-                key={id}
-                secondaryAction={
-                  <IconButton onClick={handleClick}>
-                    <NavigateNextIcon />
-                  </IconButton>
-                }
-                disablePadding
-              >
-                <ListItemButton onClick={handleClick}>
-                  <ListItemAvatar>
-                    <Avatar>{getFirstCapitalSymbols(fullName, 2)}</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={fullName} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
-      )}
-      {value?.empty && !loading && <EmptyListCaption />}
+      <PreLoading action={loadingAction}>
+        <NavListWithAvatars items={items} />
+      </PreLoading>
       <Grid container justifyContent="center">
         <Grid item>
           <Pagination
@@ -129,7 +117,6 @@ const EmployeeExplorerPage = () => {
           />
         </Grid>
       </Grid>
-      {loading && <LinearProgress />}
     </Paper>
   );
 };

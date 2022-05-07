@@ -1,6 +1,13 @@
-import { Container, IconButton, Paper } from '@mui/material';
-import { getAuthUserByEmployeeIdThunk } from '@redux/authUsers';
-import { deleteEmployeeThunk, getEmployeeByIdThunk } from '@redux/employees';
+import { Container, Grid, IconButton, Paper, Stack } from '@mui/material';
+import {
+  authUserByEmployeeIdSelector,
+  getAuthUserByEmployeeIdThunk,
+} from '@redux/authUsers';
+import {
+  deleteEmployeeThunk,
+  employeeByIdSelector,
+  getEmployeeByIdThunk,
+} from '@redux/employees';
 import { SerializedAxiosError } from '@redux/types';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -10,12 +17,19 @@ import NotFound from 'components/NotFound';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import { useDocumentTitle, useLoadingPlain, useMySnackbar } from 'utils/hooks';
+import {
+  useDocumentTitle,
+  useLoadingPlain,
+  useMySnackbar,
+  useParamSelector,
+} from 'utils/hooks';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Title from 'components/Title';
 import { Box } from '@mui/system';
 import { formatFullNameWithInitials } from 'utils/string';
 import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm';
+import BackButton from 'components/buttons/BackButton';
+import PreLoading from 'components/PreLoading';
 
 const EditEmployeePage = () => {
   const params = useParams();
@@ -41,12 +55,14 @@ const EditEmployeePage = () => {
         }),
     ]);
   }, [dispatch, employeeId, enqueueError]);
-  const loadingProps = useLoadingPlain(loadingAction);
 
   const navigate = useNavigate();
-  const handleBackButtonClick = useCallback(() => navigate(-1), [navigate]);
 
-  const [employee, authUser] = loadingProps.value ?? [];
+  const employee = useParamSelector(employeeByIdSelector, { employeeId });
+  const authUser = useParamSelector(authUserByEmployeeIdSelector, {
+    employeeId,
+  });
+
   const fullNameWithInitials = useMemo(
     () =>
       employee == null
@@ -76,35 +92,37 @@ const EditEmployeePage = () => {
     navigate,
   ]);
 
-  if (loadingProps.loading) {
-    return <BigProcess />;
-  }
-
-  if (employee == null) {
-    return <NotFound />;
-  }
-
   return (
     <Paper sx={{ p: 1 }}>
       <Container>
-        <Box sx={{ pt: 2, display: 'flex', gap: 1 }}>
-          <Box>
-            <IconButton onClick={handleBackButtonClick}>
-              <ArrowBackIosNewIcon />
-            </IconButton>
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <Title>Редактирование преподавателя</Title>
-          </Box>
-          <Box>
-            <DeleteButtonWithConfirm
-              onDelete={handleDeleteClick}
-              dialogTitle={`Удалить преподавателя ${formatFullNameWithInitials}?`}
-              dialogDescription="Эта операция необратима и приведет к удалению всех курсов преподавателя"
+        <PreLoading action={loadingAction}>
+          <Grid
+            container
+            justifyContent="space-between"
+            spacing={2}
+            paddingTop={2}
+          >
+            <Grid item>
+              <Stack direction="row" spacing={2}>
+                <BackButton to="/employees" />
+                <Title>Редактирование преподавателя</Title>
+              </Stack>
+            </Grid>
+            <Grid item>
+              <DeleteButtonWithConfirm
+                onDelete={handleDeleteClick}
+                dialogTitle={`Удалить преподавателя ${formatFullNameWithInitials}?`}
+                dialogDescription="Эта операция необратима и приведет к удалению всех курсов преподавателя"
+              />
+            </Grid>
+          </Grid>
+          {employee != null && (
+            <EditEmployeeForm
+              employeeId={employee?.id}
+              authUserId={authUser?.id}
             />
-          </Box>
-        </Box>
-        <EditEmployeeForm employeeId={employee?.id} authUserId={authUser?.id} />
+          )}
+        </PreLoading>
       </Container>
     </Paper>
   );

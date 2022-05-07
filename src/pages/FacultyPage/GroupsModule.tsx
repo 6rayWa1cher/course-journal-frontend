@@ -1,43 +1,50 @@
 import { Box } from '@mui/lab/node_modules/@mui/system';
-import { Divider, Grid, Typography, useMediaQuery } from '@mui/material';
-import { styled, useTheme } from '@mui/system';
 import {
+  Divider,
+  Grid,
+  Typography,
+  useMediaQuery,
+  IconButton,
+} from '@mui/material';
+import { useTheme } from '@mui/system';
+import {
+  deleteGroupThunk,
   getGroupsByFacultyIdThunk,
+  groupByIdSelector,
   groupsByFacultyAlphabeticalSelector,
 } from '@redux/groups';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
+import AddButton from 'components/buttons/AddButton';
+import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm';
+import EditButton from 'components/buttons/EditButton';
 import ListSelector from 'components/ListSelector';
 import NativeSelector from 'components/NativeSelector';
-import NavListWithAvatars from 'components/NavListWithAvatars';
 import PreLoading from 'components/PreLoading';
 import Scrollable from 'components/Scrollable';
 import { FacultyId } from 'models/faculty';
-import { GroupId } from 'models/group';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useMySnackbar,
   useNumberSearchState,
   useParamSelector,
 } from 'utils/hooks';
+import CreateGroupDialog from './CreateGroupDialog';
+import EditGroupDialog from './EditGroupDialog';
 import StudentsModule from './StudentsModule';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import AddStudentsDialog from './AddStudentsDialog';
 
 export interface GroupsModuleProps {
   facultyId: FacultyId;
 }
 
-const BorderedListSelector = styled(ListSelector)({
-  height: '300px',
-  maxHeight: '300px',
-  overflow: 'auto',
-});
-
 const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
   const theme = useTheme();
   const narrowScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { enqueueError } = useMySnackbar();
+  const { enqueueSuccess, enqueueError } = useMySnackbar();
 
   const dispatch = useAppDispatch();
   const loadingAction = useCallback(
@@ -55,6 +62,9 @@ const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
   const groups = useParamSelector(groupsByFacultyAlphabeticalSelector, {
     facultyId,
   });
+  const group = useParamSelector(groupByIdSelector, {
+    groupId: selected ?? undefined,
+  });
 
   useEffect(() => {
     if (groups.length > 0 && selected == null) {
@@ -62,8 +72,49 @@ const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
     }
   }, [groups, selected, setSelected]);
 
-  const studentsModule =
-    selected != null ? <StudentsModule groupId={selected} /> : null;
+  const studentsModule = useMemo(
+    () => (selected != null ? <StudentsModule groupId={selected} /> : null),
+    [selected]
+  );
+
+  const [openAddDialog, setOpenAddDialog] = useState(false);
+  const handleAddClick = useCallback(
+    () => setOpenAddDialog(true),
+    [setOpenAddDialog]
+  );
+
+  const addButton = <AddButton onClick={handleAddClick} />;
+
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const handleEditClick = useCallback(
+    () => setOpenEditDialog(true),
+    [setOpenEditDialog]
+  );
+
+  const deleteAction = useCallback(async () => {
+    if (selected == null) {
+      enqueueError('Произошла непредвиденная ошибка');
+      throw new Error('selected is null');
+    }
+    try {
+      await dispatch(deleteGroupThunk({ groupId: selected })).then(
+        unwrapResult
+      );
+      enqueueSuccess(`Группа ${group?.name} удалена`);
+      setSelected(null);
+    } catch (e) {
+      defaultErrorEnqueue(e as Error, enqueueError);
+    }
+  }, [dispatch, enqueueError, enqueueSuccess, group, selected, setSelected]);
+
+  const [openAddBatchStudentsDialog, setOpenAddBatchStudentsDialog] =
+    useState(false);
+  const handleAddBatchStudentsClick = useCallback(
+    () => setOpenAddBatchStudentsDialog(true),
+    [setOpenAddBatchStudentsDialog]
+  );
+
+  const disableGroupEditButtons = group == null;
 
   return (
     <PreLoading action={loadingAction}>
@@ -78,9 +129,14 @@ const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
             />
           ) : (
             <>
-              <Typography component="h3" variant="h6">
-                Группы
-              </Typography>
+              <Grid container justifyContent="space-between" spacing={2}>
+                <Grid item>
+                  <Typography component="h3" variant="h6">
+                    Группы
+                  </Typography>
+                </Grid>
+                <Grid item>{addButton}</Grid>
+              </Grid>
               <Divider />
               <Scrollable height="50vh">
                 <ListSelector
@@ -93,23 +149,64 @@ const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
           )}
         </Grid>
         <Grid item xs={12} md={6} p={2}>
-          {narrowScreen ? (
-            studentsModule
-          ) : (
-            <>
+          <Grid container justifyContent="space-between" spacing={2}>
+            <Grid item>
               <Typography component="h3" variant="h6">
-                {selected != null && groups != null && groups.length > 0
-                  ? `Студенты группы "${
-                      groups.filter((g) => g.id === selected)[0].name
-                    }"`
-                  : 'Студенты'}
+                {group != null ? `Группа "${group.name}"` : 'Группа'}
               </Typography>
-              <Divider />
+            </Grid>
+            <Grid item>
+              <EditButton
+                onClick={handleEditClick}
+                disabled={disableGroupEditButtons}
+              />
+              <IconButton
+                onClick={handleAddBatchStudentsClick}
+                disabled={disableGroupEditButtons}
+              >
+                <UploadFileIcon />
+              </IconButton>
+              <DeleteButtonWithConfirm
+                onDelete={deleteAction}
+                dialogTitle={
+                  group != null
+                    ? `Удалить группу "${group.name}"?`
+                    : 'Удалить группу?'
+                }
+                dialogDescription="Эта операция необратима и приведет к удалению всех студентов группы"
+                disabled={disableGroupEditButtons}
+              />
+            </Grid>
+          </Grid>
+          <Divider />
+          <Box sx={{ pt: 2 }}>
+            {narrowScreen ? (
+              studentsModule
+            ) : (
               <Scrollable height="50vh">{studentsModule}</Scrollable>
-            </>
-          )}
+            )}
+          </Box>
         </Grid>
       </Grid>
+      <CreateGroupDialog
+        facultyId={facultyId}
+        open={openAddDialog}
+        setOpen={setOpenAddDialog}
+      />
+      {group != null && (
+        <EditGroupDialog
+          group={group}
+          open={openEditDialog}
+          setOpen={setOpenEditDialog}
+        />
+      )}
+      {group != null && (
+        <AddStudentsDialog
+          groupId={group.id}
+          open={openAddBatchStudentsDialog}
+          setOpen={setOpenAddBatchStudentsDialog}
+        />
+      )}
     </PreLoading>
   );
 };

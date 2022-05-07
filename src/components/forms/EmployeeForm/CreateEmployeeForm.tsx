@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createAuthUserThunk } from '@redux/authUsers';
 import { createEmployeeThunk, deleteEmployeeThunk } from '@redux/employees';
-import { useAppDispatch } from '@redux/utils';
+import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { UserRole } from 'models/authUser';
 import { useCallback } from 'react';
@@ -75,7 +75,11 @@ const CreateEmployeeForm = () => {
             defaultErrorEnqueue(e1 as Error, enqueueError);
           }
         }
-        defaultErrorEnqueue(e as Error, enqueueError);
+        if (isSerializedAxiosError(e) && e.response?.status === 409) {
+          enqueueError('Преподаватель с такими данными уже существует');
+        } else {
+          defaultErrorEnqueue(e as Error, enqueueError);
+        }
       }
     },
     [dispatch, navigate, enqueueError, enqueueSuccess]

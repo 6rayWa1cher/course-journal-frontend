@@ -1,6 +1,7 @@
 import type { UserRole } from 'models/authUser';
-import type { CourseDto } from 'models/course';
+import type { CourseDto, CourseId } from 'models/course';
 import type { EmployeeRestDto, EmployeeDto, EmployeeId } from 'models/employee';
+import { GroupId } from 'models/group';
 import { StudentId } from 'models/student';
 
 // GENERIC TYPES
@@ -95,3 +96,13 @@ export type CreateAuthUserRequest = AuthUserGenericPart &
   );
 
 export type PatchAuthUserRequest = Partial<CreateAuthUserRequest>;
+
+export interface BatchCreateStudentRequest {
+  course: CourseId;
+  group: GroupId;
+  students: {
+    firstName: string;
+    lastName: string;
+    middleName: string | null;
+  }[];
+}

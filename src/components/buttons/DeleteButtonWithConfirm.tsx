@@ -17,21 +17,27 @@ export interface DeleteButtonProps {
   onDelete: () => Promise<unknown>;
   dialogTitle?: string;
   dialogDescription?: string;
+  disabled?: boolean;
 }
 
 const DeleteButtonWithConfirm = ({
   onDelete,
   dialogTitle,
   dialogDescription,
+  disabled = false,
 }: DeleteButtonProps) => {
   const [open, setOpen] = useState(false);
   const handleCloseDialog = useCallback(() => setOpen(false), [setOpen]);
   const handleOpenDialog = useCallback(() => setOpen(true), [setOpen]);
-  const deleteProps = useLoadingPlain(onDelete, { immediate: false });
+  const deleteAction = useCallback(
+    () => onDelete().then(handleCloseDialog),
+    [onDelete, handleCloseDialog]
+  );
+  const deleteProps = useLoadingPlain(deleteAction, { immediate: false });
   const handleDeleteButtonClick = deleteProps.execute;
   return (
     <>
-      <IconButton onClick={handleOpenDialog}>
+      <IconButton onClick={handleOpenDialog} disabled={disabled}>
         <DeleteOutlineOutlinedIcon />
       </IconButton>
       <Dialog open={open} onClose={handleCloseDialog}>

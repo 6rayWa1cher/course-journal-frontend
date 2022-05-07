@@ -17,7 +17,7 @@ export const getFirstLetter = (str: string) => str.charAt(0);
 
 export interface FullName {
   firstName: string;
-  middleName?: string;
+  middleName?: Nullable<string>;
   lastName: string;
 }
 

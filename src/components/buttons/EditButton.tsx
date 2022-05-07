@@ -1,12 +1,12 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
+import { IconButton, IconButtonProps } from '@mui/material';
 
 export interface EditIconProps {
   onClick: () => void;
 }
 
-const EditButton = ({ onClick }: EditIconProps) => (
-  <IconButton onClick={onClick}>
+const EditButton = ({ onClick, ...props }: EditIconProps & IconButtonProps) => (
+  <IconButton onClick={onClick} {...props}>
     <EditIcon />
   </IconButton>
 );

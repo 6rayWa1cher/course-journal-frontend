@@ -3,9 +3,13 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-const BackButton = () => {
+export interface BackButtonProps {
+  to: string;
+}
+
+const BackButton = ({ to }: BackButtonProps) => {
   const navigate = useNavigate();
-  const handleBackButtonClick = useCallback(() => navigate(-1), [navigate]);
+  const handleBackButtonClick = useCallback(() => navigate(to), [navigate, to]);
   return (
     <IconButton onClick={handleBackButtonClick}>
       <ArrowBackIosNewIcon />

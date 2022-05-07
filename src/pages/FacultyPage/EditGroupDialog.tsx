@@ -6,7 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
+import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,26 +19,17 @@ import { facultySchema, FacultySchemaType } from 'validation/yup/faculty';
 import FormTextField from 'components/FormTextField';
 import { LoadingButton } from '@mui/lab';
 import { groupSchema, GroupSchemaType } from 'validation/yup/group';
-import { createGroupThunk } from '@redux/groups';
+import { createGroupThunk, putGroupThunk } from '@redux/groups';
 import { FacultyId } from 'models/faculty';
 import { GroupDto } from 'models/group';
-import { SerializedAxiosError } from '@redux/types';
 
-export interface CreateGroupDialogProps {
-  facultyId: FacultyId;
+export interface EditGroupDialogProps {
+  group: GroupDto;
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSuccess?: (data: GroupDto) => void;
 }
 
-const dummyCourseId = 5; // backend-side bug
-
-const CreateGroupDialog = ({
-  facultyId,
-  open,
-  setOpen,
-  onSuccess,
-}: CreateGroupDialogProps) => {
+const EditGroupDialog = ({ group, open, setOpen }: EditGroupDialogProps) => {
   const {
     handleSubmit,
     control,
@@ -48,7 +39,7 @@ const CreateGroupDialog = ({
     resolver: yupResolver(groupSchema),
     mode: 'all',
     defaultValues: {
-      name: '',
+      name: group.name,
     },
   });
 
@@ -57,20 +48,14 @@ const CreateGroupDialog = ({
   const dispatch = useAppDispatch();
   const { enqueueSuccess, enqueueError } = useMySnackbar();
   const onSubmit = useCallback(
-    async (data: GroupSchemaType) => {
-      try {
-        const group = await dispatch(
-          createGroupThunk({
-            ...data,
-            faculty: facultyId,
-            course: dummyCourseId,
-          })
-        ).then(unwrapResult);
-        enqueueSuccess(`Группа ${data.name} создана`);
-        onSuccess?.(group);
-        handleClose();
-      } catch (e) {
-        if (isSerializedAxiosError(e)) {
+    (data: GroupSchemaType) =>
+      dispatch(
+        putGroupThunk({ groupId: group.id, data: { ...group, ...data } })
+      )
+        .then(unwrapResult)
+        .then(() => enqueueSuccess(`Группа ${data.name} создана`))
+        .then(handleClose)
+        .catch((e) => {
           if (e.response?.status === 409) {
             const message =
               'Группа с таким названием в этом факультете уже существует';
@@ -82,35 +67,23 @@ const CreateGroupDialog = ({
           } else {
             defaultErrorEnqueue(e, enqueueError);
           }
-        } else {
-          defaultErrorEnqueue(e as Error, enqueueError);
-        }
-      }
-    },
-    [
-      dispatch,
-      facultyId,
-      enqueueSuccess,
-      onSuccess,
-      handleClose,
-      setError,
-      enqueueError,
-    ]
+        }),
+    [dispatch, enqueueError, group, setError, enqueueSuccess, handleClose]
   );
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Создание группы</DialogTitle>
+      <DialogTitle>Редактирование группы &quot;{group.name}&quot;</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <DialogContentText>
-            Чтобы создать группу, введите ее название ниже
+            Чтобы изменить группу, введите ее название ниже
           </DialogContentText>
           <FormTextField
             name="name"
             control={control}
             margin="dense"
-            label="Название"
+            label="Новое название"
             type="text"
             fullWidth
             variant="standard"
@@ -120,11 +93,11 @@ const CreateGroupDialog = ({
         <DialogActions>
           <Button onClick={handleClose}>Отменить</Button>
           <LoadingButton type="submit" loading={isSubmitting} color="primary">
-            Создать
+            Сохранить
           </LoadingButton>
         </DialogActions>
       </form>
     </Dialog>
   );
 };
-export default CreateGroupDialog;
+export default EditGroupDialog;

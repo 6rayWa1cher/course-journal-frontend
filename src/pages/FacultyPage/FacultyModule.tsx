@@ -70,7 +70,7 @@ const FacultyModule = ({ facultyId }: FacultyModuleProps) => {
           >
             <Grid item>
               <Stack direction="row" spacing={2}>
-                <BackButton />
+                <BackButton to="/faculties" />
                 <Title>{faculty?.name}</Title>
               </Stack>
             </Grid>

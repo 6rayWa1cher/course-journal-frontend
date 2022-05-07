@@ -5,7 +5,7 @@ import {
   patchAuthUserThunk,
 } from '@redux/authUsers';
 import { employeeByIdSelector, putEmployeeThunk } from '@redux/employees';
-import { useAppDispatch } from '@redux/utils';
+import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { AuthUserId, UserRole } from 'models/authUser';
 import { EmployeeId } from 'models/employee';
 import { useCallback } from 'react';
@@ -98,7 +98,11 @@ const EditEmployeeForm = ({
         }
         enqueueSuccess('Преподаватель сохранен');
       } catch (e) {
-        defaultErrorEnqueue(e as Error, enqueueError);
+        if (isSerializedAxiosError(e) && e.response?.status === 409) {
+          enqueueError('Преподаватель с такими данными уже существует');
+        } else {
+          defaultErrorEnqueue(e as Error, enqueueError);
+        }
       }
     },
     [
