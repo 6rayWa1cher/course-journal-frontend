@@ -5,11 +5,11 @@ import { AuthUserDto, AuthUserId } from 'models/authUser';
 
 const authUsersSelector = (state: RootState) => state.authUsers;
 
-const authUserIdFromParamsSelector = (
+export const authUserIdFromParamsSelector = (
   _: any,
   { authUserId }: { authUserId?: AuthUserId }
 ) => authUserId ?? -1;
-const authUserIdsFromParamsSelector = (
+export const authUserIdsFromParamsSelector = (
   _: any,
   { ids }: { ids: AuthUserId[] }
 ) => ids;

@@ -4,12 +4,14 @@ import { CourseId } from 'models/course';
 
 const coursesSelector = (state: RootState) => state.courses;
 
-const courseIdFromParamsSelector = (
+export const courseIdFromParamsSelector = (
   _: any,
   { courseId }: { courseId: CourseId }
 ) => courseId;
-const courseIdsFromParamsSelector = (_: any, { ids }: { ids: CourseId[] }) =>
-  ids;
+export const courseIdsFromParamsSelector = (
+  _: any,
+  { ids }: { ids: CourseId[] }
+) => ids;
 
 export const courseByIdSelector = createSelector(
   coursesSelector,

@@ -1,29 +1,43 @@
-import { Grid, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/system';
+import { Box } from '@mui/lab/node_modules/@mui/system';
+import { Divider, Grid, Typography, useMediaQuery } from '@mui/material';
+import { styled, useTheme } from '@mui/system';
 import {
   getGroupsByFacultyIdThunk,
-  groupIdsByFacultySelector,
+  groupsByFacultyAlphabeticalSelector,
 } from '@redux/groups';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
+import ListSelector from 'components/ListSelector';
+import NativeSelector from 'components/NativeSelector';
+import NavListWithAvatars from 'components/NavListWithAvatars';
 import PreLoading from 'components/PreLoading';
+import Scrollable from 'components/Scrollable';
 import { FacultyId } from 'models/faculty';
 import { GroupId } from 'models/group';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import { useMySnackbar, useParamSelector } from 'utils/hooks';
-import GroupListSelector from './GroupListSelector';
-import GroupNativeSelector from './GroupNativeSelector';
+import {
+  useMySnackbar,
+  useNumberSearchState,
+  useParamSelector,
+} from 'utils/hooks';
+import StudentsModule from './StudentsModule';
 
 export interface GroupsModuleProps {
   facultyId: FacultyId;
 }
 
+const BorderedListSelector = styled(ListSelector)({
+  height: '300px',
+  maxHeight: '300px',
+  overflow: 'auto',
+});
+
 const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
   const theme = useTheme();
   const narrowScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { enqueueSuccess, enqueueError } = useMySnackbar();
+  const { enqueueError } = useMySnackbar();
 
   const dispatch = useAppDispatch();
   const loadingAction = useCallback(
@@ -36,24 +50,64 @@ const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
     [dispatch, facultyId, enqueueError]
   );
 
-  const [selected, setSelected] = useState<GroupId | null>(null);
+  const [selected, setSelected] = useNumberSearchState('group');
 
-  const groupsIds = useParamSelector(groupIdsByFacultySelector, { facultyId });
+  const groups = useParamSelector(groupsByFacultyAlphabeticalSelector, {
+    facultyId,
+  });
 
-  const GroupSelector = narrowScreen ? GroupNativeSelector : GroupListSelector;
+  useEffect(() => {
+    if (groups.length > 0 && selected == null) {
+      setSelected(groups[0].id);
+    }
+  }, [groups, selected, setSelected]);
+
+  const studentsModule =
+    selected != null ? <StudentsModule groupId={selected} /> : null;
 
   return (
     <PreLoading action={loadingAction}>
       <Grid container>
-        <Grid item xs={12} md={4}>
-          <GroupSelector
-            groupsIds={groupsIds}
-            selected={selected}
-            onSelect={setSelected}
-          />
+        <Grid item xs={12} md={6} p={2}>
+          {narrowScreen ? (
+            <NativeSelector
+              items={groups}
+              label="Группа"
+              selected={selected}
+              onSelect={setSelected}
+            />
+          ) : (
+            <>
+              <Typography component="h3" variant="h6">
+                Группы
+              </Typography>
+              <Divider />
+              <Scrollable height="50vh">
+                <ListSelector
+                  items={groups}
+                  selected={selected}
+                  onSelect={setSelected}
+                />
+              </Scrollable>
+            </>
+          )}
         </Grid>
-        <Grid item xs={12} md={8}>
-          <p>kek</p>
+        <Grid item xs={12} md={6} p={2}>
+          {narrowScreen ? (
+            studentsModule
+          ) : (
+            <>
+              <Typography component="h3" variant="h6">
+                {selected != null && groups != null && groups.length > 0
+                  ? `Студенты группы "${
+                      groups.filter((g) => g.id === selected)[0].name
+                    }"`
+                  : 'Студенты'}
+              </Typography>
+              <Divider />
+              <Scrollable height="50vh">{studentsModule}</Scrollable>
+            </>
+          )}
         </Grid>
       </Grid>
     </PreLoading>

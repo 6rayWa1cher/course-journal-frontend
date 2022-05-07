@@ -1,9 +1,11 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 
 const EmptyListCaption = () => (
-  <Typography display="block" variant="caption" align="center">
-    Список пуст
-  </Typography>
+  <Stack justifyContent="center" height="100%">
+    <Typography display="block" variant="caption" align="center">
+      Список пуст
+    </Typography>
+  </Stack>
 );
 
 export default EmptyListCaption;

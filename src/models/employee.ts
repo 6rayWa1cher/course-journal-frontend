@@ -6,11 +6,12 @@ export interface EmployeeDto {
   middleName: string | null;
   lastName: string;
   department: string | null;
+  hasAuthUser: boolean;
   createdAt: string;
   lastModifiedAt: string;
 }
 
 export type EmployeeRestDto = Omit<
   EmployeeDto,
-  'id' | 'createdAt' | 'lastModifiedAt'
+  'id' | 'createdAt' | 'lastModifiedAt' | 'hasAuthUser'
 >;

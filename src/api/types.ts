@@ -4,10 +4,11 @@ import type { EmployeeRestDto, EmployeeDto, EmployeeId } from 'models/employee';
 import { StudentId } from 'models/student';
 
 // GENERIC TYPES
+export type SortType = 'asc' | 'desc';
 export interface PageRequest<Keys extends string = string> {
   page: number;
   size?: number;
-  sort?: Record<Keys, 'asc' | 'desc'>;
+  sort?: { key: Keys; dir?: SortType }[];
 }
 
 export interface Page<T> {

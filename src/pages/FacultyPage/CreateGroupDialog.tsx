@@ -9,27 +9,22 @@ import {
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { useMySnackbar } from 'utils/hooks';
-import { putFacultyThunk } from '@redux/faculties';
+import { createFacultyThunk } from '@redux/faculties';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { facultySchema, FacultySchemaType } from 'validation/yup/faculty';
 import FormTextField from 'components/FormTextField';
 import { LoadingButton } from '@mui/lab';
-import { FacultyDto } from 'models/faculty';
 
-export interface EditFacultyDialogProps {
+export interface CreateGroupDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  faculty: FacultyDto;
 }
 
-const EditFacultyDialog = ({
-  open,
-  setOpen,
-  faculty,
-}: EditFacultyDialogProps) => {
+const CreateGroupDialog = ({ open, setOpen }: CreateGroupDialogProps) => {
   const {
     handleSubmit,
     control,
@@ -38,7 +33,7 @@ const EditFacultyDialog = ({
     resolver: yupResolver(facultySchema),
     mode: 'all',
     defaultValues: {
-      name: faculty.name,
+      name: '',
     },
   });
 
@@ -48,26 +43,25 @@ const EditFacultyDialog = ({
   const { enqueueError } = useMySnackbar();
   const onSubmit = useCallback(
     (data: FacultySchemaType) =>
-      dispatch(putFacultyThunk({ facultyId: faculty.id, data }))
+      dispatch(createFacultyThunk(data))
         .then(unwrapResult)
-        .then(handleClose)
         .catch((e) => defaultErrorEnqueue(e, enqueueError)),
-    [dispatch, enqueueError, handleClose, faculty]
+    [dispatch, enqueueError]
   );
 
   return (
     <Dialog open={open} onClose={handleClose} PaperProps={{}}>
-      <DialogTitle>Редактирование факультета</DialogTitle>
+      <DialogTitle>Создание факультета</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <DialogContentText>
-            Чтобы отредактировать факультет, введите его новое название ниже
+            Чтобы создать факультет, введите его название ниже.
           </DialogContentText>
           <FormTextField
             name="name"
             control={control}
             margin="dense"
-            label="Новое название"
+            label="Название"
             type="text"
             fullWidth
             variant="standard"
@@ -77,11 +71,11 @@ const EditFacultyDialog = ({
         <DialogActions>
           <Button onClick={handleClose}>Отменить</Button>
           <LoadingButton type="submit" loading={isSubmitting} color="primary">
-            Сохранить
+            Создать
           </LoadingButton>
         </DialogActions>
       </form>
     </Dialog>
   );
 };
-export default EditFacultyDialog;
+export default CreateGroupDialog;

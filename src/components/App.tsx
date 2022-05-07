@@ -18,6 +18,7 @@ import EditEmployeePage from 'pages/EditEmployeePage';
 import CreateEmployeePage from 'pages/CreateEmployeePage';
 import FacultyExplorerPage from 'pages/FacultyExplorerPage';
 import FacultyPage from 'pages/FacultyPage';
+import { CssBaseline } from '@mui/material';
 
 const darkTheme = createTheme({
   palette: {
@@ -27,6 +28,7 @@ const darkTheme = createTheme({
 
 const App = () => (
   <ThemeProvider theme={darkTheme}>
+    <CssBaseline enableColorScheme />
     <PreloaderWrapper>
       <BrowserRouter>
         <Routes>

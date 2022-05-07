@@ -1,23 +1,24 @@
-import { groupsByIdsAlphabeticalSelector } from '@redux/groups';
-import { GroupId } from 'models/group';
 import { useCallback, useMemo } from 'react';
-import { useParamSelector } from 'utils/hooks';
 import { FormControl, InputLabel, NativeSelect } from '@mui/material';
 
-export interface GroupNativeSelectorProps {
-  groupsIds?: GroupId[];
-  selected: GroupId | null;
-  onSelect: (groupId: GroupId | null) => void;
+export interface NativeSelectorItem {
+  id: number;
+  name: string;
 }
 
-const GroupNativeSelector = ({
-  groupsIds,
+export interface NativeSelectorProps<T extends NativeSelectorItem> {
+  items: T[];
+  label: string;
+  selected: number | null;
+  onSelect: (id: number | null) => void;
+}
+
+const NativeSelector = <T extends NativeSelectorItem>({
+  items,
+  label,
   selected,
   onSelect,
-}: GroupNativeSelectorProps) => {
-  const groups = useParamSelector(groupsByIdsAlphabeticalSelector, {
-    ids: groupsIds ?? [],
-  });
+}: NativeSelectorProps<T>) => {
   const trueSelected = useMemo(
     () => (selected == null ? '' : selected.toString()),
     [selected]
@@ -31,24 +32,24 @@ const GroupNativeSelector = ({
   );
   const renderedOptions = useMemo(
     () =>
-      groups.map(({ id, name }) => (
+      items.map(({ id, name }) => (
         <option key={id} value={id.toString()}>
           {name}
         </option>
       )),
-    [groups]
+    [items]
   );
 
   return (
     <FormControl fullWidth>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        Группа
+        {label}
       </InputLabel>
       <NativeSelect
         value={trueSelected}
         onChange={handleChange}
         inputProps={{
-          name: 'group',
+          name: 'item',
         }}
       >
         <option value=""></option>
@@ -58,4 +59,4 @@ const GroupNativeSelector = ({
   );
 };
 
-export default GroupNativeSelector;
+export default NativeSelector;

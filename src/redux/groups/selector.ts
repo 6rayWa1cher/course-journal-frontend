@@ -1,19 +1,18 @@
 import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
-import { FacultyId } from 'models/faculty';
 import { GroupDto, GroupId } from 'models/group';
+import { facultyIdFromParamsSelector } from '@redux/faculties/selector';
 
 const groupsSelector = (state: RootState) => state.groups;
 
-const groupIdFromParamsSelector = (
+export const groupIdFromParamsSelector = (
   _: any,
   { groupId }: { groupId?: GroupId }
 ) => groupId ?? -1;
-const facultyIdFromParamsSelector = (
+export const groupIdsFromParamsSelector = (
   _: any,
-  { facultyId }: { facultyId?: FacultyId }
-) => facultyId ?? -1;
-const groupIdsFromParamsSelector = (_: any, { ids }: { ids: GroupId[] }) => ids;
+  { ids }: { ids: GroupId[] }
+) => ids;
 
 export const groupByIdSelector = createSelector(
   groupsSelector,
@@ -36,8 +35,8 @@ export const groupsByIdsSelector = createSelector(
   (state, ids) => ids.map((id) => state.entities[id])
 );
 
-export const groupsByIdsAlphabeticalSelector = createSelector(
-  groupsByIdsSelector,
+export const groupsByFacultyAlphabeticalSelector = createSelector(
+  groupsByFacultySelector,
   (groups) =>
     groups
       .filter((group): group is GroupDto => !!group)

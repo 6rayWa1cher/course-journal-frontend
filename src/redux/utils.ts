@@ -10,7 +10,7 @@ import type { AppDispatch, RootState, SerializedAxiosError } from './types';
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
-interface ThunkAPIConfig {
+export interface ThunkAPIConfig {
   state: RootState;
   dispatch: AppDispatch;
   rejectValue: SerializedError;
@@ -47,7 +47,7 @@ export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
   };
 };
 
-interface AxiosThunkApiConfig extends ThunkAPIConfig {
+export interface AxiosThunkApiConfig extends ThunkAPIConfig {
   rejectValue: SerializedAxiosError | Error;
 }
 

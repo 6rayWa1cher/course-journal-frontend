@@ -4,12 +4,14 @@ import { FacultyId } from 'models/faculty';
 
 const facultiesSelector = (state: RootState) => state.faculties;
 
-const facultyIdFromParamsSelector = (
+export const facultyIdFromParamsSelector = (
   _: any,
   { facultyId }: { facultyId?: FacultyId }
 ) => facultyId ?? -1;
-const facultyIdsFromParamsSelector = (_: any, { ids }: { ids: FacultyId[] }) =>
-  ids;
+export const facultyIdsFromParamsSelector = (
+  _: any,
+  { ids }: { ids: FacultyId[] }
+) => ids;
 
 export const facultyByIdSelector = createSelector(
   facultiesSelector,

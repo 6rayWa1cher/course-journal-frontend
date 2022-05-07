@@ -10,7 +10,6 @@ import {
   ListItemText,
   Pagination,
   Paper,
-  Typography,
 } from '@mui/material';
 import { getEmployeesThunk } from '@redux/employees';
 import { useAppDispatch } from '@redux/utils';
@@ -19,7 +18,12 @@ import { EmployeeDto } from 'models/employee';
 import { useCallback, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import { useDocumentTitle, useLoadingPlain, useMySnackbar } from 'utils/hooks';
+import {
+  useDocumentTitle,
+  useLoadingPlain,
+  useMySnackbar,
+  useNumberSearchState,
+} from 'utils/hooks';
 import { getFirstCapitalSymbols } from 'utils/string';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import AddIcon from '@mui/icons-material/Add';
@@ -28,20 +32,25 @@ import { Page } from 'api/types';
 import EmptyListCaption from 'components/EmptyListCaption';
 
 const EmployeeExplorerPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   useDocumentTitle('Преподаватели');
-  const page = Number(searchParams.get('page') ?? '1');
-  const setPage = useCallback(
-    (p: number) => setSearchParams({ ...searchParams, page: p.toString() }),
-    [searchParams, setSearchParams]
-  );
+  const [page, setPage] = useNumberSearchState('page');
+  const clearedPage = page ?? 1;
   const [pages, setPages] = useState(1);
   const { enqueueError } = useMySnackbar();
   const dispatch = useAppDispatch();
   const [value, setValue] = useState<Page<EmployeeDto> | null>(null);
   const action = useCallback(
     () =>
-      dispatch(getEmployeesThunk({ page: page - 1 }))
+      dispatch(
+        getEmployeesThunk({
+          page: clearedPage - 1,
+          sort: [
+            { key: 'middleName' },
+            { key: 'firstName' },
+            { key: 'lastName' },
+          ],
+        })
+      )
         .then(unwrapResult)
         .then((v) => {
           setPages(v.totalPages);
@@ -51,7 +60,7 @@ const EmployeeExplorerPage = () => {
         .catch((e) => {
           defaultErrorEnqueue(e, enqueueError);
         }),
-    [dispatch, page, enqueueError]
+    [dispatch, clearedPage, enqueueError]
   );
   const { loading } = useLoadingPlain(action);
 
@@ -113,7 +122,11 @@ const EmployeeExplorerPage = () => {
       {value?.empty && !loading && <EmptyListCaption />}
       <Grid container justifyContent="center">
         <Grid item>
-          <Pagination count={pages} page={page} onChange={handleChangePage} />
+          <Pagination
+            count={pages}
+            page={clearedPage}
+            onChange={handleChangePage}
+          />
         </Grid>
       </Grid>
       {loading && <LinearProgress />}
