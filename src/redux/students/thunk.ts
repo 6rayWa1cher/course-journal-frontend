@@ -15,7 +15,7 @@ import {
   putStudentApi,
 } from 'api/students';
 import { BatchCreateStudentRequest } from 'api/types';
-import { AuthUserDto, AuthUserId, UserRole } from 'models/authUser';
+import { AuthUserId, UserRole } from 'models/authUser';
 import { GroupId } from 'models/group';
 import { StudentId, StudentRestDto } from 'models/student';
 

@@ -7,7 +7,6 @@ import {
   InputLabel,
   OutlinedInput,
   OutlinedInputProps,
-  TextFieldProps,
   FilledInput,
   Input,
 } from '@mui/material';
@@ -49,7 +48,10 @@ const PasswordInput = <T extends FieldValues, J extends FieldPath<T>>({
   additionalAdornment,
   ...fieldProps
 }: PasswordInputProps<T, J> & Partial<FormControlProps>) => {
-  const handleButtonClick = useCallback(() => setVisible(!visible), [visible]);
+  const handleButtonClick = useCallback(
+    () => setVisible(!visible),
+    [visible, setVisible]
+  );
   const handleMouseDownPassword = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
@@ -102,6 +104,7 @@ const PasswordInput = <T extends FieldValues, J extends FieldPath<T>>({
               </InputAdornment>
             }
             label={label}
+            {...inputProps}
           />
           {error && <FormHelperText error>{error.message}</FormHelperText>}
         </FormControl>

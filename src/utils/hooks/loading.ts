@@ -1,10 +1,5 @@
 import { ThunkAPIConfig, useAppDispatch } from '@redux/utils';
-import {
-  AsyncThunk,
-  AsyncThunkAction,
-  AsyncThunkPayloadCreator,
-  unwrapResult,
-} from '@reduxjs/toolkit';
+import { AsyncThunkAction, unwrapResult } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useState } from 'react';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { useMySnackbar } from './enqueue';

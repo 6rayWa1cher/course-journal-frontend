@@ -1,4 +1,4 @@
-import { Grid, IconButton, Typography } from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
 import FormTextField from 'components/FormTextField';
 import PasswordInput from 'components/PasswordInput';
 import { useCallback, useState } from 'react';

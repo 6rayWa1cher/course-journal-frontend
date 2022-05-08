@@ -4,7 +4,7 @@ import {
   SerializedError,
   AsyncThunkOptions,
 } from '@reduxjs/toolkit';
-import type { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosError } from 'axios';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch, RootState, SerializedAxiosError } from './types';
 

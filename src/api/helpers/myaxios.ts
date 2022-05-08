@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Qs from 'qs';
+import { stringify } from 'qs';
 
 const ip = process.env.REACT_APP_BACKEND_URL;
 
@@ -22,5 +22,5 @@ export const mainAxios = axios.create({
   baseURL: ip,
   headers: defaultBodyHeaders,
   validateStatus: goodStatus,
-  paramsSerializer: (params) => Qs.stringify(params, { arrayFormat: 'repeat' }),
+  paramsSerializer: (params) => stringify(params, { arrayFormat: 'repeat' }),
 });

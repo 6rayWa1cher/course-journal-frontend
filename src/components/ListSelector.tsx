@@ -1,4 +1,4 @@
-import { List, ListItemButton, ListItemText, Stack } from '@mui/material';
+import { List, ListItemButton, ListItemText } from '@mui/material';
 import { Box } from '@mui/system';
 import EmptyListCaption from 'components/EmptyListCaption';
 import { useMemo } from 'react';

@@ -1,5 +1,4 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
-import { FacultyDto } from 'models/faculty';
 import { GroupDto } from 'models/group';
 import {
   createGroupThunk,

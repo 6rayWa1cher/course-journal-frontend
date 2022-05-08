@@ -15,8 +15,7 @@ import {
 import { isAxiosError } from 'api/helpers/utils';
 import { GetEmployeesRequest, PatchAuthUserRequest } from 'api/types';
 import { AuthUserId, UserRole } from 'models/authUser';
-import { EmployeeRestDto, EmployeeId, EmployeeDto } from 'models/employee';
-import { upsertOneEmployee } from './actions';
+import { EmployeeRestDto, EmployeeId } from 'models/employee';
 
 export interface EmployeesGetByIdArgs {
   employeeId: EmployeeId;

@@ -19,7 +19,6 @@ import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { useMySnackbar } from 'utils/hooks';
 import {
   batchFullNamesSchema,
-  BatchFullNamesSchemaType,
   BatchFullNamesTransformedSchemaType,
 } from 'validation/yup/student';
 

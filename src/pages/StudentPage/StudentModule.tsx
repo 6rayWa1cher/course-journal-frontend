@@ -15,12 +15,11 @@ import FullNameForm from 'components/forms/FullNameForm';
 import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { putStudentWithAuthUserThunk } from '@redux/students';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { useMySnackbar, useParamSelector } from 'utils/hooks';
+import { useMySnackbar } from 'utils/hooks';
 import { formatFullNameWithInitials } from 'utils/string';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import BackButton from 'components/buttons/BackButton';
 import Title from 'components/Title';
-import { groupByIdSelector } from '@redux/groups';
 import { FacultyId } from 'models/faculty';
 
 export interface StudentModuleProps {

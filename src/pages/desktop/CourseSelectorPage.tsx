@@ -1,3 +1,3 @@
-const CourseSelectorPage = () => {};
+// const CourseSelectorPage = () => {};
 
-export default CourseSelectorPage;
+export default {};

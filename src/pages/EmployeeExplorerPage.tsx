@@ -1,36 +1,19 @@
-import {
-  Avatar,
-  Divider,
-  Grid,
-  IconButton,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
-  Pagination,
-  Paper,
-} from '@mui/material';
+import { Grid, Pagination, Paper } from '@mui/material';
 import { getEmployeesThunk } from '@redux/employees';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { EmployeeDto } from 'models/employee';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useDocumentTitle,
-  useLoadingPlain,
   useMySnackbar,
   useNumberSearchState,
 } from 'utils/hooks';
 import { getFirstCapitalSymbols, getFullName } from 'utils/string';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import AddIcon from '@mui/icons-material/Add';
 import Title from 'components/Title';
 import { Page } from 'api/types';
-import EmptyListCaption from 'components/EmptyListCaption';
 import AddButton from 'components/buttons/AddButton';
 import PreLoading from 'components/PreLoading';
 import NavListWithAvatars from 'components/NavListWithAvatars';
@@ -68,10 +51,6 @@ const EmployeeExplorerPage = () => {
   );
 
   const navigate = useNavigate();
-  const handleItemClick = useCallback(
-    (id: number) => navigate(`/employees/${id}`),
-    [navigate]
-  );
   const handleAddClick = useCallback(
     () => navigate(`/employees/create`),
     [navigate]

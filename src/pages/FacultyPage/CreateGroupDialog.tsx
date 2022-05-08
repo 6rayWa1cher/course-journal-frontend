@@ -9,20 +9,16 @@ import {
 import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { useMySnackbar } from 'utils/hooks';
-import { createFacultyThunk } from '@redux/faculties';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { facultySchema, FacultySchemaType } from 'validation/yup/faculty';
 import FormTextField from 'components/FormTextField';
 import { LoadingButton } from '@mui/lab';
 import { groupSchema, GroupSchemaType } from 'validation/yup/group';
 import { createGroupThunk } from '@redux/groups';
 import { FacultyId } from 'models/faculty';
 import { GroupDto } from 'models/group';
-import { SerializedAxiosError } from '@redux/types';
 
 export interface CreateGroupDialogProps {
   facultyId: FacultyId;

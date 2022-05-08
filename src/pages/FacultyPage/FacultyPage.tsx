@@ -1,4 +1,4 @@
-import { Divider, Grid, Paper } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import SubTitle from 'components/SubTitle';
 import { useParams } from 'react-router-dom';
 import FacultyModule from './FacultyModule';

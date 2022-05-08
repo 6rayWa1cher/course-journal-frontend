@@ -1,22 +1,11 @@
 import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
-import {
-  employeeByIdSelector,
-  employeeInitialsByIdSelector,
-} from '@redux/employees';
+import { employeeInitialsByIdSelector } from '@redux/employees';
 import { facultyNameByIdSelector } from '@redux/faculties';
-import {
-  studentByIdSelector,
-  studentInitialsByIdSelector,
-} from '@redux/students';
-import React, { useMemo } from 'react';
-import {
-  useLocation,
-  Link as RouterLink,
-  useParams,
-  useMatch,
-} from 'react-router-dom';
-import { useParamSelector, useRoutePath } from 'utils/hooks';
+import { studentInitialsByIdSelector } from '@redux/students';
+import { useMemo } from 'react';
+import { useLocation, Link as RouterLink, useParams } from 'react-router-dom';
+import { useParamSelector } from 'utils/hooks';
 
 const localizationTable: Record<string, string> = {
   '': 'Журнал курса',

@@ -6,7 +6,7 @@ import {
   getGroupsByFacultyIdApi,
   putGroupApi,
 } from 'api/groups';
-import { FacultyId, FacultyRestDto } from 'models/faculty';
+import { FacultyId } from 'models/faculty';
 import { GroupId, GroupRestDto } from 'models/group';
 
 export interface GroupByIdArgs {
