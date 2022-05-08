@@ -1,5 +1,11 @@
-import { useCallback, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo } from 'react';
+import {
+  Params,
+  useLocation,
+  useParams,
+  useSearchParams,
+  Location,
+} from 'react-router-dom';
 
 export const useDocumentTitle = (title: string) => {
   useEffect(() => {
@@ -22,4 +28,31 @@ export const useNumberSearchState = (
     [searchParams, label, setSearchParams]
   );
   return [value, setValue];
+};
+
+// https://stackoverflow.com/a/70754791
+const getRoutePath = (location: Location, params: Params): string => {
+  const { pathname } = location;
+
+  if (!Object.keys(params).length) {
+    return pathname; // we don't need to replace anything
+  }
+
+  let path = pathname;
+  Object.entries(params).forEach(([paramName, paramValue]) => {
+    if (paramValue) {
+      path = path.replace(paramValue, `:${paramName}`);
+    }
+  });
+  return path;
+};
+
+export const useRoutePath = () => {
+  const location = useLocation();
+  const params = useParams();
+  const pattern = useMemo(
+    () => getRoutePath(location, params),
+    [location, params]
+  );
+  return pattern;
 };

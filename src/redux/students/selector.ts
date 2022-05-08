@@ -2,7 +2,7 @@ import { groupIdFromParamsSelector } from '@redux/groups';
 import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { StudentDto, StudentId } from 'models/student';
-import { getFullName } from 'utils/string';
+import { formatFullNameWithInitials, getFullName } from 'utils/string';
 
 const studentsSelector = (state: RootState) => state.students;
 
@@ -42,4 +42,9 @@ export const studentsByGroupAlphabeticalSelector = createSelector(
     students
       .filter((student): student is StudentDto => !!student)
       .sort((a, b) => getFullName(a).localeCompare(getFullName(b)))
+);
+
+export const studentInitialsByIdSelector = createSelector(
+  studentByIdSelector,
+  (student) => (student != null ? formatFullNameWithInitials(student) : null)
 );

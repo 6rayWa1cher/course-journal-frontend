@@ -9,12 +9,14 @@ import { useCallback } from 'react';
 import { useLoadingActionThunk, useParamSelector } from 'utils/hooks';
 import StarIcon from '@mui/icons-material/Star';
 import { getFirstCapitalSymbols, getFullName } from 'utils/string';
+import { FacultyId } from 'models/faculty';
 
 export interface StudentsModuleProps {
+  facultyId: FacultyId;
   groupId: GroupId;
 }
 
-const StudentsModule = ({ groupId }: StudentsModuleProps) => {
+const StudentsModule = ({ facultyId, groupId }: StudentsModuleProps) => {
   const thunk = useCallback(
     () => getStudentsByGroupIdThunk({ groupId }),
     [groupId]
@@ -30,7 +32,7 @@ const StudentsModule = ({ groupId }: StudentsModuleProps) => {
         items={students.map((v) => ({
           id: v.id,
           name: getFullName(v),
-          link: `/students/${v.id}`,
+          link: `/faculties/${facultyId}/students/${v.id}`,
           avatar: v.headman ? (
             <StarIcon />
           ) : (

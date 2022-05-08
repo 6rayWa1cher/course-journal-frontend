@@ -23,6 +23,7 @@ import StudentModule from './StudentModule';
 const StudentPage = () => {
   const params = useParams();
 
+  const facultyId = Number(params.facultyId);
   const studentId = Number(params.studentId);
 
   const student = useParamSelector(studentByIdSelector, { studentId });
@@ -30,28 +31,23 @@ const StudentPage = () => {
   useDocumentTitle(
     student != null ? formatFullNameWithInitials(student) : 'Студент'
   );
-
-  const dispatch = useAppDispatch();
-  const { enqueueError } = useMySnackbar();
-  const loadingAction = useCallback(async () => {
-    try {
-      const { student } = await dispatch(
-        getStudentWithAuthUserThunk({ studentId })
-      ).then(unwrapResult);
-      await dispatch(getGroupByIdThunk({ groupId: student.group })).then(
-        unwrapResult
-      );
-      return student;
-    } catch (err) {
-      defaultErrorEnqueue(err as Error, enqueueError);
-    }
-  }, [dispatch, enqueueError, studentId]);
+  const thunk = useCallback(
+    () => getStudentWithAuthUserThunk({ studentId }),
+    [studentId]
+  );
+  const loadingAction = useLoadingActionThunk(thunk);
 
   return (
     <Paper>
       <Container>
         <PreLoading action={loadingAction}>
-          {student && <StudentModule student={student} authUser={authUser} />}
+          {student && (
+            <StudentModule
+              facultyId={facultyId}
+              student={student}
+              authUser={authUser}
+            />
+          )}
         </PreLoading>
       </Container>
     </Paper>

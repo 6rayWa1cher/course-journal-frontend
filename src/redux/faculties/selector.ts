@@ -24,3 +24,8 @@ export const facultyByIdsSelector = createSelector(
   facultyIdsFromParamsSelector,
   (state, ids) => ids.map((id) => state.entities[id])
 );
+
+export const facultyNameByIdSelector = createSelector(
+  facultyByIdSelector,
+  (faculty) => faculty?.name
+);

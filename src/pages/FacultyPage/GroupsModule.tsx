@@ -73,8 +73,11 @@ const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
   }, [groups, selected, setSelected]);
 
   const studentsModule = useMemo(
-    () => (selected != null ? <StudentsModule groupId={selected} /> : null),
-    [selected]
+    () =>
+      selected != null ? (
+        <StudentsModule facultyId={facultyId} groupId={selected} />
+      ) : null,
+    [selected, facultyId]
   );
 
   const [openAddDialog, setOpenAddDialog] = useState(false);

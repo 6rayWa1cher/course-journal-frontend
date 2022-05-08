@@ -21,14 +21,19 @@ import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import BackButton from 'components/buttons/BackButton';
 import Title from 'components/Title';
 import { groupByIdSelector } from '@redux/groups';
+import { FacultyId } from 'models/faculty';
 
 export interface StudentModuleProps {
+  facultyId: FacultyId;
   student: StudentDto;
   authUser?: AuthUserDto;
 }
 
-const StudentModule = ({ student, authUser }: StudentModuleProps) => {
-  const group = useParamSelector(groupByIdSelector, { groupId: student.group });
+const StudentModule = ({
+  facultyId,
+  student,
+  authUser,
+}: StudentModuleProps) => {
   const authUserExists = authUser != null;
   const methods = useForm<StudentFullSchemaType>({
     resolver: yupResolver(studentFullSchema),
@@ -114,14 +119,12 @@ const StudentModule = ({ student, authUser }: StudentModuleProps) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
-          {group && (
-            <Grid item>
-              <BackButton
-                to={`/faculties/${group.faculty}?group=${group.id}`}
-                replace
-              />
-            </Grid>
-          )}
+          <Grid item>
+            <BackButton
+              to={`/faculties/${facultyId}?group=${student.group}`}
+              replace
+            />
+          </Grid>
           <Grid item>
             <Title>Редактирование студента</Title>
           </Grid>

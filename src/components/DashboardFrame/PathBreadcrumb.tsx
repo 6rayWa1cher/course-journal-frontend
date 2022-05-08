@@ -1,17 +1,42 @@
 import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
+import {
+  employeeByIdSelector,
+  employeeInitialsByIdSelector,
+} from '@redux/employees';
+import { facultyNameByIdSelector } from '@redux/faculties';
+import {
+  studentByIdSelector,
+  studentInitialsByIdSelector,
+} from '@redux/students';
 import React, { useMemo } from 'react';
-import { useLocation, Link as RouterLink } from 'react-router-dom';
+import {
+  useLocation,
+  Link as RouterLink,
+  useParams,
+  useMatch,
+} from 'react-router-dom';
+import { useParamSelector, useRoutePath } from 'utils/hooks';
 
 const localizationTable: Record<string, string> = {
   '': 'Журнал курса',
   employees: 'Преподаватели',
+  faculties: 'Факультеты',
+  students: 'Студенты',
 };
 
-const localizeName = (name: Nullable<string | number>): string => {
+type IdsLocalizationTable = Record<string, string>;
+
+const localizeName = (
+  name: Nullable<string | number>,
+  table: IdsLocalizationTable
+): string => {
   let out = '';
   if (Number.isInteger(name)) {
     out = '#' + name;
+  }
+  if (name != null && name in table) {
+    out = table[name];
   }
   if (name != null && name in localizationTable) {
     out = localizationTable[name];
@@ -25,16 +50,41 @@ export interface PathBreadcrumbProps {
 }
 
 const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
+  const params = useParams();
   const location = useLocation();
+  const faculty = useParamSelector(facultyNameByIdSelector, {
+    facultyId: Number(params.facultyId),
+  });
+  const employee = useParamSelector(employeeInitialsByIdSelector, {
+    employeeId: Number(params.employeeId),
+  });
+  const student = useParamSelector(studentInitialsByIdSelector, {
+    studentId: Number(params.studentId),
+  });
 
   const parts = useMemo(() => {
     const pathname = location.pathname === '/' ? '' : location.pathname;
     const blocks = pathname.split('/');
+    const table = Object.fromEntries(
+      [
+        [params.facultyId, faculty],
+        [params.employeeId, employee],
+        [params.studentId, student],
+      ].filter(([k, v]) => k != null && v != null)
+    );
     return blocks.map((b, i, arr) => ({
       path: arr.slice(0, i + 1).join('/') || '/',
-      name: localizeName(b),
+      name: localizeName(b, table),
     }));
-  }, [location]);
+  }, [
+    employee,
+    faculty,
+    location.pathname,
+    params.employeeId,
+    params.facultyId,
+    params.studentId,
+    student,
+  ]);
 
   const crumbs = useMemo(
     () =>
