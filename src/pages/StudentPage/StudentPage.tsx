@@ -4,7 +4,6 @@ import {
   getStudentWithAuthUserThunk,
   studentByIdSelector,
 } from '@redux/students';
-import StudentForm from 'components/forms/StudentForm';
 import PreLoading from 'components/PreLoading';
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,6 +13,7 @@ import {
   useParamSelector,
 } from 'utils/hooks';
 import { formatFullNameWithInitials } from 'utils/string';
+import StudentModule from './StudentModule';
 
 const StudentPage = () => {
   const params = useParams();
@@ -36,7 +36,7 @@ const StudentPage = () => {
     <Paper>
       <Container>
         <PreLoading action={loadingAction}>
-          {student && <StudentForm student={student} authUser={authUser} />}
+          {student && <StudentModule student={student} authUser={authUser} />}
         </PreLoading>
       </Container>
     </Paper>

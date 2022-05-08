@@ -10,15 +10,15 @@ import {
   studentFullSchema,
   StudentFullSchemaType,
 } from 'validation/yup/student';
-import BaseAuthUserForm from './AuthUserForm/BaseAuthUserForm';
-import FullNameForm from './FullNameForm';
+import AuthUserForm from 'components/forms/AuthUserForm';
+import FullNameForm from 'components/forms/FullNameForm';
 
-export interface StudentFormProps {
+export interface StudentModuleProps {
   student: StudentDto;
   authUser?: AuthUserDto;
 }
 
-const StudentForm = ({ student, authUser }: StudentFormProps) => {
+const StudentModule = ({ student, authUser }: StudentModuleProps) => {
   const authUserExists = authUser != null;
   const methods = useForm<StudentFullSchemaType>({
     resolver: yupResolver(studentFullSchema),
@@ -51,7 +51,7 @@ const StudentForm = ({ student, authUser }: StudentFormProps) => {
         <Divider sx={{ pt: 2, mb: 2 }} />
         <FormCheckbox name="headman" label="Староста" control={control} />
         {headman && (
-          <BaseAuthUserForm passwordRequired={headman && !authUserExists} />
+          <AuthUserForm passwordRequired={headman && !authUserExists} />
         )}
         <ClearSubmitButton />
       </form>
@@ -59,4 +59,4 @@ const StudentForm = ({ student, authUser }: StudentFormProps) => {
   );
 };
 
-export default StudentForm;
+export default StudentModule;

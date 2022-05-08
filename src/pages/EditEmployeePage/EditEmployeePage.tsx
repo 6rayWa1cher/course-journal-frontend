@@ -7,7 +7,6 @@ import {
 } from '@redux/employees';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
-import EditEmployeeForm from 'components/forms/EmployeeForm/EditEmployeeForm';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
@@ -22,6 +21,7 @@ import { formatFullNameWithInitials } from 'utils/string';
 import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm';
 import BackButton from 'components/buttons/BackButton';
 import PreLoading from 'components/PreLoading';
+import EditEmployeeModule from './EditEmployeeModule';
 
 const EditEmployeePage = () => {
   const params = useParams();
@@ -92,8 +92,8 @@ const EditEmployeePage = () => {
           </Grid>
 
           {employee != null && (
-            <EditEmployeeForm
-              employeeId={employee?.id}
+            <EditEmployeeModule
+              employeeId={employee.id}
               authUserId={authUser?.id}
             />
           )}

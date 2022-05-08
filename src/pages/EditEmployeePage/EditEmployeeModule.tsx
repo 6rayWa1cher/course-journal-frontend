@@ -4,7 +4,11 @@ import {
   createAuthUserThunk,
   patchAuthUserThunk,
 } from '@redux/authUsers';
-import { employeeByIdSelector, putEmployeeThunk } from '@redux/employees';
+import {
+  employeeByIdSelector,
+  putEmployeeThunk,
+  putEmployeeWithAuthUserThunk,
+} from '@redux/employees';
 import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { AuthUserId, UserRole } from 'models/authUser';
 import { EmployeeId } from 'models/employee';
@@ -20,9 +24,9 @@ import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Divider, LinearProgress } from '@mui/material';
 import ClearSubmitButtons from 'components/ClearSubmitButtons';
-import InnerEmployeeForm from 'components/forms/EmployeeForm/InnerEmployeeForm';
+import EmployeeForm from 'components/forms/EmployeeForm';
 
-interface EditEmployeeModuleProps {
+export interface EditEmployeeModuleProps {
   employeeId: EmployeeId;
   authUserId?: AuthUserId;
 }
@@ -33,7 +37,7 @@ const EditEmployeeModule = ({
 }: EditEmployeeModuleProps) => {
   const employee = useParamSelector(employeeByIdSelector, { employeeId });
   const authUser = useParamSelector(authUserByIdSelector, { authUserId });
-  const authUserPresented = !!authUserId;
+  const authUserPresented = authUserId != null;
   const yupSchema = authUserPresented
     ? employeeAuthUserOptionalPasswordSchema
     : employeeAuthUserSchema;
@@ -66,19 +70,37 @@ const EditEmployeeModule = ({
       password,
     }: EmployeeAuthUserOptionalPasswordType) => {
       try {
-        await dispatch(
-          putEmployeeThunk({
-            employeeId,
-            data: {
-              firstName,
-              middleName,
-              lastName,
-              department,
-            },
-          })
-        ).then(unwrapResult);
         const authUserChanged =
           authUser?.username !== username || password !== '';
+        const employeeRequest = {
+          employeeId,
+          employee: {
+            firstName,
+            middleName,
+            lastName,
+            department,
+          },
+        };
+        const authUserRequest = {
+          authUserId,
+          authUser: {
+            username,
+            password:
+              password != null && password.length > 0 ? password : undefined,
+          },
+        };
+        if (authUserChanged || !authUserPresented) {
+          await dispatch(
+            putEmployeeWithAuthUserThunk({
+              ...employeeRequest,
+              ...authUserRequest,
+            })
+          ).then(unwrapResult);
+        } else {
+          await dispatch(
+            putEmployeeThunk({ employeeId, data: employeeRequest.employee })
+          ).then(unwrapResult);
+        }
         if (authUserChanged && authUserPresented) {
           await dispatch(
             patchAuthUserThunk({
@@ -125,7 +147,7 @@ const EditEmployeeModule = ({
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InnerEmployeeForm
+        <EmployeeForm
           passwordRequired={!authUserPresented}
           passwordLabel={authUserPresented ? 'Новый пароль' : 'Пароль'}
         />

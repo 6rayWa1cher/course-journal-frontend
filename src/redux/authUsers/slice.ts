@@ -1,6 +1,7 @@
 import {
   createEmployeeWithAuthUserThunk,
   getEmployeeWithAuthUserThunk,
+  putEmployeeWithAuthUserThunk,
 } from '@redux/employees';
 import { getStudentWithAuthUserThunk } from '@redux/students';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
@@ -24,7 +25,8 @@ export const slice = createSlice({
       isAnyOf(
         getStudentWithAuthUserThunk.fulfilled,
         createEmployeeWithAuthUserThunk.fulfilled,
-        getEmployeeWithAuthUserThunk.fulfilled
+        getEmployeeWithAuthUserThunk.fulfilled,
+        putEmployeeWithAuthUserThunk.fulfilled
       ),
       (state, { payload }) => {
         const authUser = payload.authUser;

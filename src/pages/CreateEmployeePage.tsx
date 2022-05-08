@@ -12,7 +12,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Title from 'components/Title';
 import { useDocumentTitle, useMySnackbar } from 'utils/hooks';
 import { FormProvider, useForm } from 'react-hook-form';
-import InnerEmployeeForm from 'components/forms/EmployeeForm/InnerEmployeeForm';
+import EmployeeForm from 'components/forms/EmployeeForm';
 import ClearSubmitButtons from 'components/ClearSubmitButtons';
 import {
   employeeAuthUserSchema,
@@ -114,7 +114,7 @@ const CreateEmployeePage = () => {
         </Grid>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <InnerEmployeeForm />
+            <EmployeeForm />
             <Divider />
             <ClearSubmitButtons submitLabel="Создать" />
             {isSubmitting && <LinearProgress />}

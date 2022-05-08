@@ -6,15 +6,15 @@ import { useFormContext } from 'react-hook-form';
 import { generatePassword } from 'utils/random';
 import CasinoIcon from '@mui/icons-material/Casino';
 
-export interface BaseAuthUserFormProps {
+export interface AuthUserFormProps {
   passwordRequired?: boolean;
   passwordLabel?: string;
 }
 
-const BaseAuthUserForm = ({
+const AuthUserForm = ({
   passwordRequired = true,
   passwordLabel = 'Пароль',
-}: BaseAuthUserFormProps) => {
+}: AuthUserFormProps) => {
   const { control, setValue } = useFormContext();
 
   const handleRandomPasswordButtonClick = useCallback(
@@ -73,4 +73,4 @@ const BaseAuthUserForm = ({
   );
 };
 
-export default BaseAuthUserForm;
+export default AuthUserForm;
