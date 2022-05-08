@@ -1,9 +1,11 @@
+import { getStudentWithAuthUserThunk } from '@redux/students';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { AuthUserDto } from 'models/authUser';
 import {
   createAuthUserThunk,
   getAuthUserByEmployeeIdThunk,
   getAuthUserByIdThunk,
+  getAuthUserByStudentIdThunk,
   patchAuthUserThunk,
 } from './thunk';
 
@@ -14,12 +16,20 @@ export const slice = createSlice({
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(
+      getStudentWithAuthUserThunk.fulfilled,
+      (state, { payload }) => {
+        const authUser = payload.authUser;
+        if (authUser != null) adapter.upsertOne(state, payload.authUser);
+      }
+    );
     builder.addMatcher(
       isAnyOf(
         getAuthUserByIdThunk.fulfilled,
         getAuthUserByEmployeeIdThunk.fulfilled,
         createAuthUserThunk.fulfilled,
-        patchAuthUserThunk.fulfilled
+        patchAuthUserThunk.fulfilled,
+        getAuthUserByStudentIdThunk.fulfilled
       ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);

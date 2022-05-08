@@ -19,6 +19,7 @@ import CreateEmployeePage from 'pages/CreateEmployeePage';
 import FacultyExplorerPage from 'pages/FacultyExplorerPage';
 import FacultyPage from 'pages/FacultyPage';
 import { CssBaseline } from '@mui/material';
+import StudentPage from 'pages/StudentPage';
 
 const darkTheme = createTheme({
   palette: {
@@ -52,6 +53,7 @@ const App = () => (
               />
               <Route path="/faculties" element={<FacultyExplorerPage />} />
               <Route path="/faculties/:facultyId" element={<FacultyPage />} />
+              <Route path="/students/:studentId" element={<StudentPage />} />
             </Route>
           </Route>
           <Route

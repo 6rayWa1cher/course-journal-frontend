@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, CheckboxProps } from '@mui/material';
+import { Checkbox, CheckboxProps, FormControlLabel } from '@mui/material';
 import {
   Control,
   Controller,
@@ -13,6 +13,7 @@ export interface FormCheckboxProps<
   J extends FieldPath<T>
 > {
   name: J;
+  label: string;
   control: Control<T>;
   controllerProps?: Partial<ControllerProps<T, J>>;
 }
@@ -20,6 +21,7 @@ export interface FormCheckboxProps<
 const FormCheckbox = <T extends FieldValues, J extends FieldPath<T>>({
   name,
   control,
+  label,
   controllerProps = {},
   ...fieldProps
 }: FormCheckboxProps<T, J> & CheckboxProps) => {
@@ -31,13 +33,18 @@ const FormCheckbox = <T extends FieldValues, J extends FieldPath<T>>({
         field: { onChange, onBlur, value, name, ref },
         fieldState: { error },
       }) => (
-        <Checkbox
-          id={name}
-          checked={value}
-          onChange={(e) => onChange(e.target.checked)}
-          onBlur={onBlur}
-          inputRef={ref}
-          {...fieldProps}
+        <FormControlLabel
+          control={
+            <Checkbox
+              id={name}
+              checked={value}
+              onChange={(e) => onChange(e.target.checked)}
+              onBlur={onBlur}
+              inputRef={ref}
+              {...fieldProps}
+            />
+          }
+          label={label}
         />
       )}
       {...controllerProps}

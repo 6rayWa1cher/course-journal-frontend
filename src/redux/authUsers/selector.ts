@@ -3,6 +3,8 @@ import { authUserIdSelector } from '@redux/auth/selector';
 import type { RootState } from '@redux/types';
 import { AuthUserDto, AuthUserId } from 'models/authUser';
 import { employeeIdFromParamsSelector } from '@redux/employees';
+import { studentIdFromParamsSelector } from '@redux/students';
+import { find } from 'lodash';
 
 const authUsersSelector = (state: RootState) => state.authUsers;
 
@@ -28,8 +30,14 @@ export const authUserByIdSelector = createSelector(
   (state, authUserId) => state.entities[authUserId]
 );
 
+export const authUserByStudentIdSelector = createSelector(
+  authUsersSelector,
+  studentIdFromParamsSelector,
+  (state, studentId) => find(state.entities, (u) => u?.student === studentId)
+);
+
 export const authUserByEmployeeIdSelector = createSelector(
   authUsersSelector,
   employeeIdFromParamsSelector,
-  (state, employeeId) => state.entities[employeeId]
+  (state, employeeId) => find(state.entities, (u) => u?.employee === employeeId)
 );

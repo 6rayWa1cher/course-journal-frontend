@@ -1,4 +1,7 @@
+import { password, username } from './user';
 import yup from './utils';
+
+const name = yup.string().max(250);
 
 const batchFullNames = yup
   .array()
@@ -8,7 +11,7 @@ const batchFullNames = yup
     }
     return original ? original.split('\n').map((l) => l.split(' ')) : [];
   })
-  .of(yup.array().min(2).max(3).of(yup.string().max(250)))
+  .of(yup.array().min(2).max(3).of(name))
   .min(1, 'Нужно ввести хотя-бы одно ФИО');
 
 export interface BatchFullNamesSchemaType {
@@ -24,3 +27,40 @@ export const batchFullNamesSchema = yup
     batchFullNames,
   })
   .required();
+
+export interface StudentFullSchemaType {
+  lastName: string;
+  firstName: string;
+  middleName: string;
+  headman: boolean;
+  username: string;
+  password: string;
+}
+
+export const studentFullSchema = yup.object({
+  lastName: name.required(),
+  firstName: name.required(),
+  middleName: name,
+  headman: yup.bool(),
+  username: yup.string().when('headman', {
+    is: true,
+    then: (schema) => schema.concat(username),
+  }),
+  password: yup.string().when(['headman', '$authUserExists'], {
+    is: (headman: boolean, authUserExists: boolean) =>
+      headman && !authUserExists,
+    then: password.required(),
+    otherwise: (schema) =>
+      schema.test({
+        name: 'emptyOrValid',
+        message: '',
+        test: async (pwd) =>
+          pwd?.length === 0 ||
+          (await password
+            .required()
+            .validate(pwd)
+            .then(() => true)
+            .catch(() => false)),
+      }),
+  }),
+});

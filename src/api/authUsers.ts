@@ -1,6 +1,7 @@
 import type { AxiosPromise } from 'axios';
 import type { AuthUserDto, AuthUserId } from 'models/authUser';
 import { EmployeeId } from 'models/employee';
+import { StudentId } from 'models/student';
 import { mainAxios } from './helpers/myaxios';
 import { CreateAuthUserRequest, PatchAuthUserRequest } from './types';
 
@@ -12,6 +13,11 @@ export const getAuthUserByEmployeeIdApi = (
   employeeId: EmployeeId
 ): AxiosPromise<AuthUserDto> =>
   mainAxios.get(`/auth-user/employee/${employeeId}`);
+
+export const getAuthUserByStudentIdApi = (
+  studentId: StudentId
+): AxiosPromise<AuthUserDto> =>
+  mainAxios.get(`/auth-user/student/${studentId}`);
 
 export const createAuthUserApi = (
   data: CreateAuthUserRequest

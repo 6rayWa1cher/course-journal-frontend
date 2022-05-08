@@ -6,6 +6,7 @@ import {
   deleteStudentThunk,
   getStudentByIdThunk,
   getStudentsByGroupIdThunk,
+  getStudentWithAuthUserThunk,
   putStudentThunk,
 } from './thunk';
 
@@ -16,6 +17,12 @@ export const slice = createSlice({
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(
+      getStudentWithAuthUserThunk.fulfilled,
+      (state, { payload }) => {
+        adapter.upsertOne(state, payload.student);
+      }
+    );
     builder.addCase(deleteStudentThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
     });

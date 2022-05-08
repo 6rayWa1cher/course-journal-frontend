@@ -1,4 +1,6 @@
 import { createAxiosAsyncThunk } from '@redux/utils';
+import { getAuthUserByStudentIdApi } from 'api/authUsers';
+import { isAxiosError } from 'api/helpers/utils';
 import {
   batchCreateStudentApi,
   createStudentApi,
@@ -20,6 +22,22 @@ export const getStudentByIdThunk = createAxiosAsyncThunk(
   async ({ studentId }: StudentByIdArgs) => {
     const data = (await getStudentByIdApi(studentId)).data;
     return data;
+  }
+);
+
+export const getStudentWithAuthUserThunk = createAxiosAsyncThunk(
+  'students/getWithAuthUser',
+  async ({ studentId }: StudentByIdArgs) => {
+    const student = (await getStudentByIdApi(studentId)).data;
+    try {
+      const authUser = (await getAuthUserByStudentIdApi(studentId)).data;
+      return { student, authUser };
+    } catch (e) {
+      if (isAxiosError(e) && e.response?.status === 404) {
+        return { student };
+      }
+      throw e;
+    }
   }
 );
 
