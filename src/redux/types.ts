@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import store from './store';
 
 export interface GenericError {
@@ -21,4 +21,5 @@ export interface SerializedAxiosError extends Error {
   message: AxiosError['message'];
   stack: AxiosError['stack'];
   response?: Omit<AxiosResponse, 'request' | 'config'>;
+  config: Pick<AxiosRequestConfig, 'url'>;
 }

@@ -54,13 +54,17 @@ export const studentFullSchema = yup.object({
       schema.test({
         name: 'emptyOrValid',
         message: '',
-        test: async (pwd) =>
-          pwd?.length === 0 ||
-          (await password
-            .required()
-            .validate(pwd)
-            .then(() => true)
-            .catch(() => false)),
+        test: (pwd) => {
+          try {
+            return (
+              pwd == null ||
+              pwd.length === 0 ||
+              password.validateSync(pwd) != null
+            );
+          } catch (e) {
+            return false;
+          }
+        },
       }),
   }),
 });

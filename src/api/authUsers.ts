@@ -28,3 +28,6 @@ export const patchAuthUserApi = (
   data: PatchAuthUserRequest
 ): AxiosPromise<AuthUserDto> =>
   mainAxios.patch(`/auth-user/${authUserId}`, data);
+
+export const deleteAuthUserApi = (authUserId: AuthUserId): AxiosPromise<void> =>
+  mainAxios.delete(`/auth-user/${authUserId}`);

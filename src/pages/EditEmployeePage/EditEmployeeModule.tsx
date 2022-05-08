@@ -16,21 +16,21 @@ import {
   EmployeeAuthUserOptionalPasswordType,
   employeeAuthUserSchema,
 } from 'validation/yup/employee';
-import InnerEmployeeForm from './InnerEmployeeForm';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Divider, LinearProgress } from '@mui/material';
 import ClearSubmitButtons from 'components/ClearSubmitButtons';
+import InnerEmployeeForm from 'components/forms/EmployeeForm/InnerEmployeeForm';
 
-interface EditEmployeeFormProps {
+interface EditEmployeeModuleProps {
   employeeId: EmployeeId;
   authUserId?: AuthUserId;
 }
 
-const EditEmployeeForm = ({
+const EditEmployeeModule = ({
   authUserId,
   employeeId,
-}: EditEmployeeFormProps) => {
+}: EditEmployeeModuleProps) => {
   const employee = useParamSelector(employeeByIdSelector, { employeeId });
   const authUser = useParamSelector(authUserByIdSelector, { authUserId });
   const authUserPresented = !!authUserId;
@@ -137,4 +137,4 @@ const EditEmployeeForm = ({
   );
 };
 
-export default EditEmployeeForm;
+export default EditEmployeeModule;

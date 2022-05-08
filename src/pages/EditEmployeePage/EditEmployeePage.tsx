@@ -1,31 +1,23 @@
-import { Container, Grid, IconButton, Paper, Stack } from '@mui/material';
-import {
-  authUserByEmployeeIdSelector,
-  getAuthUserByEmployeeIdThunk,
-} from '@redux/authUsers';
+import { Container, Grid, Paper, Stack } from '@mui/material';
+import { authUserByEmployeeIdSelector } from '@redux/authUsers';
 import {
   deleteEmployeeThunk,
   employeeByIdSelector,
-  getEmployeeByIdThunk,
+  getEmployeeWithAuthUserThunk,
 } from '@redux/employees';
-import { SerializedAxiosError } from '@redux/types';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
-import BigProcess from 'components/BigProcess';
 import EditEmployeeForm from 'components/forms/EmployeeForm/EditEmployeeForm';
-import NotFound from 'components/NotFound';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useDocumentTitle,
-  useLoadingPlain,
+  useLoadingActionThunk,
   useMySnackbar,
   useParamSelector,
 } from 'utils/hooks';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Title from 'components/Title';
-import { Box } from '@mui/system';
 import { formatFullNameWithInitials } from 'utils/string';
 import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm';
 import BackButton from 'components/buttons/BackButton';
@@ -39,22 +31,11 @@ const EditEmployeePage = () => {
   const { enqueueSuccess, enqueueError } = useMySnackbar();
 
   const dispatch = useAppDispatch();
-  const loadingAction = useCallback(() => {
-    return Promise.all([
-      dispatch(getEmployeeByIdThunk({ employeeId }))
-        .then(unwrapResult)
-        .catch((e: Error) => {
-          defaultErrorEnqueue(e, enqueueError);
-        }),
-      dispatch(getAuthUserByEmployeeIdThunk({ employeeId }))
-        .then(unwrapResult)
-        .catch((e: SerializedAxiosError) => {
-          if (e.response?.status !== 404) {
-            defaultErrorEnqueue(e, enqueueError);
-          }
-        }),
-    ]);
-  }, [dispatch, employeeId, enqueueError]);
+  const thunk = useCallback(
+    () => getEmployeeWithAuthUserThunk({ employeeId }),
+    [employeeId]
+  );
+  const loadingAction = useLoadingActionThunk(thunk);
 
   const navigate = useNavigate();
 
@@ -64,14 +45,7 @@ const EditEmployeePage = () => {
   });
 
   const fullNameWithInitials = useMemo(
-    () =>
-      employee == null
-        ? null
-        : formatFullNameWithInitials({
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            middleName: employee.middleName ?? undefined,
-          }),
+    () => (employee == null ? null : formatFullNameWithInitials(employee)),
     [employee]
   );
   useDocumentTitle(fullNameWithInitials ?? 'Изменение преподавателя');
@@ -116,6 +90,7 @@ const EditEmployeePage = () => {
               />
             </Grid>
           </Grid>
+
           {employee != null && (
             <EditEmployeeForm
               employeeId={employee?.id}

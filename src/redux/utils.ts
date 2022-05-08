@@ -4,7 +4,7 @@ import {
   SerializedError,
   AsyncThunkOptions,
 } from '@reduxjs/toolkit';
-import type { AxiosError } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch, RootState, SerializedAxiosError } from './types';
 
@@ -28,7 +28,7 @@ export const createTypedAsyncThunk = <ReturnType, ThunkArg = void>(
   );
 
 export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
-  const { code, message, stack, response, name } = e;
+  const { code, message, stack, response, name, config } = e;
   const serializedResponse =
     response == null
       ? response
@@ -38,12 +38,16 @@ export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
           statusText: response.statusText,
           headers: response.headers,
         };
+  const serializedConfig = {
+    url: config.url,
+  };
   return {
     code,
     message,
     stack,
     response: serializedResponse,
     name,
+    config: serializedConfig,
   };
 };
 

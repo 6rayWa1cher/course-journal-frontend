@@ -1,8 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Divider, LinearProgress } from '@mui/material';
 import { createAuthUserThunk } from '@redux/authUsers';
 import { createEmployeeThunk, deleteEmployeeThunk } from '@redux/employees';
 import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
+import ClearSubmitButtons from 'components/ClearSubmitButtons';
 import { UserRole } from 'models/authUser';
 import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -29,11 +31,15 @@ const CreateEmployeeForm = () => {
       password: '',
     },
   });
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { enqueueSuccess, enqueueError } = useMySnackbar();
-  const handleSubmit = useCallback(
+  const onSubmit = useCallback(
     async (data: EmployeeAuthUserType) => {
       const {
         firstName,
@@ -87,7 +93,12 @@ const CreateEmployeeForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <InnerEmployeeForm onSubmit={handleSubmit} />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InnerEmployeeForm />
+        <Divider />
+        <ClearSubmitButtons submitLabel="Создать" />
+        {isSubmitting && <LinearProgress />}
+      </form>
     </FormProvider>
   );
 };

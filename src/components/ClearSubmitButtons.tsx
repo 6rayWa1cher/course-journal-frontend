@@ -1,10 +1,10 @@
 import { Button, Grid } from '@mui/material';
 
-export interface ClearSubmitButtonProps {
+export interface ClearSubmitButtonsProps {
   submitLabel?: string;
 }
 
-const ClearSubmitButton = ({ submitLabel }: ClearSubmitButtonProps) => (
+const ClearSubmitButtons = ({ submitLabel }: ClearSubmitButtonsProps) => (
   <Grid container sx={{ p: (theme) => theme.spacing(2, 0, 1) }} spacing={2}>
     <Grid item xs={12} md={6}>
       <Button type="reset" fullWidth variant="outlined">
@@ -19,4 +19,4 @@ const ClearSubmitButton = ({ submitLabel }: ClearSubmitButtonProps) => (
   </Grid>
 );
 
-export default ClearSubmitButton;
+export default ClearSubmitButtons;

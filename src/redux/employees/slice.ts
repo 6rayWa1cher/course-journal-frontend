@@ -1,12 +1,15 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import {
   createEmployeeThunk,
+  createEmployeeWithAuthUserThunk,
   deleteEmployeeThunk,
   getEmployeeByIdThunk,
   getEmployeesThunk,
+  getEmployeeWithAuthUserThunk,
   putEmployeeThunk,
 } from './thunk';
 import { EmployeeDto } from 'models/employee';
+import { upsertOneEmployee } from './actions';
 
 export const adapter = createEntityAdapter<EmployeeDto>();
 
@@ -23,9 +26,19 @@ export const slice = createSlice({
     });
     builder.addMatcher(
       isAnyOf(
+        createEmployeeWithAuthUserThunk.fulfilled,
+        getEmployeeWithAuthUserThunk.fulfilled
+      ),
+      (state, { payload }) => {
+        adapter.upsertOne(state, payload.employee);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(
         getEmployeeByIdThunk.fulfilled,
         createEmployeeThunk.fulfilled,
-        putEmployeeThunk.fulfilled
+        putEmployeeThunk.fulfilled,
+        upsertOneEmployee
       ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);

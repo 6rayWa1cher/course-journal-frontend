@@ -4,7 +4,7 @@ import {
   getStudentWithAuthUserThunk,
   studentByIdSelector,
 } from '@redux/students';
-import StudentForm from 'components/forms/StudentForm/StudentForm';
+import StudentForm from 'components/forms/StudentForm';
 import PreLoading from 'components/PreLoading';
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';

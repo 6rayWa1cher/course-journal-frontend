@@ -10,8 +10,8 @@ import {
   studentFullSchema,
   StudentFullSchemaType,
 } from 'validation/yup/student';
-import BaseAuthUserForm from '../AuthUserForm/BaseAuthUserForm';
-import FullNameForm from '../FullNameForm';
+import BaseAuthUserForm from './AuthUserForm/BaseAuthUserForm';
+import FullNameForm from './FullNameForm';
 
 export interface StudentFormProps {
   student: StudentDto;
