@@ -127,7 +127,11 @@ const EditEmployeeModule = ({
         enqueueSuccess('Преподаватель сохранен');
       } catch (e) {
         if (isSerializedAxiosError(e) && e.response?.status === 409) {
-          enqueueError('Преподаватель с такими данными уже существует');
+          if (e.config.url?.includes('auth-user')) {
+            enqueueError('Пользователь с такими данными уже существует');
+          } else {
+            enqueueError('Преподаватель с такими данными уже существует');
+          }
         } else {
           defaultErrorEnqueue(e as Error, enqueueError);
         }

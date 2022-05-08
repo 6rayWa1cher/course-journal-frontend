@@ -1,5 +1,10 @@
 import { createAxiosAsyncThunk } from '@redux/utils';
-import { getAuthUserByStudentIdApi } from 'api/authUsers';
+import {
+  createAuthUserApi,
+  deleteAuthUserApi,
+  getAuthUserByStudentIdApi,
+  patchAuthUserApi,
+} from 'api/authUsers';
 import { isAxiosError } from 'api/helpers/utils';
 import {
   batchCreateStudentApi,
@@ -10,6 +15,7 @@ import {
   putStudentApi,
 } from 'api/students';
 import { BatchCreateStudentRequest } from 'api/types';
+import { AuthUserDto, AuthUserId, UserRole } from 'models/authUser';
 import { GroupId } from 'models/group';
 import { StudentId, StudentRestDto } from 'models/student';
 
@@ -79,6 +85,63 @@ export const putStudentThunk = createAxiosAsyncThunk(
   async ({ studentId, data }: PutStudentArgs) => {
     const student = (await putStudentApi(studentId, data)).data;
     return student;
+  }
+);
+
+export interface PutStudentWithAuthUserArgs {
+  studentId: StudentId;
+  student: StudentRestDto;
+  headman: boolean;
+  authUserId?: AuthUserId;
+  authUser?: {
+    username: string;
+    password?: string;
+  };
+}
+
+export const putStudentWithAuthUserThunk = createAxiosAsyncThunk(
+  'students/putWithAuthUser',
+  async ({
+    studentId,
+    student,
+    headman,
+    authUserId,
+    authUser,
+  }: PutStudentWithAuthUserArgs) => {
+    const putStudent = async () =>
+      (await putStudentApi(studentId, student)).data;
+    const authUserExists = authUserId != null;
+    if (headman && authUserExists) {
+      const modifiedAuthUser =
+        authUser != null
+          ? (await patchAuthUserApi(authUserId, authUser)).data
+          : null;
+      const modifiedStudent = await putStudent();
+      return { student: modifiedStudent, authUser: modifiedAuthUser };
+    } else if (headman && !authUserExists) {
+      if (authUser == null) {
+        throw new Error('authUser is not present');
+      }
+      if (authUser.password == null) {
+        throw new Error('password is not present');
+      }
+      const authUserRequest = {
+        username: authUser.username,
+        password: authUser.password as string,
+        userRole: UserRole.HEADMAN,
+        userInfo: studentId,
+      };
+      const createdAuthUser = (await createAuthUserApi(authUserRequest)).data;
+      const modifiedStudent = await putStudent();
+      return { student: modifiedStudent, authUser: createdAuthUser };
+    } else if (!headman && authUserExists) {
+      await deleteAuthUserApi(authUserId);
+      const modifiedStudent = await putStudent();
+      return { student: modifiedStudent };
+    } else {
+      const modifiedStudent = await putStudent();
+      return { student: modifiedStudent };
+    }
   }
 );
 

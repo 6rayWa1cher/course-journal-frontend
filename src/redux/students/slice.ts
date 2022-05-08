@@ -8,6 +8,7 @@ import {
   getStudentsByGroupIdThunk,
   getStudentWithAuthUserThunk,
   putStudentThunk,
+  putStudentWithAuthUserThunk,
 } from './thunk';
 
 export const adapter = createEntityAdapter<StudentDto>();
@@ -17,15 +18,18 @@ export const slice = createSlice({
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      getStudentWithAuthUserThunk.fulfilled,
+    builder.addCase(deleteStudentThunk.fulfilled, (state, { payload }) => {
+      adapter.removeOne(state, payload);
+    });
+    builder.addMatcher(
+      isAnyOf(
+        getStudentWithAuthUserThunk.fulfilled,
+        putStudentWithAuthUserThunk.fulfilled
+      ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload.student);
       }
     );
-    builder.addCase(deleteStudentThunk.fulfilled, (state, { payload }) => {
-      adapter.removeOne(state, payload);
-    });
     builder.addMatcher(
       isAnyOf(
         getStudentByIdThunk.fulfilled,

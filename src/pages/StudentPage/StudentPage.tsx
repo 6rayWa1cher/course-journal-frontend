@@ -1,15 +1,20 @@
 import { Container, Paper } from '@mui/material';
 import { authUserByStudentIdSelector } from '@redux/authUsers';
+import { getGroupByIdThunk } from '@redux/groups';
 import {
   getStudentWithAuthUserThunk,
   studentByIdSelector,
 } from '@redux/students';
+import { useAppDispatch } from '@redux/utils';
+import { unwrapResult } from '@reduxjs/toolkit';
 import PreLoading from 'components/PreLoading';
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useDocumentTitle,
   useLoadingActionThunk,
+  useMySnackbar,
   useParamSelector,
 } from 'utils/hooks';
 import { formatFullNameWithInitials } from 'utils/string';
@@ -26,11 +31,21 @@ const StudentPage = () => {
     student != null ? formatFullNameWithInitials(student) : 'Студент'
   );
 
-  const thunk = useCallback(
-    () => getStudentWithAuthUserThunk({ studentId }),
-    [studentId]
-  );
-  const loadingAction = useLoadingActionThunk(thunk);
+  const dispatch = useAppDispatch();
+  const { enqueueError } = useMySnackbar();
+  const loadingAction = useCallback(async () => {
+    try {
+      const { student } = await dispatch(
+        getStudentWithAuthUserThunk({ studentId })
+      ).then(unwrapResult);
+      await dispatch(getGroupByIdThunk({ groupId: student.group })).then(
+        unwrapResult
+      );
+      return student;
+    } catch (err) {
+      defaultErrorEnqueue(err as Error, enqueueError);
+    }
+  }, [dispatch, enqueueError, studentId]);
 
   return (
     <Paper>

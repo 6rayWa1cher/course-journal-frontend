@@ -3,7 +3,10 @@ import {
   getEmployeeWithAuthUserThunk,
   putEmployeeWithAuthUserThunk,
 } from '@redux/employees';
-import { getStudentWithAuthUserThunk } from '@redux/students';
+import {
+  getStudentWithAuthUserThunk,
+  putStudentWithAuthUserThunk,
+} from '@redux/students';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { AuthUserDto } from 'models/authUser';
 import {
@@ -26,11 +29,12 @@ export const slice = createSlice({
         getStudentWithAuthUserThunk.fulfilled,
         createEmployeeWithAuthUserThunk.fulfilled,
         getEmployeeWithAuthUserThunk.fulfilled,
-        putEmployeeWithAuthUserThunk.fulfilled
+        putEmployeeWithAuthUserThunk.fulfilled,
+        putStudentWithAuthUserThunk.fulfilled
       ),
       (state, { payload }) => {
         const authUser = payload.authUser;
-        if (authUser != null) adapter.upsertOne(state, payload.authUser);
+        if (authUser != null) adapter.upsertOne(state, authUser);
       }
     );
     builder.addMatcher(
