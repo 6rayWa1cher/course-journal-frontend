@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { generatePassword } from 'utils/random';
 import CasinoIcon from '@mui/icons-material/Casino';
+import RandomPasswordInput from 'components/RandomPasswordInput';
 
 export interface AuthUserFormProps {
   passwordRequired?: boolean;
@@ -16,18 +17,6 @@ const AuthUserForm = ({
   passwordLabel = 'Пароль',
 }: AuthUserFormProps) => {
   const { control, setValue } = useFormContext();
-
-  const handleRandomPasswordButtonClick = useCallback(
-    () =>
-      setValue('password', generatePassword({ minLength: 12, maxLength: 18 })),
-    [setValue]
-  );
-  const handleRandomPasswordMouseDown = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-    },
-    []
-  );
 
   const [visible, setVisible] = useState(false);
 
@@ -47,9 +36,10 @@ const AuthUserForm = ({
         />
       </Grid>
       <Grid item xs={12} md={6}>
-        <PasswordInput
+        <RandomPasswordInput
           name="password"
           control={control}
+          setValue={setValue}
           label={passwordLabel}
           inputProps={{
             autoComplete: 'off',
@@ -58,14 +48,6 @@ const AuthUserForm = ({
           setVisible={setVisible}
           variant="standard"
           required={passwordRequired}
-          additionalAdornment={
-            <IconButton
-              onClick={handleRandomPasswordButtonClick}
-              onMouseDown={handleRandomPasswordMouseDown}
-            >
-              <CasinoIcon />
-            </IconButton>
-          }
           fullWidth
         />
       </Grid>

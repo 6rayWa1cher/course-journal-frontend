@@ -10,6 +10,11 @@ export const username = yup
 
 export const password = yup.string().min(5).max(128);
 
+export const optionalPassword = yup.string().when({
+  is: (password: string) => password != null && password.length > 0,
+  then: password,
+});
+
 const confirmPassword = yup
   .string()
   .oneOf([yup.ref('password')], 'Пароли не одинаковы')
@@ -31,6 +36,25 @@ export interface EmailPasswordSchemaType {
   username: string;
   password: string;
 }
+
+export interface EditAuthUserSchemaType {
+  username: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export const editAuthUserSchema = yup
+  .object({
+    username: yup.string().when({
+      is: (username: string) => username != null && username.length > 0,
+      then: username,
+    }),
+    newPassword: optionalPassword,
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('newPassword')], 'Пароли должны совпадать'),
+  })
+  .required();
 
 export const registrationSchema = emailPasswordSchema
   .shape({

@@ -3,10 +3,12 @@ import { useDocumentTitle } from 'utils/hooks';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import CardLink from 'components/CardLink';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const items = [
   { title: 'Факультеты', link: '/faculties', Icon: AccountBalanceIcon },
   { title: 'Преподаватели', link: '/employees', Icon: AccountBoxIcon },
+  { title: 'Настройки', link: '/settings', Icon: SettingsIcon },
 ];
 
 const MainPage = () => {

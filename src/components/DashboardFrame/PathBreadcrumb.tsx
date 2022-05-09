@@ -12,6 +12,7 @@ const localizationTable: Record<string, string> = {
   employees: 'Преподаватели',
   faculties: 'Факультеты',
   students: 'Студенты',
+  settings: 'Настройки',
 };
 
 type IdsLocalizationTable = Record<string, string>;

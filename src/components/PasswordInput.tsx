@@ -24,7 +24,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 export interface PasswordInputProps<
   T extends FieldValues,
   J extends FieldPath<T>
-> {
+> extends Partial<FormControlProps> {
   name: J;
   control: Control<T>;
   label?: string;
@@ -47,7 +47,7 @@ const PasswordInput = <T extends FieldValues, J extends FieldPath<T>>({
   inputProps = {},
   additionalAdornment,
   ...fieldProps
-}: PasswordInputProps<T, J> & Partial<FormControlProps>) => {
+}: PasswordInputProps<T, J>) => {
   const handleButtonClick = useCallback(
     () => setVisible(!visible),
     [visible, setVisible]

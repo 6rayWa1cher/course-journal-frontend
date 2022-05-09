@@ -5,6 +5,7 @@ import {
   CardActions,
   Button,
   Box,
+  Typography,
 } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +23,15 @@ const CardLink = ({ title, link, Icon }: CardLinkProps) => {
   return (
     <Card onClick={handleClick}>
       <CardContent>
-        <SubTitle>{title}</SubTitle>
+        <Typography
+          component="h2"
+          variant="h5"
+          color="primary"
+          textOverflow="clip"
+          overflow="hidden"
+        >
+          {title}
+        </Typography>
         <CardMedia>
           <Box
             sx={{

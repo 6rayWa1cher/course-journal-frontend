@@ -8,6 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export const mainListItems = (
   <div>
@@ -49,4 +50,13 @@ export const adminListItems = (
   </>
 );
 
-export const secondaryListItems = <div></div>;
+export const secondaryListItems = (
+  <>
+    <ListItem button component={Link} to="/settings">
+      <ListItemIcon>
+        <SettingsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Настройки" />
+    </ListItem>
+  </>
+);

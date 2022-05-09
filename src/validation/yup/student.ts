@@ -1,4 +1,4 @@
-import { password, username } from './user';
+import { optionalPassword, password, username } from './user';
 import yup from './utils';
 
 const name = yup.string().max(250);
@@ -50,21 +50,6 @@ export const studentFullSchema = yup.object({
     is: (headman: boolean, authUserExists: boolean) =>
       headman && !authUserExists,
     then: password.required(),
-    otherwise: (schema) =>
-      schema.test({
-        name: 'emptyOrValid',
-        message: '',
-        test: (pwd) => {
-          try {
-            return (
-              pwd == null ||
-              pwd.length === 0 ||
-              password.validateSync(pwd) != null
-            );
-          } catch (e) {
-            return false;
-          }
-        },
-      }),
+    otherwise: optionalPassword,
   }),
 });
