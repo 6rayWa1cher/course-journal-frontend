@@ -55,13 +55,11 @@ const AddStudentsDialog = ({
   const onSubmit = useCallback(
     async (data: BatchFullNamesTransformedSchemaType) => {
       try {
-        console.log('started', data);
         const preparedStudents = data.batchFullNames.map((array) => ({
           lastName: array[0],
           firstName: array[1],
           middleName: array[2] ?? null,
         }));
-        console.log(preparedStudents);
         const students = await dispatch(
           batchCreateStudentThunk({
             students: preparedStudents,
