@@ -6,11 +6,11 @@ import { facultyIdFromParamsSelector } from '@redux/faculties/selector';
 const groupsSelector = (state: RootState) => state.groups;
 
 export const groupIdFromParamsSelector = (
-  _: any,
+  _: unknown,
   { groupId }: { groupId?: GroupId }
 ) => groupId ?? -1;
 export const groupIdsFromParamsSelector = (
-  _: any,
+  _: unknown,
   { ids }: { ids: GroupId[] }
 ) => ids;
 

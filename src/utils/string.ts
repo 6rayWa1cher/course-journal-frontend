@@ -25,7 +25,7 @@ export const formatFullNameWithInitials = ({
   firstName,
   lastName,
   middleName,
-}: FullName & Anything) =>
+}: FullName & object) =>
   middleName != null && middleName.length > 0
     ? `${lastName} ${getFirstLetter(firstName)}.${getFirstLetter(middleName)}.`
     : `${lastName} ${getFirstLetter(firstName)}.`;
@@ -34,4 +34,4 @@ export const getFullName = ({
   firstName,
   lastName,
   middleName,
-}: FullName & Anything) => `${lastName} ${firstName} ${middleName}`;
+}: FullName & object) => `${lastName} ${firstName} ${middleName}`;

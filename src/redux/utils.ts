@@ -51,8 +51,12 @@ export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
   };
 };
 
-export const isSerializedAxiosError = (e: any): e is SerializedAxiosError => {
+export const isSerializedAxiosError = (
+  e: unknown
+): e is SerializedAxiosError => {
   return (
+    e != null &&
+    typeof e === 'object' &&
     'code' in e &&
     'message' in e &&
     'stack' in e &&
@@ -75,8 +79,8 @@ export const createAxiosAsyncThunk = <Returned, ThunkArg = void>(
     async (arg, thunkAPI) => {
       try {
         return await thunk(arg, thunkAPI);
-      } catch (err: any) {
-        if ('isAxiosError' in err) {
+      } catch (err: unknown) {
+        if (err != null && typeof err === 'object' && 'isAxiosError' in err) {
           return thunkAPI.rejectWithValue(
             serializeAxiosError(err as AxiosError)
           );

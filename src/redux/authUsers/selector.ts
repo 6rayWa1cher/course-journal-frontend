@@ -9,11 +9,11 @@ import { find } from 'lodash';
 const authUsersSelector = (state: RootState) => state.authUsers;
 
 export const authUserIdFromParamsSelector = (
-  _: any,
+  _: unknown,
   { authUserId }: { authUserId?: AuthUserId }
 ) => authUserId ?? -1;
 export const authUserIdsFromParamsSelector = (
-  _: any,
+  _: unknown,
   { ids }: { ids: AuthUserId[] }
 ) => ids;
 

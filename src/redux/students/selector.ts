@@ -7,11 +7,11 @@ import { formatFullNameWithInitials, getFullName } from 'utils/string';
 const studentsSelector = (state: RootState) => state.students;
 
 export const studentIdFromParamsSelector = (
-  _: any,
+  _: unknown,
   { studentId }: { studentId?: StudentId }
 ) => studentId ?? -1;
 export const studentIdsFromParamsSelector = (
-  _: any,
+  _: unknown,
   { ids }: { ids: StudentId[] }
 ) => ids;
 

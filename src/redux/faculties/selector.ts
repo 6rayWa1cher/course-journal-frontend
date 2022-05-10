@@ -5,11 +5,11 @@ import { FacultyId } from 'models/faculty';
 const facultiesSelector = (state: RootState) => state.faculties;
 
 export const facultyIdFromParamsSelector = (
-  _: any,
+  _: unknown,
   { facultyId }: { facultyId?: FacultyId }
 ) => facultyId ?? -1;
 export const facultyIdsFromParamsSelector = (
-  _: any,
+  _: unknown,
   { ids }: { ids: FacultyId[] }
 ) => ids;
 

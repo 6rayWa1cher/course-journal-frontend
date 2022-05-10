@@ -5,11 +5,11 @@ import { CourseId } from 'models/course';
 const coursesSelector = (state: RootState) => state.courses;
 
 export const courseIdFromParamsSelector = (
-  _: any,
+  _: unknown,
   { courseId }: { courseId: CourseId }
 ) => courseId;
 export const courseIdsFromParamsSelector = (
-  _: any,
+  _: unknown,
   { ids }: { ids: CourseId[] }
 ) => ids;
 

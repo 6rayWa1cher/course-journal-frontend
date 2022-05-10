@@ -11,10 +11,7 @@ export type Store = typeof store;
 
 export type AppDispatch = typeof store.dispatch;
 
-export type SelectorType<T = any, J = void> = (
-  state: RootState,
-  params: J
-) => T;
+export type SelectorType<T, J = void> = (state: RootState, params: J) => T;
 
 export interface SerializedAxiosError extends Error {
   code: AxiosError['code'];

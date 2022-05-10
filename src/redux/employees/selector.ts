@@ -6,11 +6,11 @@ import { formatFullNameWithInitials } from 'utils/string';
 const employeesSelector = (state: RootState) => state.employees;
 
 export const employeeIdFromParamsSelector = (
-  _: any,
+  _: unknown,
   { employeeId }: { employeeId?: EmployeeId }
 ) => employeeId ?? -1;
 export const employeeIdsFromParamsSelector = (
-  _: any,
+  _: unknown,
   { ids }: { ids: EmployeeId[] }
 ) => ids;
 
