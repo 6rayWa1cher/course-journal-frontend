@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
-import { getSelfCoursesPageThunk } from './thunk';
+import { getCourseByEmployeePageThunk } from './thunk';
 import { CourseDto } from 'models/course';
 
 export const adapter = createEntityAdapter<CourseDto>();
@@ -10,7 +10,7 @@ export const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      isAnyOf(getSelfCoursesPageThunk.fulfilled),
+      isAnyOf(getCourseByEmployeePageThunk.fulfilled),
       (state, { payload }) => {
         adapter.upsertMany(state, payload.content);
       }

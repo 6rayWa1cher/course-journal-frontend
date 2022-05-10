@@ -1,3 +1,4 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import {
   Card,
   CardContent,
@@ -13,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 export interface CardLinkProps {
   title: string;
   link: string;
-  Icon: any;
+  Icon: SvgIconComponent;
 }
 
 const CardLink = ({ title, link, Icon }: CardLinkProps) => {

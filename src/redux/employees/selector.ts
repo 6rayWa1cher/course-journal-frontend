@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { EmployeeId } from 'models/employee';
 import { formatFullNameWithInitials } from 'utils/string';
 
-const employeesSelector = (state: RootState) => state.employees;
+export const employeesSelector = (state: RootState) => state.employees;
 
 export const employeeIdFromParamsSelector = (
   _: unknown,

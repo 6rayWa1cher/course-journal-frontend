@@ -1,5 +1,5 @@
 import { Container, Paper } from '@mui/material';
-import { authUserByStudentIdSelector } from '@redux/authUsers';
+import { authUserByStudentIdSelector } from '@redux/selector';
 import {
   getStudentWithAuthUserThunk,
   studentByIdSelector,

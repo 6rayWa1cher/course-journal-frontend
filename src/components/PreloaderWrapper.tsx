@@ -24,7 +24,6 @@ const PreloaderWrapper = ({ children }: PreloaderWrapperProps) => {
     loadingState === WebApplicationState.IDLE ||
     loadingState === WebApplicationState.LOADING;
   const loadingCausedError = error == null;
-  console.log('wrapper rendered');
   return (
     <>
       {initialLoading && (

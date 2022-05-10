@@ -1,5 +1,4 @@
 import { Container, Grid, Paper, Stack } from '@mui/material';
-import { authUserByEmployeeIdSelector } from '@redux/authUsers';
 import {
   deleteEmployeeThunk,
   employeeByIdSelector,
@@ -22,6 +21,7 @@ import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm'
 import BackButton from 'components/buttons/BackButton';
 import PreLoading from 'components/PreLoading';
 import EditEmployeeModule from './EditEmployeeModule';
+import { authUserByEmployeeIdSelector } from '@redux/selector';
 
 const EditEmployeePage = () => {
   const params = useParams();

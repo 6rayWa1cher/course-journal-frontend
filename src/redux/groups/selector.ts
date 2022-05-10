@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { GroupDto, GroupId } from 'models/group';
 import { facultyIdFromParamsSelector } from '@redux/faculties/selector';
 
-const groupsSelector = (state: RootState) => state.groups;
+export const groupsSelector = (state: RootState) => state.groups;
 
 export const groupIdFromParamsSelector = (
   _: unknown,

@@ -2,7 +2,7 @@ import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { FacultyId } from 'models/faculty';
 
-const facultiesSelector = (state: RootState) => state.faculties;
+export const facultiesSelector = (state: RootState) => state.faculties;
 
 export const facultyIdFromParamsSelector = (
   _: unknown,
