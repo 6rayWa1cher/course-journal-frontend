@@ -1,7 +1,4 @@
-import Typography, {
-  TypographyProps,
-  TypographyTypeMap,
-} from '@mui/material/Typography';
+import Typography from '@mui/material/Typography';
 
 export interface SubTitleProps {
   children: Children;

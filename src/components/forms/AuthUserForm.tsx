@@ -1,10 +1,7 @@
-import { Grid, IconButton } from '@mui/material';
+import { Grid } from '@mui/material';
 import FormTextField from 'components/FormTextField';
-import PasswordInput from 'components/PasswordInput';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { generatePassword } from 'utils/random';
-import CasinoIcon from '@mui/icons-material/Casino';
 import RandomPasswordInput from 'components/RandomPasswordInput';
 
 export interface AuthUserFormProps {

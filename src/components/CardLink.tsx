@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SubTitle from './SubTitle';
 
 export interface CardLinkProps {
   title: string;
