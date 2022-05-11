@@ -1,13 +1,8 @@
 import type { AxiosPromise } from 'axios';
-import type { CourseDto, CourseId } from 'models/course';
+import type { CourseDto, CourseId, CourseRestDto } from 'models/course';
 import { mainAxios } from './helpers/myaxios';
 import { preparePageRequest } from './helpers/preparers';
-import type {
-  Page,
-  GetCoursesByOwnerIdRequest,
-  CreateCourseRequest,
-  EditCourseRequest,
-} from './types';
+import type { Page, GetCoursesByOwnerIdRequest } from './types';
 
 export const getCoursesByOwnerApi = ({
   employeeId,
@@ -21,13 +16,12 @@ export const getCoursesByOwnerApi = ({
 export const getCourseByIdApi = (id: CourseId): AxiosPromise<CourseDto> =>
   mainAxios.get(`/courses/${id}`);
 
-export const postCourseApi = (
-  body: CreateCourseRequest
-): AxiosPromise<CourseDto> => mainAxios.post(`/courses/`, body);
+export const postCourseApi = (body: CourseRestDto): AxiosPromise<CourseDto> =>
+  mainAxios.post(`/courses/`, body);
 
 export const putCourseApi = (
   id: CourseId,
-  body: EditCourseRequest
+  body: CourseRestDto
 ): AxiosPromise<CourseDto> => mainAxios.put(`/courses/${id}`, body);
 
 export const deleteCourseApi = (id: CourseId): AxiosPromise<CourseDto> =>

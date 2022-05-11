@@ -73,13 +73,6 @@ export interface GetCoursesByOwnerIdRequest {
   pagination: PageRequest<keyof CourseDto>;
 }
 
-export interface CreateCourseRequest {
-  name: string;
-  owner: number;
-}
-
-export type EditCourseRequest = CreateCourseRequest;
-
 export type GetEmployeesRequest = PageRequest<keyof EmployeeDto>;
 
 export type PutEmployeeRequest = EmployeeRestDto;

@@ -29,6 +29,7 @@ import StudentPage from 'pages/StudentPage';
 import SettingsPage from 'pages/SettingsPage';
 import CourseSelectorPage from 'pages/CourseSelectorPage';
 import IndexRedirect from './IndexRedirect';
+import CreateCoursePage from 'pages/CreateCoursePage';
 
 const darkTheme = createTheme({
   palette: {
@@ -82,6 +83,7 @@ const App = () => (
               }
             >
               <Route index element={<CourseSelectorPage />} />
+              <Route path="create" element={<CreateCoursePage />} />
             </Route>
 
             <Route path="settings" element={<SettingsPage />} />

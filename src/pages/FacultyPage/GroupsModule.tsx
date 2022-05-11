@@ -27,6 +27,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useMySnackbar,
+  useNarrowScreen,
   useNumberSearchState,
   useParamSelector,
 } from 'utils/hooks';
@@ -41,8 +42,7 @@ export interface GroupsModuleProps {
 }
 
 const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
-  const theme = useTheme();
-  const narrowScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const narrowScreen = useNarrowScreen();
 
   const { enqueueSuccess, enqueueError } = useMySnackbar();
 
@@ -124,12 +124,17 @@ const GroupsModule = ({ facultyId }: GroupsModuleProps) => {
       <Grid container>
         <Grid item xs={12} md={6} p={2}>
           {narrowScreen ? (
-            <NativeSelector
-              items={groups}
-              label="Группа"
-              selected={selected}
-              onSelect={setSelected}
-            />
+            <Grid container spacing={2}>
+              <Grid item xs>
+                <NativeSelector
+                  items={groups}
+                  label="Группа"
+                  selected={selected}
+                  onSelect={setSelected}
+                />
+              </Grid>
+              <Grid item>{addButton}</Grid>
+            </Grid>
           ) : (
             <>
               <Grid container justifyContent="space-between" spacing={2}>

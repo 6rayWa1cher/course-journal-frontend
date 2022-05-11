@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
-import { getCourseByEmployeePageThunk } from './thunk';
+import { createCourseThunk, getCourseByEmployeePageThunk } from './thunk';
 import { CourseDto } from 'models/course';
 
 export const adapter = createEntityAdapter<CourseDto>();
@@ -13,6 +13,12 @@ export const slice = createSlice({
       isAnyOf(getCourseByEmployeePageThunk.fulfilled),
       (state, { payload }) => {
         adapter.upsertMany(state, payload.content);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(createCourseThunk.fulfilled),
+      (state, { payload }) => {
+        adapter.upsertOne(state, payload);
       }
     );
   },
