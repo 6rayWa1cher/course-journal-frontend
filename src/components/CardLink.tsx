@@ -7,6 +7,7 @@ import {
   Button,
   Box,
   Typography,
+  CardActionArea,
 } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -21,35 +22,37 @@ const CardLink = ({ title, link, Icon }: CardLinkProps) => {
   const navigate = useNavigate();
   const handleClick = useCallback(() => navigate(link), [navigate, link]);
   return (
-    <Card onClick={handleClick}>
-      <CardContent>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="primary"
-          textOverflow="clip"
-          overflow="hidden"
-        >
-          {title}
-        </Typography>
-        <CardMedia>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '110px',
-            }}
+    <Card>
+      <CardActionArea onClick={handleClick}>
+        <CardContent>
+          <Typography
+            component="h2"
+            variant="h5"
+            color="primary"
+            textOverflow="clip"
+            overflow="hidden"
           >
-            <Icon sx={{ fontSize: 70 }} />
-          </Box>
-        </CardMedia>
-      </CardContent>
-      <CardActions>
-        <Button onClick={handleClick} size="small">
-          Перейти
-        </Button>
-      </CardActions>
+            {title}
+          </Typography>
+          <CardMedia>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '110px',
+              }}
+            >
+              <Icon sx={{ fontSize: 70 }} />
+            </Box>
+          </CardMedia>
+        </CardContent>
+        <CardActions>
+          <Button onClick={handleClick} size="small">
+            Перейти
+          </Button>
+        </CardActions>
+      </CardActionArea>
     </Card>
   );
 };

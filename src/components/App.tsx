@@ -30,6 +30,11 @@ import SettingsPage from 'pages/SettingsPage';
 import CourseSelectorPage from 'pages/CourseSelectorPage';
 import IndexRedirect from './IndexRedirect';
 import CreateCoursePage from 'pages/CreateCoursePage';
+import CoursePage from 'pages/CoursePage';
+import TeacherTasksPage from 'pages/TeacherTasksPage';
+import CreateTaskPage from 'pages/CreateTaskPage';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const darkTheme = createTheme({
   palette: {
@@ -39,70 +44,79 @@ const darkTheme = createTheme({
 
 const App = () => (
   <ThemeProvider theme={darkTheme}>
-    <CssBaseline enableColorScheme />
-    <PreloaderWrapper>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainElement />}>
-            <Route index element={<IndexRedirect />} />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <CssBaseline enableColorScheme />
+      <PreloaderWrapper>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainElement />}>
+              <Route index element={<IndexRedirect />} />
 
-            <Route
-              path="employees"
-              element={
-                <RoleRoute role={UserRole.ADMIN} fallback="/">
-                  <Outlet />
-                </RoleRoute>
-              }
-            >
-              <Route index element={<EmployeeExplorerPage />} />
-              <Route path="create" element={<CreateEmployeePage />} />
-              <Route path=":employeeId" element={<EditEmployeePage />} />
-            </Route>
-
-            <Route
-              path="faculties"
-              element={
-                <RoleRoute role={UserRole.ADMIN} fallback="/">
-                  <Outlet />
-                </RoleRoute>
-              }
-            >
-              <Route index element={<FacultyExplorerPage />} />
-              <Route path=":facultyId">
-                <Route index element={<FacultyPage />} />
-                <Route path="students/:studentId" element={<StudentPage />} />
+              <Route
+                path="employees"
+                element={
+                  <RoleRoute role={UserRole.ADMIN} fallback="/">
+                    <Outlet />
+                  </RoleRoute>
+                }
+              >
+                <Route index element={<EmployeeExplorerPage />} />
+                <Route path="create" element={<CreateEmployeePage />} />
+                <Route path=":employeeId" element={<EditEmployeePage />} />
               </Route>
-            </Route>
 
+              <Route
+                path="faculties"
+                element={
+                  <RoleRoute role={UserRole.ADMIN} fallback="/">
+                    <Outlet />
+                  </RoleRoute>
+                }
+              >
+                <Route index element={<FacultyExplorerPage />} />
+                <Route path=":facultyId">
+                  <Route index element={<FacultyPage />} />
+                  <Route path="students/:studentId" element={<StudentPage />} />
+                </Route>
+              </Route>
+
+              <Route
+                path="courses"
+                element={
+                  <RoleRoute role={UserRole.TEACHER} fallback="/">
+                    <Outlet />
+                  </RoleRoute>
+                }
+              >
+                <Route index element={<CourseSelectorPage />} />
+                <Route path="create" element={<CreateCoursePage />} />
+                <Route path=":courseId">
+                  <Route index element={<CoursePage />} />
+                  <Route path="tasks">
+                    <Route index element={<TeacherTasksPage />} />
+                    <Route path="create" element={<CreateTaskPage />} />
+                  </Route>
+                </Route>
+              </Route>
+
+              <Route path="settings" element={<SettingsPage />} />
+            </Route>
             <Route
-              path="courses"
               element={
-                <RoleRoute role={UserRole.TEACHER} fallback="/">
+                <StageRoute stage={Stage.UNAUTHORIZED}>
                   <Outlet />
-                </RoleRoute>
+                </StageRoute>
               }
             >
-              <Route index element={<CourseSelectorPage />} />
-              <Route path="create" element={<CreateCoursePage />} />
+              <Route path="/login" element={<LoginPage />} />
             </Route>
-
-            <Route path="settings" element={<SettingsPage />} />
-          </Route>
-          <Route
-            element={
-              <StageRoute stage={Stage.UNAUTHORIZED}>
-                <Outlet />
-              </StageRoute>
-            }
-          >
-            <Route path="/login" element={<LoginPage />} />
-          </Route>
-          <Route path="/logout" element={<Logout />} />
-          <Route path="*" element={<StageRedirect />} />
-        </Routes>
-      </BrowserRouter>
-    </PreloaderWrapper>
-    <ToastContainer />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="*" element={<StageRedirect />} />
+          </Routes>
+        </BrowserRouter>
+      </PreloaderWrapper>
+      <ToastContainer />
+    </LocalizationProvider>
   </ThemeProvider>
 );
 

@@ -10,7 +10,7 @@ const IndexRedirect = () => {
   return (
     <>
       {userRole === UserRole.ADMIN && <AdminMainPage />}
-      {userRole === UserRole.TEACHER && <Navigate to="/courses" />}
+      {userRole === UserRole.TEACHER && <Navigate to="/courses" replace />}
     </>
   );
 };
