@@ -40,14 +40,14 @@ const CreateTaskPage = () => {
     mode: 'all',
     defaultValues: {
       title: '',
-      description: '',
-      maxScore: '',
-      criteria: [{ name: 'Выполнение задания', criteriaPercent: '100' }],
+      description: undefined,
+      maxScore: undefined,
+      criteria: [{ name: 'Выполнение задания', criteriaPercent: 100 }],
       announced: true,
       deadlinesEnabled: false,
-      maxPenaltyPercent: '',
-      softDeadlineAt: null,
-      hardDeadlineAt: null,
+      maxPenaltyPercent: undefined,
+      softDeadlineAt: undefined,
+      hardDeadlineAt: undefined,
     },
   });
   const {
@@ -57,7 +57,10 @@ const CreateTaskPage = () => {
     watch,
   } = methods;
 
-  const onSubmit = useCallback(() => true, []);
+  const onSubmit = useCallback(
+    (data: CreateTaskSchemaType) => console.log('submitted', data),
+    []
+  );
 
   return (
     <Paper sx={{ p: 2 }}>

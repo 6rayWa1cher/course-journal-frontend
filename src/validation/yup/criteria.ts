@@ -5,7 +5,7 @@ const criteriaPercent = yup.number().min(0).max(100).required();
 
 export interface CreateCriteriaSchemaType {
   name: string;
-  criteriaPercent: string;
+  criteriaPercent: number;
 }
 
 export const createCriteriaSchema = yup

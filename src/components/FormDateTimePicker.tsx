@@ -1,6 +1,5 @@
 import { DateTimePicker, DateTimePickerProps } from '@mui/lab';
 import { TextFieldProps, TextField } from '@mui/material';
-import { rules } from '@typescript-eslint/eslint-plugin';
 import {
   FieldValues,
   FieldPath,
@@ -8,9 +7,8 @@ import {
   ControllerProps,
   Controller,
 } from 'react-hook-form';
-import FormTextField from './FormTextField';
 
-export interface FormDateTimePicker<
+export interface FormDateTimePickerProps<
   T extends FieldValues,
   J extends FieldPath<T>
 > {
@@ -26,23 +24,23 @@ const FormDateTimePicker = <T extends FieldValues, J extends FieldPath<T>>({
   controllerProps = {},
   dateTimePickerProps = {},
   ...props
-}: FormDateTimePicker<T, J> & TextFieldProps) => {
+}: FormDateTimePickerProps<T, J> & TextFieldProps) => {
   return (
     <Controller
       control={control}
       name={name}
-      rules={rules}
       render={({
         field: { onChange, onBlur, value, name, ref },
         fieldState: { error },
       }) => (
         <DateTimePicker
+          mask="__.__.____ __:__"
           value={value as Date | null}
           onChange={onChange}
           renderInput={(params: TextFieldProps) => (
             <TextField
               id={name}
-              value={value}
+              value={value ?? ''}
               onChange={onChange}
               onBlur={onBlur}
               inputRef={ref}

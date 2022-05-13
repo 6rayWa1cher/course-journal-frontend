@@ -3,7 +3,7 @@ import AddButton from 'components/buttons/AddButton';
 import DeleteButton from 'components/buttons/DeleteButton';
 import FormTextField from 'components/FormTextField';
 import SubTitle from 'components/SubTitle';
-import { sum } from 'lodash';
+import { compact, sum } from 'lodash';
 import { useMemo, useCallback } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { CreateTaskSchemaType } from 'validation/yup';
@@ -31,7 +31,10 @@ const CriteriaForm = () => {
     )
   );
 
-  const percentsSum = useMemo(() => sum(percents.map(Number)), [percents]);
+  const percentsSum = useMemo(
+    () => sum(compact(percents).map(Number)),
+    [percents]
+  );
 
   const sumEqualsToHundred = percentsSum === 100;
 
@@ -43,11 +46,9 @@ const CriteriaForm = () => {
   const handleAddClick = useCallback(
     () =>
       criteriaAppend({
-        name: '',
+        name: undefined,
         criteriaPercent:
-          0 < percentsSum && percentsSum < 100
-            ? (100 - percentsSum).toString()
-            : '0',
+          0 < percentsSum && percentsSum < 100 ? 100 - percentsSum : undefined,
       }),
     [criteriaAppend, percentsSum]
   );

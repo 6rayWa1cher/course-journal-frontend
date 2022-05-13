@@ -12,7 +12,7 @@ export interface RoleRouteProps {
 const RoleRoute = ({ role, fallback, children }: RoleRouteProps) => {
   const currentUserRole = useSelector(selfAuthUserSelector)?.userRole;
   if (currentUserRole !== role) {
-    console.log('fallback');
+    console.info('fallback');
     return <Navigate to={fallback} />;
   }
   return <>{children}</>;

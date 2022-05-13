@@ -35,6 +35,7 @@ import TeacherTasksPage from 'pages/TeacherTasksPage';
 import CreateTaskPage from 'pages/CreateTaskPage';
 import { LocalizationProvider } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ru } from 'date-fns/locale';
 
 const darkTheme = createTheme({
   palette: {
@@ -44,7 +45,7 @@ const darkTheme = createTheme({
 
 const App = () => (
   <ThemeProvider theme={darkTheme}>
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider locale={ru} dateAdapter={AdapterDateFns}>
       <CssBaseline enableColorScheme />
       <PreloaderWrapper>
         <BrowserRouter>
