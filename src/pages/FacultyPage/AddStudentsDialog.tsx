@@ -108,6 +108,7 @@ const AddStudentsDialog = ({
             variant="standard"
             required
             multiline
+            rows={4}
           />
         </DialogContent>
         <DialogActions>

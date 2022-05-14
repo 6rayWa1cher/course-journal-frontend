@@ -14,7 +14,7 @@ import {
 export const adapter = createEntityAdapter<StudentDto>();
 
 export const slice = createSlice({
-  name: 'groups',
+  name: 'students',
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {

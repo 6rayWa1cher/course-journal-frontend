@@ -1,5 +1,10 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
-import { getSelfCoursesPageThunk } from './thunk';
+import {
+  createCourseThunk,
+  deleteCourseThunk,
+  getCourseByEmployeePageThunk,
+  getCourseByIdThunk,
+} from './thunk';
 import { CourseDto } from 'models/course';
 
 export const adapter = createEntityAdapter<CourseDto>();
@@ -9,10 +14,19 @@ export const slice = createSlice({
   initialState: adapter.getInitialState(),
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(deleteCourseThunk.fulfilled, (state, { payload }) => {
+      adapter.removeOne(state, payload);
+    });
     builder.addMatcher(
-      isAnyOf(getSelfCoursesPageThunk.fulfilled),
+      isAnyOf(getCourseByEmployeePageThunk.fulfilled),
       (state, { payload }) => {
         adapter.upsertMany(state, payload.content);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(createCourseThunk.fulfilled, getCourseByIdThunk.fulfilled),
+      (state, { payload }) => {
+        adapter.upsertOne(state, payload);
       }
     );
   },

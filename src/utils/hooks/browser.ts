@@ -30,6 +30,22 @@ export const useNumberSearchState = (
   return [value, setValue];
 };
 
+export const useStringSearchState = (
+  label: string
+): [string | null, (p: string | null) => void] => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rawValue = searchParams.get(label);
+  const value = rawValue != null && rawValue.length > 0 ? rawValue : null;
+  const setValue = useCallback(
+    (p: string | null) => {
+      searchParams.set(label, p == null ? '' : p);
+      setSearchParams(searchParams, { replace: true });
+    },
+    [searchParams, label, setSearchParams]
+  );
+  return [value, setValue];
+};
+
 // https://stackoverflow.com/a/70754791
 const getRoutePath = (location: Location, params: Params): string => {
   const { pathname } = location;

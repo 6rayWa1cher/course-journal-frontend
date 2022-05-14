@@ -43,7 +43,7 @@ const FormCheckbox = <T extends FieldValues, J extends FieldPath<T>>({
             control={
               <Checkbox
                 id={name}
-                checked={value}
+                checked={value ?? false}
                 onChange={(e) => onChange(e.target.checked)}
                 onBlur={onBlur}
                 inputRef={ref}

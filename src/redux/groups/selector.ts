@@ -2,8 +2,9 @@ import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { GroupDto, GroupId } from 'models/group';
 import { facultyIdFromParamsSelector } from '@redux/faculties/selector';
+import { compact } from 'lodash';
 
-const groupsSelector = (state: RootState) => state.groups;
+export const groupsSelector = (state: RootState) => state.groups;
 
 export const groupIdFromParamsSelector = (
   _: unknown,
@@ -46,4 +47,9 @@ export const groupsByFacultyAlphabeticalSelector = createSelector(
 export const groupIdsByFacultySelector = createSelector(
   groupsByFacultySelector,
   (groups) => groups.map((g) => g.id)
+);
+
+export const allGroupEntitiesSelector = createSelector(
+  groupsSelector,
+  (state) => state.entities
 );

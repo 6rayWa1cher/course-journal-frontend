@@ -1,8 +1,9 @@
 import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
-import { FacultyId } from 'models/faculty';
+import { compact } from 'lodash';
+import { FacultyDto, FacultyId } from 'models/faculty';
 
-const facultiesSelector = (state: RootState) => state.faculties;
+export const facultiesSelector = (state: RootState) => state.faculties;
 
 export const facultyIdFromParamsSelector = (
   _: unknown,
@@ -28,4 +29,8 @@ export const facultyByIdsSelector = createSelector(
 export const facultyNameByIdSelector = createSelector(
   facultyByIdSelector,
   (faculty) => faculty?.name
+);
+
+export const allFacultiesSelector = createSelector(facultiesSelector, (state) =>
+  compact(Object.values(state.entities))
 );

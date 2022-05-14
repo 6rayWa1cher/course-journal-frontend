@@ -7,7 +7,7 @@ export const getFacultyByIdApi = (
 ): AxiosPromise<FacultyDto> => mainAxios.get(`/faculties/${facultyId}`);
 
 export const getAllFacultiesApi = (): AxiosPromise<FacultyDto[]> =>
-  mainAxios.get('/faculties/');
+  mainAxios.get('/faculties/all');
 
 export const createFacultyApi = (
   data: FacultyRestDto

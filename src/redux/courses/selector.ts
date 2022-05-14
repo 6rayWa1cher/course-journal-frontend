@@ -1,8 +1,10 @@
+import { employeeIdFromParamsSelector } from '@redux/employees';
 import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
-import { CourseId } from 'models/course';
+import { find } from 'lodash';
+import { CourseDto, CourseId } from 'models/course';
 
-const coursesSelector = (state: RootState) => state.courses;
+export const coursesSelector = (state: RootState) => state.courses;
 
 export const courseIdFromParamsSelector = (
   _: unknown,
@@ -17,4 +19,13 @@ export const courseByIdSelector = createSelector(
   coursesSelector,
   courseIdFromParamsSelector,
   (state, courseId) => state.entities[courseId]
+);
+
+export const coursesByEmployeeIdSelector = createSelector(
+  coursesSelector,
+  employeeIdFromParamsSelector,
+  (state, employeeId) =>
+    Object.values(state.entities).filter(
+      (e): e is CourseDto => e?.owner === employeeId
+    )
 );

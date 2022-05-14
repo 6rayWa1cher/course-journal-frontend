@@ -48,3 +48,11 @@ export const studentInitialsByIdSelector = createSelector(
   studentByIdSelector,
   (student) => (student != null ? formatFullNameWithInitials(student) : null)
 );
+
+export const studentInitialsByIdsSelector = createSelector(
+  studentsByIdsSelector,
+  (students) =>
+    students.map((student) =>
+      student != null ? formatFullNameWithInitials(student) : null
+    )
+);

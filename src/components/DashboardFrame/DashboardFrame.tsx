@@ -96,9 +96,6 @@ const Drawer = styled(MuiDrawer, {
         duration: theme.transitions.duration.leavingScreen,
       }),
       width: theme.spacing(0),
-      // [theme.breakpoints.up("sm")]: {
-      //   width: theme.spacing(9),
-      // },
     }),
   },
 }));

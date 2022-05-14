@@ -11,6 +11,7 @@ import {
 import { useCallback, useState } from 'react';
 import { useLoadingPlain } from 'utils/hooks';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import DeleteButton from './DeleteButton';
 
 export interface DeleteButtonProps {
   onDelete: () => Promise<unknown>;
@@ -36,9 +37,7 @@ const DeleteButtonWithConfirm = ({
   const handleDeleteButtonClick = deleteProps.execute;
   return (
     <>
-      <IconButton onClick={handleOpenDialog} disabled={disabled}>
-        <DeleteOutlineOutlinedIcon />
-      </IconButton>
+      <DeleteButton onClick={handleOpenDialog} disabled={disabled} />
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>{dialogTitle ?? 'Удалить?'}</DialogTitle>
         <DialogContent>

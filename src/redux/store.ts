@@ -11,6 +11,7 @@ import employees from './employees/slice';
 import faculties from './faculties/slice';
 import groups from './groups/slice';
 import students from './students/slice';
+import tasks from './tasks/slice';
 
 const store = (() => {
   const reducer = combineReducers({
@@ -22,6 +23,7 @@ const store = (() => {
     faculties,
     groups,
     students,
+    tasks,
   });
 
   const store = configureStore({ reducer });

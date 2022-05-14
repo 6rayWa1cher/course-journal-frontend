@@ -11,7 +11,7 @@ const items = [
   { title: 'Настройки', link: '/settings', Icon: SettingsIcon },
 ];
 
-const MainPage = () => {
+const AdminMainPage = () => {
   useDocumentTitle('Главная');
 
   return (
@@ -29,4 +29,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default AdminMainPage;
