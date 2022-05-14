@@ -1,4 +1,7 @@
+import { ThunkAPIConfig, useAppDispatch } from '@redux/utils';
+import { AsyncThunkAction, unwrapResult } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useState } from 'react';
+import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import { useMySnackbar } from './enqueue';
 
 export enum UseLoadingEnum {
@@ -14,8 +17,8 @@ export type UseLoadingOptions = Partial<{
   errorToMsg: ((error: Error) => string) | string | null;
 }>;
 
-export const useLoadingPlain = (
-  asyncFunc: () => Promise<any>,
+export const useLoadingPlain = <T>(
+  asyncFunc: () => Promise<T>,
   {
     immediate = true,
     enqueue = false,
@@ -23,7 +26,7 @@ export const useLoadingPlain = (
   }: UseLoadingOptions = {}
 ) => {
   const [status, setStatus] = useState(UseLoadingEnum.IDLE);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState<T | null>(null);
   const [error, setError] = useState(null);
 
   const { enqueueError } = useMySnackbar();
@@ -79,4 +82,28 @@ export const useLoadingPlain = (
     idle,
     bundle: { loading, error, status },
   };
+};
+
+export type ActionCreator<ReturnType, ThunkArg> = () => AsyncThunkAction<
+  ReturnType,
+  ThunkArg,
+  ThunkAPIConfig
+>;
+
+export const useLoadingActionThunk = <ReturnType, ThunkArg>(
+  actionCreator: ActionCreator<ReturnType, ThunkArg>
+) => {
+  const { enqueueError } = useMySnackbar();
+
+  const dispatch = useAppDispatch();
+  const loadingAction = useCallback(
+    () =>
+      dispatch(actionCreator())
+        .then(unwrapResult)
+        .catch((e: Error) => {
+          defaultErrorEnqueue(e, enqueueError);
+        }),
+    [dispatch, actionCreator, enqueueError]
+  );
+  return loadingAction;
 };

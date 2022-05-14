@@ -2,11 +2,13 @@ import * as React from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import HistoryIcon from '@mui/icons-material/History';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export const mainListItems = (
   <div>
@@ -31,4 +33,30 @@ export const mainListItems = (
   </div>
 );
 
-export const secondaryListItems = <div></div>;
+export const adminListItems = (
+  <>
+    <ListItem button component={Link} to="/employees">
+      <ListItemIcon>
+        <AccountBoxIcon />
+      </ListItemIcon>
+      <ListItemText primary="Преподаватели" />
+    </ListItem>
+    <ListItem button component={Link} to="/faculties">
+      <ListItemIcon>
+        <AccountBalanceIcon />
+      </ListItemIcon>
+      <ListItemText primary="Факультеты" />
+    </ListItem>
+  </>
+);
+
+export const secondaryListItems = (
+  <>
+    <ListItem button component={Link} to="/settings">
+      <ListItemIcon>
+        <SettingsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Настройки" />
+    </ListItem>
+  </>
+);

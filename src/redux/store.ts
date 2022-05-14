@@ -8,6 +8,9 @@ import auth from './auth/slice';
 import authUsers from './authUsers/slice';
 import courses from './courses/slice';
 import employees from './employees/slice';
+import faculties from './faculties/slice';
+import groups from './groups/slice';
+import students from './students/slice';
 
 const store = (() => {
   const reducer = combineReducers({
@@ -16,6 +19,9 @@ const store = (() => {
     authUsers,
     courses,
     employees,
+    faculties,
+    groups,
+    students,
   });
 
   const store = configureStore({ reducer });

@@ -10,7 +10,7 @@ import type { AppDispatch, RootState, SerializedAxiosError } from './types';
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
-interface ThunkAPIConfig {
+export interface ThunkAPIConfig {
   state: RootState;
   dispatch: AppDispatch;
   rejectValue: SerializedError;
@@ -28,7 +28,7 @@ export const createTypedAsyncThunk = <ReturnType, ThunkArg = void>(
   );
 
 export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
-  const { code, message, stack, response } = e;
+  const { code, message, stack, response, name, config } = e;
   const serializedResponse =
     response == null
       ? response
@@ -38,15 +38,34 @@ export const serializeAxiosError = (e: AxiosError): SerializedAxiosError => {
           statusText: response.statusText,
           headers: response.headers,
         };
+  const serializedConfig = {
+    url: config.url,
+  };
   return {
     code,
     message,
     stack,
     response: serializedResponse,
+    name,
+    config: serializedConfig,
   };
 };
 
-interface AxiosThunkApiConfig extends ThunkAPIConfig {
+export const isSerializedAxiosError = (
+  e: unknown
+): e is SerializedAxiosError => {
+  return (
+    e != null &&
+    typeof e === 'object' &&
+    'code' in e &&
+    'message' in e &&
+    'stack' in e &&
+    'response' in e &&
+    'name' in e
+  );
+};
+
+export interface AxiosThunkApiConfig extends ThunkAPIConfig {
   rejectValue: SerializedAxiosError | Error;
 }
 
@@ -60,8 +79,8 @@ export const createAxiosAsyncThunk = <Returned, ThunkArg = void>(
     async (arg, thunkAPI) => {
       try {
         return await thunk(arg, thunkAPI);
-      } catch (err: any) {
-        if ('isAxiosError' in err) {
+      } catch (err: unknown) {
+        if (err != null && typeof err === 'object' && 'isAxiosError' in err) {
           return thunkAPI.rejectWithValue(
             serializeAxiosError(err as AxiosError)
           );

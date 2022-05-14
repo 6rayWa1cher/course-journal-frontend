@@ -11,11 +11,12 @@ import createAuthRefreshInterceptor, {
 } from 'axios-auth-refresh';
 import { convertAuthBagFromApi, saveAuthBag } from 'service/authbag';
 import { basicAxios, mainAxios } from './myaxios';
+import { AxiosError } from 'axios';
 
 const getAccessToken = (store: Store) => accessTokenSelector(store.getState());
 
 export const createWrappedAuthApiInterceptor = (store: Store) => {
-  const refreshAuthLogic = (failedRequest: any) =>
+  const refreshAuthLogic = (failedRequest: AxiosError) =>
     basicAxios
       .post(
         '/auth/get_access',
@@ -29,14 +30,16 @@ export const createWrappedAuthApiInterceptor = (store: Store) => {
         const authBag = convertAuthBagFromApi(res.data);
         saveAuthBag(authBag);
         store.dispatch(setBag(authBag));
-        failedRequest.response.config.headers['Authorization'] =
-          'Bearer ' + getAccessToken(store);
+        if (failedRequest?.response?.config.headers != null) {
+          failedRequest.response.config.headers['Authorization'] =
+            'Bearer ' + getAccessToken(store);
+        }
         return Promise.resolve();
       })
       .catch(async (e) => {
         console.error(e);
         try {
-          await store.dispatch(logoutThunk());
+          await store.dispatch(logoutThunk({ bothTokensInvalid: true }));
         } finally {
           throw e;
         }

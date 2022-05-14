@@ -1,6 +1,21 @@
+import {
+  createEmployeeWithAuthUserThunk,
+  getEmployeeWithAuthUserThunk,
+  putEmployeeWithAuthUserThunk,
+} from '@redux/employees';
+import {
+  getStudentWithAuthUserThunk,
+  putStudentWithAuthUserThunk,
+} from '@redux/students';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { AuthUserDto } from 'models/authUser';
-import { getAuthUserByIdThunk } from './thunk';
+import {
+  createAuthUserThunk,
+  getAuthUserByEmployeeIdThunk,
+  getAuthUserByIdThunk,
+  getAuthUserByStudentIdThunk,
+  patchAuthUserThunk,
+} from './thunk';
 
 export const adapter = createEntityAdapter<AuthUserDto>();
 
@@ -10,7 +25,26 @@ export const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      isAnyOf(getAuthUserByIdThunk.fulfilled),
+      isAnyOf(
+        getStudentWithAuthUserThunk.fulfilled,
+        createEmployeeWithAuthUserThunk.fulfilled,
+        getEmployeeWithAuthUserThunk.fulfilled,
+        putEmployeeWithAuthUserThunk.fulfilled,
+        putStudentWithAuthUserThunk.fulfilled
+      ),
+      (state, { payload }) => {
+        const authUser = payload.authUser;
+        if (authUser != null) adapter.upsertOne(state, authUser);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(
+        getAuthUserByIdThunk.fulfilled,
+        getAuthUserByEmployeeIdThunk.fulfilled,
+        createAuthUserThunk.fulfilled,
+        patchAuthUserThunk.fulfilled,
+        getAuthUserByStudentIdThunk.fulfilled
+      ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
       }

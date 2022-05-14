@@ -7,6 +7,7 @@ export const defaultErrorEnqueue = <E extends Error>(
   if (e.message === 'Network Error') {
     enqueueError('Сервер недоступен');
   } else {
+    console.error(e);
     enqueueError('Возникла непредвиденная ошибка');
   }
 };

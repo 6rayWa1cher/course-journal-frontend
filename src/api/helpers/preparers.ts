@@ -16,5 +16,5 @@ export const preparePageRequest = ({
   sort:
     sort == null
       ? undefined
-      : Object.entries(sort).map(([key, dir]) => `${key},${dir}`),
+      : sort.map(({ key, dir }) => `${key},${dir ?? 'asc'}`),
 });

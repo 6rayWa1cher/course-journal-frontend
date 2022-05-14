@@ -1,12 +1,15 @@
 import type { UserRole } from 'models/authUser';
-import type { CourseDto } from 'models/course';
-import type { EmployeeId } from 'models/employee';
+import type { CourseDto, CourseId } from 'models/course';
+import type { EmployeeRestDto, EmployeeDto, EmployeeId } from 'models/employee';
+import { GroupId } from 'models/group';
+import { StudentId } from 'models/student';
 
 // GENERIC TYPES
+export type SortType = 'asc' | 'desc';
 export interface PageRequest<Keys extends string = string> {
   page: number;
   size?: number;
-  sort?: Record<Keys, 'asc' | 'desc'>;
+  sort?: { key: Keys; dir?: SortType }[];
 }
 
 export interface Page<T> {
@@ -76,3 +79,30 @@ export interface CreateCourseRequest {
 }
 
 export type EditCourseRequest = CreateCourseRequest;
+
+export type GetEmployeesRequest = PageRequest<keyof EmployeeDto>;
+
+export type PutEmployeeRequest = EmployeeRestDto;
+
+interface AuthUserGenericPart {
+  username: string;
+  password: string;
+}
+export type CreateAuthUserRequest = AuthUserGenericPart &
+  (
+    | { userRole: UserRole.ADMIN }
+    | { userRole: UserRole.TEACHER; userInfo: EmployeeId }
+    | { userRole: UserRole.HEADMAN; userInfo: StudentId }
+  );
+
+export type PatchAuthUserRequest = Partial<CreateAuthUserRequest>;
+
+export interface BatchCreateStudentRequest {
+  course: CourseId;
+  group: GroupId;
+  students: {
+    firstName: string;
+    lastName: string;
+    middleName: string | null;
+  }[];
+}

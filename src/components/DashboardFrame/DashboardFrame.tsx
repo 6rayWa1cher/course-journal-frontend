@@ -12,11 +12,14 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems, secondaryListItems } from './ListItems';
+import { adminListItems, secondaryListItems } from './ListItems';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useMediaQuery } from '@mui/material';
 import PathBreadcrumb from './PathBreadcrumb';
+import { useSelector } from 'react-redux';
+import { selfAuthUserSelector } from '@redux/authUsers';
+import { UserRole } from 'models/authUser';
 
 const Copyright = (props: TypographyProps) => {
   const yearRange = (() => {
@@ -111,6 +114,7 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
   };
   const theme = useTheme();
   const largeScreen = useMediaQuery(theme.breakpoints.up('sm'));
+  const role = useSelector(selfAuthUserSelector)?.userRole;
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -151,7 +155,7 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>{mainListItems}</List>
+          <List>{role === UserRole.ADMIN && adminListItems}</List>
           <Divider />
           <List>{secondaryListItems}</List>
           <Divider />
@@ -163,12 +167,10 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) => {
-            console.log(theme.palette.mode);
-            return theme.palette.mode === 'light'
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light'
               ? theme.palette.grey[100]
-              : theme.palette.grey[900];
-          },
+              : theme.palette.grey[900],
           flexGrow: 1,
           height: '100vh',
           overflow: 'auto',

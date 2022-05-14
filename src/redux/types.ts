@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import store from './store';
 
 export interface GenericError {
@@ -11,11 +11,12 @@ export type Store = typeof store;
 
 export type AppDispatch = typeof store.dispatch;
 
-export type SelectorType<T = any> = (state: RootState, params?: object) => T;
+export type SelectorType<T, J = void> = (state: RootState, params: J) => T;
 
-export interface SerializedAxiosError {
+export interface SerializedAxiosError extends Error {
   code: AxiosError['code'];
   message: AxiosError['message'];
   stack: AxiosError['stack'];
   response?: Omit<AxiosResponse, 'request' | 'config'>;
+  config: Pick<AxiosRequestConfig, 'url'>;
 }

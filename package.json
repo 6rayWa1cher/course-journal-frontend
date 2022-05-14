@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.8.8",
     "@mui/icons-material": "^5.6.2",
+    "@mui/lab": "^5.0.0-alpha.80",
     "@mui/material": "^5.6.2",
     "@mui/system": "^5.6.2",
     "@reduxjs/toolkit": "^1.8.1",
@@ -20,7 +21,9 @@
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "axios": "^0.26.1",
     "axios-auth-refresh": "^3.2.2",
+    "crypto-browserify": "^3.12.0",
     "eslint": "^8.14.0",
+    "lodash": "^4.17.21",
     "normalizr": "^3.6.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -29,6 +32,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^8.2.0",
+    "source-map-explorer": "^2.5.2",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0",
     "yup": "^0.32.11"
@@ -39,7 +43,8 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
-    "format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+    "format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "browserslist": {
     "production": [

@@ -7,7 +7,7 @@ export interface CenteredRoundBoxProps {
 
 type AvatarPropsType = AvatarTypeMap['props'];
 
-export const CenteredRoundBox = ({
+const CenteredRoundBox = ({
   children,
   ...props
 }: CenteredRoundBoxProps & AvatarPropsType) => (

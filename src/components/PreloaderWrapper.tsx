@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { CircularProgress } from '@mui/material';
 import { initAppThunk, stateSelector, WebApplicationState } from '@redux/app';
-import { useAppDispatch } from '@redux/utils';
 import MyBackdrop from './MyBackdrop';
-import { AppDispatch, RootState } from '@redux/types';
+import { AppDispatch } from '@redux/types';
 
 export interface PreloaderWrapperProps {
   children: Children;
