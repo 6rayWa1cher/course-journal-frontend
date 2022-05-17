@@ -2,8 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Paper, Container, Grid, Divider, LinearProgress } from '@mui/material';
 import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
 import {
-  CreateTaskWithCriteriaArgs,
-  createTaskWithCriteriaThunk,
+  criteriaByTaskSelector,
+  getCriteriaByTaskIdThunk,
+} from '@redux/criteria';
+import {
+  getTaskByIdThunk,
+  PutTaskWithCriteriaArgs,
+  putTaskWithCriteriaThunk,
+  taskByIdSelector,
 } from '@redux/tasks';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -13,37 +19,44 @@ import TaskForm from 'components/forms/TaskForm';
 import PreLoading from 'components/PreLoading';
 import Title from 'components/Title';
 import { pick } from 'lodash';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import {
-  useDocumentTitle,
-  useLoadingActionThunk,
-  useMySnackbar,
-  useParamSelector,
-} from 'utils/hooks';
-import { createTaskSchema, CreateTaskSchemaType } from 'validation/yup/task';
+import { useDocumentTitle, useMySnackbar, useParamSelector } from 'utils/hooks';
+import { editTaskSchema, EditTaskSchemaType } from 'validation/yup/task';
 
-const CreateTaskPage = () => {
+const EditTaskPage = () => {
   const params = useParams();
 
   const courseId = Number(params.courseId);
+  const taskId = Number(params.taskId);
 
-  const thunk = useCallback(() => getCourseByIdThunk({ courseId }), [courseId]);
-  const loadingAction = useLoadingActionThunk(thunk);
+  const dispatch = useAppDispatch();
+  const { enqueueError, enqueueSuccess } = useMySnackbar();
+  const loadingAction = useCallback(async () => {
+    try {
+      await dispatch(getCourseByIdThunk({ courseId })).then(unwrapResult);
+      await dispatch(getCriteriaByTaskIdThunk({ taskId })).then(unwrapResult);
+      return await dispatch(getTaskByIdThunk({ taskId })).then(unwrapResult);
+    } catch (e) {
+      defaultErrorEnqueue(e as Error, enqueueError);
+    }
+  }, [courseId, taskId, dispatch, enqueueError]);
 
   const course = useParamSelector(courseByIdSelector, { courseId });
   useDocumentTitle(
     course != null
-      ? `Создание задания для курса ${course.name}`
-      : 'Создание задания'
+      ? `Редактирование задания для курса ${course.name}`
+      : 'Редактирование задания'
   );
 
-  const methods = useForm<CreateTaskSchemaType>({
-    resolver: yupResolver(createTaskSchema),
+  const methods = useForm<EditTaskSchemaType>({
+    resolver: yupResolver(editTaskSchema),
     mode: 'all',
     defaultValues: {
+      course: undefined,
+      taskNumber: undefined,
       title: '',
       description: undefined,
       maxScore: undefined,
@@ -58,42 +71,69 @@ const CreateTaskPage = () => {
   const {
     handleSubmit,
     formState: { isSubmitting },
+    reset,
   } = methods;
 
-  const dispatch = useAppDispatch();
-  const { enqueueError, enqueueSuccess } = useMySnackbar();
-  const navigate = useNavigate();
+  const task = useParamSelector(taskByIdSelector, { taskId });
+  const criteria = useParamSelector(criteriaByTaskSelector, { taskId });
+  useEffect(
+    () =>
+      reset({
+        course: courseId,
+        title: task?.title,
+        taskNumber: task?.taskNumber ?? undefined,
+        description:
+          task != null && 'description' in task
+            ? task.description ?? undefined
+            : undefined,
+        maxScore: task?.maxScore ?? undefined,
+        criteria,
+        announced: task?.announced ?? true,
+        deadlinesEnabled: task?.deadlinesEnabled ?? false,
+        maxPenaltyPercent: task?.maxPenaltyPercent ?? undefined,
+        softDeadlineAt:
+          task?.softDeadlineAt != null
+            ? new Date(task?.softDeadlineAt)
+            : undefined,
+        hardDeadlineAt:
+          task?.hardDeadlineAt != null
+            ? new Date(task?.hardDeadlineAt)
+            : undefined,
+      }),
+    [task, criteria, courseId, reset]
+  );
+
   const onSubmit = useCallback(
-    async (data: CreateTaskSchemaType) => {
+    async (data: EditTaskSchemaType) => {
       try {
-        const req: CreateTaskWithCriteriaArgs = {
+        const req: PutTaskWithCriteriaArgs = {
           task: {
             ...pick(data, [
+              'course',
               'title',
+              'taskNumber',
               'description',
               'maxScore',
               'announced',
               'deadlinesEnabled',
               'maxPenaltyPercent',
             ]),
-            course: courseId,
             softDeadlineAt: data.softDeadlineAt?.toISOString(),
             hardDeadlineAt: data.hardDeadlineAt?.toISOString(),
           },
           criteria: data.criteria,
+          taskId,
         };
-        const { task } = await dispatch(createTaskWithCriteriaThunk(req)).then(
+        const { task } = await dispatch(putTaskWithCriteriaThunk(req)).then(
           unwrapResult
         );
-        const taskId = task.id;
-        enqueueSuccess(`Задание ${task.title} создано`);
-        navigate(`/courses/${courseId}/tasks/${taskId}`);
+        enqueueSuccess(`Задание ${task.title} изменено`);
         return task;
       } catch (e) {
         defaultErrorEnqueue(e as Error, enqueueError);
       }
     },
-    [courseId, dispatch, enqueueError, enqueueSuccess, navigate]
+    [dispatch, enqueueError, enqueueSuccess, taskId]
   );
 
   return (
@@ -108,7 +148,7 @@ const CreateTaskPage = () => {
                     <BackButton to={`/courses/${courseId}/tasks`} />
                   </Grid>
                   <Grid item xs>
-                    <Title>Создание задания для курса {course?.name}</Title>
+                    <Title>Изменение задания для курса {course?.name}</Title>
                   </Grid>
                 </Grid>
                 <Grid item xs={12}>
@@ -117,7 +157,7 @@ const CreateTaskPage = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Divider />
-                  <ClearSubmitButtons />
+                  <ClearSubmitButtons submitLabel="Сохранить" />
                   {isSubmitting && <LinearProgress />}
                 </Grid>
               </Grid>
@@ -129,4 +169,4 @@ const CreateTaskPage = () => {
   );
 };
 
-export default CreateTaskPage;
+export default EditTaskPage;

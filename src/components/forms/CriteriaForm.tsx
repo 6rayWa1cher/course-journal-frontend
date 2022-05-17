@@ -1,4 +1,4 @@
-import { Grid, Tooltip } from '@mui/material';
+import { Grid, Tooltip, Typography } from '@mui/material';
 import AddButton from 'components/buttons/AddButton';
 import DeleteButton from 'components/buttons/DeleteButton';
 import FormTextField from 'components/FormTextField';
@@ -8,9 +8,14 @@ import { useMemo, useCallback } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { CreateTaskSchemaType } from 'validation/yup';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import { ErrorMessage } from '@hookform/error-message';
 
 const CriteriaForm = () => {
-  const { control, watch } = useFormContext<CreateTaskSchemaType>();
+  const {
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext<CreateTaskSchemaType>();
 
   const {
     fields: criteriaFields,
@@ -123,6 +128,15 @@ const CriteriaForm = () => {
           <AddButton onClick={handleAddClick} />
         </Grid>
       </Grid>
+      <ErrorMessage
+        errors={errors}
+        name="criteria"
+        render={({ message }) => (
+          <Typography variant="caption" color="error">
+            {message}
+          </Typography>
+        )}
+      />
       {renderedCriteriaFields}
     </>
   );

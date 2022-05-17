@@ -1,3 +1,4 @@
+import { CriteriaId } from 'models/criteria';
 import yup from './utils';
 
 const name = yup.string().min(1).max(250).required();
@@ -14,3 +15,13 @@ export const createCriteriaSchema = yup
     criteriaPercent,
   })
   .required();
+
+// export interface EditCriteriaSchemaType {
+//   id?: CriteriaId;
+//   name: string;
+//   criteriaPercent: number;
+// }
+
+// export const editCriteriaSchema = createCriteriaSchema.shape({
+//   id: yup.number(),
+// });

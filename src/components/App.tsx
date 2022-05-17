@@ -36,6 +36,7 @@ import CreateTaskPage from 'pages/CreateTaskPage';
 import { LocalizationProvider } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale';
+import EditTaskPage from 'pages/EditTaskPage';
 
 const darkTheme = createTheme({
   palette: {
@@ -96,6 +97,7 @@ const App = () => (
                   <Route path="tasks">
                     <Route index element={<TeacherTasksPage />} />
                     <Route path="create" element={<CreateTaskPage />} />
+                    <Route path=":taskId" element={<EditTaskPage />} />
                   </Route>
                 </Route>
               </Route>

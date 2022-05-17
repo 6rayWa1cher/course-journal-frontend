@@ -1,10 +1,22 @@
+import { CourseId } from 'models/course';
+import { TaskId } from 'models/task';
+import { hasDuplicates } from 'utils/collections';
 import { createCriteriaSchema, CreateCriteriaSchemaType } from './criteria';
 import yup, { transformDate } from './utils';
 
 const title = yup.string().min(1).max(250).required();
 const description = yup.string().max(25000);
 const maxScore = yup.number().required().min(0);
-const criteria = yup.array().of(createCriteriaSchema).min(1).required();
+const criteria = yup
+  .array()
+  .of(createCriteriaSchema)
+  .min(1)
+  .required()
+  .test(
+    'criteria-unique-names',
+    'Все названия критериев должны быть уникальны',
+    (value) => value == null || !hasDuplicates(value.map((c) => c.name))
+  );
 const announced = yup.bool().required();
 const deadlinesEnabled = yup.bool().required();
 const maxPenaltyPercent = yup.number().when('deadlinesEnabled', {
@@ -57,3 +69,13 @@ export const createTaskSchema = yup
     hardDeadlineAt,
   })
   .required();
+
+export interface EditTaskSchemaType extends CreateTaskSchemaType {
+  course: CourseId;
+  taskNumber: number;
+}
+
+export const editTaskSchema = createTaskSchema.shape({
+  taskNumber: yup.number().required(),
+  course: yup.number().required(),
+});

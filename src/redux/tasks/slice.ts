@@ -1,14 +1,16 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
-import { TaskDto } from 'models/task';
+import { ShortTaskRestDto, TaskDto } from 'models/task';
 import {
-  createTaskThunk,
   deleteTaskThunk,
+  createTaskWithCriteriaThunk,
+  putTaskWithCriteriaThunk,
   getTaskByIdThunk,
-  getTasksByCourseIdThunk,
+  createTaskThunk,
   putTaskThunk,
+  getTasksByCourseIdThunk,
 } from './thunk';
 
-export const adapter = createEntityAdapter<TaskDto>();
+export const adapter = createEntityAdapter<TaskDto | ShortTaskRestDto>();
 
 export const slice = createSlice({
   name: 'tasks',
@@ -18,6 +20,18 @@ export const slice = createSlice({
     builder.addCase(deleteTaskThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
     });
+    builder.addCase(
+      createTaskWithCriteriaThunk.fulfilled,
+      (state, { payload }) => {
+        adapter.addOne(state, payload.task);
+      }
+    );
+    builder.addCase(
+      putTaskWithCriteriaThunk.fulfilled,
+      (state, { payload }) => {
+        adapter.upsertOne(state, payload.task);
+      }
+    );
     builder.addMatcher(
       isAnyOf(
         getTaskByIdThunk.fulfilled,

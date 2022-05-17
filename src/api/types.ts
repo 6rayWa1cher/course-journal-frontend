@@ -99,3 +99,10 @@ export interface BatchCreateStudentRequest {
     middleName: string | null;
   }[];
 }
+
+export interface SetCriteriaForTaskRequest {
+  criteria: {
+    name: string;
+    criteriaPercent: number;
+  }[];
+}
