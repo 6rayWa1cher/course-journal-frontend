@@ -1,7 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { compact, find, pick, uniq } from 'lodash';
 import { GroupDto, GroupId } from 'models/group';
-import { StudentDto } from 'models/student';
 import { authUsersSelector, selfAuthUserSelector } from './authUsers';
 import { employeeIdFromParamsSelector, employeesSelector } from './employees';
 import { groupsSelector } from './groups';

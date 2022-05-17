@@ -1,7 +1,6 @@
 import {
   Checkbox,
   Divider,
-  FormControlLabel,
   List,
   ListItem,
   ListItemButton,
@@ -9,7 +8,7 @@ import {
   ListItemText,
   ListProps,
 } from '@mui/material';
-import { difference, intersection, remove, union, without } from 'lodash';
+import { difference, intersection, union, without } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import {
   FieldValues,

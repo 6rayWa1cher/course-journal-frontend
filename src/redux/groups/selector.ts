@@ -2,7 +2,6 @@ import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { GroupDto, GroupId } from 'models/group';
 import { facultyIdFromParamsSelector } from '@redux/faculties/selector';
-import { compact } from 'lodash';
 
 export const groupsSelector = (state: RootState) => state.groups;
 

@@ -1,12 +1,6 @@
 import React from 'react';
 import PreloaderWrapper from './PreloaderWrapper';
-import {
-  BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import StageRoute from './StageRoute';
 import LoginPage from 'pages/LoginPage';
@@ -15,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import MainElement from './MainElement';
 import { Stage } from '@redux/app';
 import Logout from './Logout';
-import AdminMainPage from 'pages/AdminMainPage';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserRole } from 'models/authUser';
 import RoleRoute from './RoleRoute';

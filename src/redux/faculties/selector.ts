@@ -1,7 +1,7 @@
 import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { compact } from 'lodash';
-import { FacultyDto, FacultyId } from 'models/faculty';
+import { FacultyId } from 'models/faculty';
 
 export const facultiesSelector = (state: RootState) => state.faculties;
 

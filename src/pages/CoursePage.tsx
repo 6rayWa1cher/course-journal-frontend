@@ -17,7 +17,6 @@ import {
   useParamSelector,
 } from 'utils/hooks';
 import { deleteCourseThunk } from '../redux/courses/thunk';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 

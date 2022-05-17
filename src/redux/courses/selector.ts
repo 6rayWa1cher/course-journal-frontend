@@ -1,7 +1,6 @@
 import { employeeIdFromParamsSelector } from '@redux/employees';
 import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
-import { find } from 'lodash';
 import { CourseDto, CourseId } from 'models/course';
 
 export const coursesSelector = (state: RootState) => state.courses;

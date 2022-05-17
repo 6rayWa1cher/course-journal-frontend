@@ -1,5 +1,4 @@
 import { CourseId } from 'models/course';
-import { TaskId } from 'models/task';
 import { hasDuplicates } from 'utils/collections';
 import { createCriteriaSchema, CreateCriteriaSchemaType } from './criteria';
 import yup, { transformDate } from './utils';

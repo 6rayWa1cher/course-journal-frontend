@@ -1,4 +1,4 @@
-import { Paper, Container, Grid, Pagination, Stack } from '@mui/material';
+import { Paper, Container, Grid, Pagination } from '@mui/material';
 import {
   coursesByEmployeeIdSelector,
   getCourseByEmployeePageThunk,
@@ -8,9 +8,8 @@ import AddButton from 'components/buttons/AddButton';
 import NavListWithAvatars from 'components/NavListWithAvatars';
 import PreLoading from 'components/PreLoading';
 import Title from 'components/Title';
-import { debounce } from 'lodash';
-import { useCallback, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   useDocumentTitle,
   useLoadingActionThunk,

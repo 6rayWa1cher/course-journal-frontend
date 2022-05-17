@@ -1,5 +1,4 @@
-import { parse } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import { parse, ru } from 'date-fns';
 import * as yup from 'yup';
 
 yup.setLocale({

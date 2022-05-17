@@ -6,11 +6,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
 } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useLoadingPlain } from 'utils/hooks';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DeleteButton from './DeleteButton';
 
 export interface DeleteButtonProps {

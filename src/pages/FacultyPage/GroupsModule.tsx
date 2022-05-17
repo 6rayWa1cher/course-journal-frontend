@@ -1,12 +1,5 @@
 import { Box } from '@mui/lab/node_modules/@mui/system';
-import {
-  Divider,
-  Grid,
-  Typography,
-  useMediaQuery,
-  IconButton,
-} from '@mui/material';
-import { useTheme } from '@mui/system';
+import { Divider, Grid, Typography, IconButton } from '@mui/material';
 import {
   deleteGroupThunk,
   getGroupsByFacultyIdThunk,
