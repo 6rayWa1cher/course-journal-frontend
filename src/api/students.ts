@@ -31,6 +31,5 @@ export const putStudentApi = (
   data: StudentRestDto
 ): AxiosPromise<StudentDto> => mainAxios.put(`/students/${studentId}`, data);
 
-export const deleteStudentApi = (
-  studentId: StudentId
-): AxiosPromise<StudentDto> => mainAxios.delete(`/students/${studentId}`);
+export const deleteStudentApi = (studentId: StudentId): AxiosPromise<void> =>
+  mainAxios.delete(`/students/${studentId}`);

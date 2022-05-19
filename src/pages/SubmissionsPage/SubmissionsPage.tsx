@@ -1,20 +1,20 @@
 import { Container, Grid, Paper } from '@mui/material';
+import { getCourseByIdThunk } from '@redux/courses';
 import { getCriteriaByCourseIdThunk } from '@redux/criteria';
-import { getAllStudentsByCourseIdThunk } from '@redux/students';
 import {
-  getSubmissionsByCourseAndStudentThunk,
-  getSubmissionsByCourseIdThunk,
-  submissionsByStudentAndCourseSelector,
-} from '@redux/submissions';
-import { getTasksByCourseIdThunk, tasksByCourseSelector } from '@redux/tasks';
+  getAllStudentsByCourseIdThunk,
+  studentsByCourseSelector,
+} from '@redux/students';
+import { getSubmissionsByCourseAndStudentThunk } from '@redux/submissions';
+import { getTasksByCourseIdThunk } from '@redux/tasks';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import BackButton from 'components/buttons/BackButton';
 import ListSelector from 'components/ListSelector';
 import NativeSelector from 'components/NativeSelector';
 import PreLoading from 'components/PreLoading';
+import Scrollable from 'components/Scrollable';
 import Title from 'components/Title';
-import { StudentDto, StudentId } from 'models/student';
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
@@ -23,9 +23,12 @@ import {
   useMySnackbar,
   useNarrowScreen,
   useNumberSearchState,
+  useParamSelector,
+  usePrompt,
 } from 'utils/hooks';
 import { formatFullNameWithInitials } from 'utils/string';
 import ScoringModule from './ScoringModule';
+import { ScoringModuleStatus } from './types';
 
 const SubmissionsPage = () => {
   const params = useParams();
@@ -33,30 +36,34 @@ const SubmissionsPage = () => {
   const courseId = Number(params.courseId);
 
   const [studentId, setStudentId] = useNumberSearchState('student');
-  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [status, setStatus] = useState<ScoringModuleStatus>(
+    ScoringModuleStatus.IDLE
+  );
+  const disableNavigation =
+    status === ScoringModuleStatus.WAITING ||
+    status === ScoringModuleStatus.SUBMITTING;
 
-  // const tasks = useParamSelector(tasksByCourseSelector, { courseId });
-  // const criteria = useParamSelector(criteriaBy);
-  // const submissions = useParamSelector(submissionsByStudentAndCourseSelector, {
-  //   studentId: studentId ?? undefined,
-  //   courseId,
-  // });
+  usePrompt(
+    'Вы действительно хотите уйти со страницы? Оценки ещё НЕ сохранены!',
+    disableNavigation
+  );
 
   const { enqueueError } = useMySnackbar();
   const dispatch = useAppDispatch();
-  const mainLoadingAction = useCallback(
-    () =>
-      Promise.all([
-        dispatch(getAllStudentsByCourseIdThunk({ courseId })).then(
-          unwrapResult
-        ),
-        dispatch(getTasksByCourseIdThunk({ courseId })).then(unwrapResult),
-        dispatch(getCriteriaByCourseIdThunk({ courseId })).then(unwrapResult),
-      ])
-        .then(([students]) => students)
-        .catch((e) => defaultErrorEnqueue(e as Error, enqueueError)),
-    [courseId, dispatch, enqueueError]
-  );
+  const mainLoadingAction = useCallback(async () => {
+    try {
+      await dispatch(getCourseByIdThunk({ courseId })).then(unwrapResult);
+      await dispatch(getAllStudentsByCourseIdThunk({ courseId })).then(
+        unwrapResult
+      );
+      await dispatch(getTasksByCourseIdThunk({ courseId })).then(unwrapResult);
+      return await dispatch(getCriteriaByCourseIdThunk({ courseId })).then(
+        unwrapResult
+      );
+    } catch (e) {
+      defaultErrorEnqueue(e as Error, enqueueError);
+    }
+  }, [courseId, dispatch, enqueueError]);
 
   const sideLoadingThunk = useCallback(
     () =>
@@ -68,15 +75,16 @@ const SubmissionsPage = () => {
   );
   const sideLoadingAction = useLoadingActionThunk(sideLoadingThunk);
 
+  const students = useParamSelector(studentsByCourseSelector, { courseId });
+  const studentItems = students.map((item) => ({
+    id: item.id,
+    name: formatFullNameWithInitials(item),
+  }));
   const narrowScreen = useNarrowScreen();
 
-  const render = useCallback(
-    (value: StudentDto[]) => {
-      const items = value.map((item: StudentDto) => ({
-        id: item.id,
-        name: formatFullNameWithInitials(item),
-      }));
-      return (
+  return (
+    <Container>
+      <PreLoading action={mainLoadingAction}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Paper sx={{ p: 2 }}>
@@ -94,17 +102,21 @@ const SubmissionsPage = () => {
             <Paper sx={{ p: 2 }}>
               {narrowScreen ? (
                 <NativeSelector
-                  items={items}
+                  items={studentItems}
                   label="Студенты"
                   selected={studentId}
                   onSelect={setStudentId}
+                  disabled={disableNavigation}
                 />
               ) : (
-                <ListSelector
-                  items={items}
-                  selected={studentId}
-                  onSelect={setStudentId}
-                />
+                <Scrollable height="calc(85vh - 150px)">
+                  <ListSelector
+                    items={studentItems}
+                    selected={studentId}
+                    onSelect={setStudentId}
+                    disabled={disableNavigation}
+                  />
+                </Scrollable>
               )}
             </Paper>
           </Grid>
@@ -112,20 +124,18 @@ const SubmissionsPage = () => {
             <Paper sx={{ p: 2 }}>
               {studentId != null && (
                 <PreLoading action={sideLoadingAction}>
-                  <ScoringModule courseId={courseId} studentId={studentId} />
+                  <ScoringModule
+                    courseId={courseId}
+                    studentId={studentId}
+                    status={status}
+                    setStatus={setStatus}
+                  />
                 </PreLoading>
               )}
             </Paper>
           </Grid>
         </Grid>
-      );
-    },
-    [courseId, narrowScreen, setStudentId, sideLoadingAction, studentId]
-  );
-
-  return (
-    <Container>
-      <PreLoading action={mainLoadingAction} render={render} />
+      </PreLoading>
     </Container>
   );
 };

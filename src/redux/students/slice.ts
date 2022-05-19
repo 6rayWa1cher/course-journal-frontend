@@ -1,4 +1,5 @@
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
+import { chain, filter } from 'lodash';
 import { StudentDto } from 'models/student';
 import {
   batchCreateStudentThunk,
@@ -22,6 +23,22 @@ export const slice = createSlice({
     builder.addCase(deleteStudentThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
     });
+    builder.addCase(
+      getAllStudentsByCourseIdThunk.fulfilled,
+      (state, { payload, meta }) => {
+        const course = meta.arg.courseId;
+        adapter.removeMany(
+          state,
+          chain(state.entities)
+            .values()
+            .compact()
+            .filter({ course })
+            .map((s) => s.id)
+            .value()
+        );
+        adapter.addMany(state, payload);
+      }
+    );
     builder.addMatcher(
       isAnyOf(
         getStudentWithAuthUserThunk.fulfilled,
@@ -44,8 +61,7 @@ export const slice = createSlice({
     builder.addMatcher(
       isAnyOf(
         getStudentsByGroupIdThunk.fulfilled,
-        batchCreateStudentThunk.fulfilled,
-        getAllStudentsByCourseIdThunk.fulfilled
+        batchCreateStudentThunk.fulfilled
       ),
       (state, { payload }) => {
         adapter.upsertMany(state, payload);

@@ -24,6 +24,7 @@ export interface ListCheckboxesSelectorProps<
   options: {
     id: number;
     name: string;
+    subName?: string;
   }[];
   name: J;
   control: Control<T>;
@@ -89,7 +90,7 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
             <Divider variant="middle" />
           </>
         )}
-        {options.map(({ id, name }) => (
+        {options.map(({ id, name, subName }) => (
           <ListItem key={id} disablePadding>
             <ListItemButton role={undefined} onClick={handleToggle(id)} dense>
               <ListItemIcon>
@@ -99,7 +100,7 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
                   disableRipple
                 />
               </ListItemIcon>
-              <ListItemText primary={name} />
+              <ListItemText primary={name} secondary={subName} />
             </ListItemButton>
           </ListItem>
         ))}

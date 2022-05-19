@@ -1,5 +1,10 @@
 import type { AxiosPromise } from 'axios';
-import type { CourseDto, CourseId, CourseRestDto } from 'models/course';
+import type {
+  CourseDto,
+  CourseFullDto,
+  CourseId,
+  CourseRestDto,
+} from 'models/course';
 import { mainAxios } from './helpers/myaxios';
 import { preparePageRequest } from './helpers/preparers';
 import type { Page, GetCoursesByOwnerIdRequest } from './types';
@@ -13,16 +18,17 @@ export const getCoursesByOwnerApi = ({
     params: { name, ...preparePageRequest(pagination) },
   });
 
-export const getCourseByIdApi = (id: CourseId): AxiosPromise<CourseDto> =>
+export const getCourseByIdApi = (id: CourseId): AxiosPromise<CourseFullDto> =>
   mainAxios.get(`/courses/${id}`);
 
-export const postCourseApi = (body: CourseRestDto): AxiosPromise<CourseDto> =>
-  mainAxios.post(`/courses/`, body);
+export const postCourseApi = (
+  body: CourseRestDto
+): AxiosPromise<CourseFullDto> => mainAxios.post(`/courses/`, body);
 
 export const putCourseApi = (
   id: CourseId,
   body: CourseRestDto
-): AxiosPromise<CourseDto> => mainAxios.put(`/courses/${id}`, body);
+): AxiosPromise<CourseFullDto> => mainAxios.put(`/courses/${id}`, body);
 
-export const deleteCourseApi = (id: CourseId): AxiosPromise<CourseDto> =>
+export const deleteCourseApi = (id: CourseId): AxiosPromise<void> =>
   mainAxios.delete(`/courses/${id}`);

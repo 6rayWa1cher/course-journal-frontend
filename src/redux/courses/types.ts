@@ -1,6 +1,6 @@
-import type { CourseDto, CourseId } from 'models/course';
+import type { CourseDto, CourseFullDto, CourseId } from 'models/course';
 
 export interface CourseState {
-  entities: Record<CourseId, CourseDto>;
+  entities: Record<CourseId, CourseDto | CourseFullDto>;
   ids: CourseId[];
 }

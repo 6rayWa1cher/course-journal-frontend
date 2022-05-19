@@ -5,9 +5,10 @@ import {
   getCourseByEmployeePageThunk,
   getCourseByIdThunk,
 } from './thunk';
-import { CourseDto } from 'models/course';
+import { CourseDto, CourseFullDto } from 'models/course';
+import { getAllStudentsByCourseIdThunk } from '@redux/students';
 
-export const adapter = createEntityAdapter<CourseDto>();
+export const adapter = createEntityAdapter<CourseDto | CourseFullDto>();
 
 export const slice = createSlice({
   name: 'courses',
@@ -17,6 +18,17 @@ export const slice = createSlice({
     builder.addCase(deleteCourseThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
     });
+    builder.addCase(
+      getAllStudentsByCourseIdThunk.fulfilled,
+      (state, { payload, meta }) => {
+        const course = state.entities[meta.arg.courseId] as
+          | CourseFullDto
+          | undefined;
+        if (course != null) {
+          course.students = payload.map((s) => s.id);
+        }
+      }
+    );
     builder.addMatcher(
       isAnyOf(getCourseByEmployeePageThunk.fulfilled),
       (state, { payload }) => {

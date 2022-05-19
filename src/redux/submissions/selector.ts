@@ -2,7 +2,12 @@ import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { SubmissionDto, SubmissionId } from 'models/submission';
 import { studentIdFromParamsSelector } from '@redux/students';
-import { tasksByCourseSelector } from '@redux/tasks';
+import {
+  taskByIdSelector,
+  taskIdFromParamsSelector,
+  tasksByCourseSelector,
+} from '@redux/tasks';
+import { find } from 'lodash';
 
 export const submissionsSelector = (state: RootState) => state.submissions;
 
@@ -38,4 +43,12 @@ export const submissionsByStudentAndCourseSelector = createSelector(
       (s): s is SubmissionDto => s?.student === studentId && set.has(s?.task)
     );
   }
+);
+
+export const submissionByStudentAndTaskSelector = createSelector(
+  submissionsSelector,
+  taskIdFromParamsSelector,
+  studentIdFromParamsSelector,
+  (state, taskId, studentId) =>
+    find(state.entities, { task: taskId, student: studentId })
 );

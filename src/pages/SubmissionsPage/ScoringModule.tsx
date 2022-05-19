@@ -18,13 +18,21 @@ import {
   batchSetSubmissionsSchema,
   BatchSetSubmissionsSchemaType,
 } from 'validation/yup/submission';
+import { ScoringModuleStatus } from './types';
 
 export interface ScoringModuleProps {
   studentId: StudentId;
   courseId: CourseId;
+  status: ScoringModuleStatus;
+  setStatus: (status: ScoringModuleStatus) => void;
 }
 
-const ScoringModule = ({ studentId, courseId }: ScoringModuleProps) => {
+const ScoringModule = ({
+  studentId,
+  courseId,
+  status,
+  setStatus,
+}: ScoringModuleProps) => {
   const tasks = useParamSelector(tasksByCourseTaskNumberSortSelector, {
     courseId,
   });
@@ -37,28 +45,27 @@ const ScoringModule = ({ studentId, courseId }: ScoringModuleProps) => {
   const getDefaultValues = useCallback(() => {
     const coveredTaskIds = new Set(submissions.map((s) => s.task));
     const taskToNumber = new Map(tasks.map((t) => [t.id, t.taskNumber]));
+    const convertSubs = submissions.map((s) => ({
+      ...pick(s, 'task', 'satisfiedCriteria', 'additionalScore'),
+      submittedAt: new Date(s.submittedAt),
+    }));
+    const newSubs = tasks
+      .filter((t) => !coveredTaskIds.has(t.id))
+      .map((t) => ({
+        task: t.id,
+        submittedAt: new Date(),
+        satisfiedCriteria: [],
+        additionalScore: 0,
+      }));
     const newValues = {
       courseId,
       studentId,
-      submissions: [
-        ...submissions.map((s) => ({
-          ...pick(s, 'task', 'satisfiedCriteria', 'additionalScore'),
-          submittedAt: new Date(s.submittedAt),
-        })),
-        ...tasks
-          .filter((t) => !coveredTaskIds.has(t.id))
-          .map((t) => ({
-            task: t.id,
-            submittedAt: new Date(),
-            satisfiedCriteria: [],
-            additionalScore: 0,
-          })),
-      ].sort(
+      submissions: [...convertSubs, ...newSubs].sort(
         (a, b) =>
           (taskToNumber.get(a.task) ?? 0) - (taskToNumber.get(b.task) ?? 0)
       ),
     };
-    console.log(newValues);
+    console.log(convertSubs, newSubs, 'newValues: ', newValues);
     return newValues;
   }, [courseId, studentId, submissions, tasks]);
 
@@ -77,21 +84,29 @@ const ScoringModule = ({ studentId, courseId }: ScoringModuleProps) => {
   const dispatch = useAppDispatch();
   const { enqueueError } = useMySnackbar();
   const onSubmit = useCallback(
-    (data: BatchSetSubmissionsSchemaType) =>
-      dispatch(
-        setSubmissionsForStudentAndCourseThunk({
-          ...data,
-          submissions: data.submissions
-            .filter((s) => s.satisfiedCriteria.length > 0)
-            .map((s) => ({
-              ...s,
-              submittedAt: s.submittedAt.toISOString(),
-            })),
-        })
-      )
-        .then(unwrapResult)
-        .catch((e) => defaultErrorEnqueue(e as Error, enqueueError)),
-    [dispatch, enqueueError]
+    async (data: BatchSetSubmissionsSchemaType) => {
+      setStatus(ScoringModuleStatus.SUBMITTING);
+      try {
+        await dispatch(
+          setSubmissionsForStudentAndCourseThunk({
+            ...data,
+            submissions: data.submissions
+              .filter((s) => s.satisfiedCriteria.length > 0)
+              .map((s) => ({
+                ...s,
+                submittedAt: s.submittedAt.toISOString(),
+              })),
+          })
+        ).then(unwrapResult);
+        setStatus(ScoringModuleStatus.COMPLETE);
+      } catch (e) {
+        defaultErrorEnqueue(e as Error, enqueueError);
+        setStatus(ScoringModuleStatus.ERROR);
+      } finally {
+        setStatus(ScoringModuleStatus.COMPLETE);
+      }
+    },
+    [dispatch, enqueueError, setStatus]
   );
   const onSubmitDebounced = useDebounce(onSubmit, 500);
 
@@ -117,17 +132,23 @@ const ScoringModule = ({ studentId, courseId }: ScoringModuleProps) => {
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (name != null && type === 'change') {
+      // if react-hook-form emitted the 'change' event on some field,
+      // upload changes to the server
+      console.log(value);
+      if (type === 'change' && name != null) {
+        setStatus(ScoringModuleStatus.WAITING);
         handleSubmit(onSubmitDebounced)();
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch, onSubmitDebounced, handleSubmit, isDirty]);
+  }, [watch, onSubmitDebounced, handleSubmit, isDirty, setStatus]);
+
+  useEffect(() => setStatus(ScoringModuleStatus.IDLE), [setStatus]);
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ScoringForm />
+        <ScoringForm status={status} />
       </form>
     </FormProvider>
   );

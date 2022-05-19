@@ -19,5 +19,5 @@ export const putTaskApi = (
   data: TaskRestDto
 ): AxiosPromise<TaskDto> => mainAxios.put(`/tasks/${taskId}`, data);
 
-export const deleteTaskApi = (taskId: TaskId): AxiosPromise<TaskDto> =>
+export const deleteTaskApi = (taskId: TaskId): AxiosPromise<void> =>
   mainAxios.delete(`/tasks/${taskId}`);
