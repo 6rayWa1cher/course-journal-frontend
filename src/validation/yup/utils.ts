@@ -1,4 +1,7 @@
-import { parse, ru } from 'date-fns';
+// eslint-disable-next-line import/no-duplicates
+import { parse } from 'date-fns';
+// eslint-disable-next-line import/no-duplicates
+import { ru } from 'date-fns/locale';
 import * as yup from 'yup';
 
 yup.setLocale({

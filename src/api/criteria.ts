@@ -3,6 +3,7 @@ import { CriteriaDto, CriteriaId, CriteriaRestDto } from 'models/criteria';
 import { mainAxios } from './helpers/myaxios';
 import { TaskId } from 'models/task';
 import { SetCriteriaForTaskRequest } from './types';
+import { CourseId } from 'models/course';
 
 export const getCriteriaByIdApi = (
   criteriaId: CriteriaId
@@ -11,6 +12,10 @@ export const getCriteriaByIdApi = (
 export const getCriteriaByTaskIdApi = (
   taskId: TaskId
 ): AxiosPromise<CriteriaDto[]> => mainAxios.get(`/criteria/task/${taskId}`);
+
+export const getCriteriaByCourseIdApi = (
+  courseId: CourseId
+): AxiosPromise<CriteriaDto[]> => mainAxios.get(`/criteria/course/${courseId}`);
 
 export const createCriteriaApi = (
   data: CriteriaRestDto

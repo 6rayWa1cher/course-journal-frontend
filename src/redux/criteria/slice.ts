@@ -8,6 +8,7 @@ import { CriteriaDto, CriteriaId } from 'models/criteria';
 import {
   createCriteriaThunk,
   deleteCriteriaThunk,
+  getCriteriaByCourseIdThunk,
   getCriteriaByIdThunk,
   getCriteriaByTaskIdThunk,
   putCriteriaThunk,
@@ -35,6 +36,12 @@ export const slice = createSlice({
     builder.addCase(deleteCriteriaThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
     });
+    builder.addCase(
+      getCriteriaByCourseIdThunk.fulfilled,
+      (state, { payload }) => {
+        adapter.setAll(state, payload);
+      }
+    );
     builder.addCase(
       putTaskWithCriteriaThunk.fulfilled,
       (state, { payload }) => {

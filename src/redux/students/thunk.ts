@@ -10,12 +10,14 @@ import {
   batchCreateStudentApi,
   createStudentApi,
   deleteStudentApi,
+  getAllStudentsByCourseIdApi,
   getStudentByIdApi,
   getStudentsByGroupIdApi,
   putStudentApi,
 } from 'api/students';
 import { BatchCreateStudentRequest } from 'api/types';
 import { AuthUserId, UserRole } from 'models/authUser';
+import { CourseId } from 'models/course';
 import { GroupId } from 'models/group';
 import { StudentId, StudentRestDto } from 'models/student';
 
@@ -55,6 +57,18 @@ export const getStudentsByGroupIdThunk = createAxiosAsyncThunk(
   'students/getAll',
   async ({ groupId }: GetStudentsByGroupIdArgs) => {
     const data = (await getStudentsByGroupIdApi(groupId)).data;
+    return data;
+  }
+);
+
+export interface GetAllStudentsByCourseIdArgs {
+  courseId: CourseId;
+}
+
+export const getAllStudentsByCourseIdThunk = createAxiosAsyncThunk(
+  'students/getAllByCourseId',
+  async ({ courseId }: GetAllStudentsByCourseIdArgs) => {
+    const data = (await getAllStudentsByCourseIdApi(courseId)).data;
     return data;
   }
 );

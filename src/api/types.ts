@@ -1,8 +1,10 @@
 import type { UserRole } from 'models/authUser';
 import type { CourseDto, CourseId } from 'models/course';
+import { CriteriaId } from 'models/criteria';
 import type { EmployeeRestDto, EmployeeDto, EmployeeId } from 'models/employee';
 import { GroupId } from 'models/group';
 import { StudentId } from 'models/student';
+import { TaskId } from 'models/task';
 
 // GENERIC TYPES
 export type SortType = 'asc' | 'desc';
@@ -104,5 +106,16 @@ export interface SetCriteriaForTaskRequest {
   criteria: {
     name: string;
     criteriaPercent: number;
+  }[];
+}
+
+export interface SetSubmissionsForCourseAndStudentRequest {
+  courseId: CourseId;
+  studentId: StudentId;
+  submissions: {
+    task: TaskId;
+    satisfiedCriteria: CriteriaId[];
+    submittedAt: string;
+    additionalScore: number;
   }[];
 }

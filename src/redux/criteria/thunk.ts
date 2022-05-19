@@ -2,10 +2,12 @@ import { createAxiosAsyncThunk } from '@redux/utils';
 import {
   createCriteriaApi,
   deleteCriteriaApi,
+  getCriteriaByCourseIdApi,
   getCriteriaByIdApi,
   getCriteriaByTaskIdApi,
   putCriteriaApi,
 } from 'api/criteria';
+import { CourseId } from 'models/course';
 import { CriteriaId, CriteriaRestDto } from 'models/criteria';
 import { TaskId } from 'models/task';
 
@@ -29,6 +31,18 @@ export const getCriteriaByTaskIdThunk = createAxiosAsyncThunk(
   'criteria/getAll',
   async ({ taskId }: GetCriteriaByTaskIdArgs) => {
     const data = (await getCriteriaByTaskIdApi(taskId)).data;
+    return data;
+  }
+);
+
+export interface GetCriteriaByCourseIdArgs {
+  courseId: CourseId;
+}
+
+export const getCriteriaByCourseIdThunk = createAxiosAsyncThunk(
+  'criteria/getByCourseId',
+  async ({ courseId }: GetCriteriaByCourseIdArgs) => {
+    const data = (await getCriteriaByCourseIdApi(courseId)).data;
     return data;
   }
 );

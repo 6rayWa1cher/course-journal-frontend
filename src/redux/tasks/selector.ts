@@ -3,7 +3,7 @@ import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { TaskDto, TaskId } from 'models/task';
 
-const tasksSelector = (state: RootState) => state.tasks;
+export const tasksSelector = (state: RootState) => state.tasks;
 
 export const taskIdFromParamsSelector = (
   _: unknown,
@@ -35,10 +35,10 @@ export const tasksByIdsSelector = createSelector(
   (state, ids) => ids.map((id) => state.entities[id])
 );
 
-export const tasksByCourseAlphabeticalSelector = createSelector(
+export const tasksByCourseTaskNumberSortSelector = createSelector(
   tasksByCourseSelector,
   (tasks) =>
     tasks
       .filter((task): task is TaskDto => !!task)
-      .sort((a, b) => a.title.localeCompare(b.title))
+      .sort((a, b) => (a.taskNumber ?? 0) - (b.taskNumber ?? 0))
 );

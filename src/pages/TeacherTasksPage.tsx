@@ -1,6 +1,10 @@
 import { Paper, Container, Grid } from '@mui/material';
 import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
-import { getTasksByCourseIdThunk, tasksByCourseSelector } from '@redux/tasks';
+import {
+  getTasksByCourseIdThunk,
+  tasksByCourseSelector,
+  tasksByCourseTaskNumberSortSelector,
+} from '@redux/tasks';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import AddButton from 'components/buttons/AddButton';
@@ -32,7 +36,9 @@ const TeacherTasksPage = () => {
     }
   }, [courseId, dispatch, enqueueError]);
 
-  const tasks = useParamSelector(tasksByCourseSelector, { courseId });
+  const tasks = useParamSelector(tasksByCourseTaskNumberSortSelector, {
+    courseId,
+  });
   const course = useParamSelector(courseByIdSelector, { courseId });
 
   useDocumentTitle(

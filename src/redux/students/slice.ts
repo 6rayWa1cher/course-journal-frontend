@@ -4,6 +4,7 @@ import {
   batchCreateStudentThunk,
   createStudentThunk,
   deleteStudentThunk,
+  getAllStudentsByCourseIdThunk,
   getStudentByIdThunk,
   getStudentsByGroupIdThunk,
   getStudentWithAuthUserThunk,
@@ -43,7 +44,8 @@ export const slice = createSlice({
     builder.addMatcher(
       isAnyOf(
         getStudentsByGroupIdThunk.fulfilled,
-        batchCreateStudentThunk.fulfilled
+        batchCreateStudentThunk.fulfilled,
+        getAllStudentsByCourseIdThunk.fulfilled
       ),
       (state, { payload }) => {
         adapter.upsertMany(state, payload);
