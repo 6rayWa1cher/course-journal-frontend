@@ -18,7 +18,11 @@ import type { Blocker, History, Transition } from 'history';
 
 export const useDocumentTitle = (title: string) => {
   useEffect(() => {
-    document.title = (title ? `${title} - ` : '') + 'Журнал предмета';
+    const prevTitle = document.title;
+    document.title = (title ? `${title} - ` : '') + 'Журнал курса';
+    return () => {
+      document.title = prevTitle;
+    };
   }, [title]);
 };
 

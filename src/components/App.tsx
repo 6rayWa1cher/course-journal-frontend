@@ -31,6 +31,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale';
 import EditTaskPage from 'pages/EditTaskPage';
 import SubmissionsPage from 'pages/SubmissionsPage';
+import EditCoursePage from 'pages/EditCoursePage';
 
 const darkTheme = createTheme({
   palette: {
@@ -88,6 +89,7 @@ const App = () => (
                 <Route path="create" element={<CreateCoursePage />} />
                 <Route path=":courseId">
                   <Route index element={<CoursePage />} />
+                  <Route path="edit" element={<EditCoursePage />} />
                   <Route path="tasks">
                     <Route index element={<TeacherTasksPage />} />
                     <Route path="create" element={<CreateTaskPage />} />

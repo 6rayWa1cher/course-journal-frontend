@@ -1,3 +1,4 @@
+import { getAllIdsBy } from '@redux/sliceUtils';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { ShortTaskRestDto, TaskDto } from 'models/task';
 import {
@@ -44,7 +45,9 @@ export const slice = createSlice({
     );
     builder.addMatcher(
       isAnyOf(getTasksByCourseIdThunk.fulfilled),
-      (state, { payload }) => {
+      (state, { payload, meta }) => {
+        const course = meta.arg.courseId;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { course }));
         adapter.upsertMany(state, payload);
       }
     );

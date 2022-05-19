@@ -1,10 +1,10 @@
+import { getAllIdsBy } from '@redux/sliceUtils';
 import {
   createTaskWithCriteriaThunk,
   putTaskWithCriteriaThunk,
 } from '@redux/tasks';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
-import { chain } from 'lodash';
-import { CriteriaDto, CriteriaId } from 'models/criteria';
+import { CriteriaDto } from 'models/criteria';
 import {
   createCriteriaThunk,
   deleteCriteriaThunk,
@@ -45,13 +45,8 @@ export const slice = createSlice({
     builder.addCase(
       putTaskWithCriteriaThunk.fulfilled,
       (state, { payload }) => {
-        const taskId = payload.task.id;
-        const criteriaToDelete: CriteriaId[] = chain(state.entities)
-          .filter({ task: taskId })
-          .compact()
-          .map((c) => c.id)
-          .value();
-        adapter.removeMany(state, criteriaToDelete);
+        const task = payload.task.id;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { task }));
         adapter.upsertMany(state, payload.criteria);
       }
     );

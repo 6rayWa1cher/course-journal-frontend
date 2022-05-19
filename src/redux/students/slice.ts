@@ -1,3 +1,4 @@
+import { getAllIdsBy } from '@redux/sliceUtils';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { chain, filter } from 'lodash';
 import { StudentDto } from 'models/student';
@@ -27,18 +28,21 @@ export const slice = createSlice({
       getAllStudentsByCourseIdThunk.fulfilled,
       (state, { payload, meta }) => {
         const course = meta.arg.courseId;
-        adapter.removeMany(
-          state,
-          chain(state.entities)
-            .values()
-            .compact()
-            .filter({ course })
-            .map((s) => s.id)
-            .value()
-        );
+        adapter.removeMany(state, getAllIdsBy(state.entities, { course }));
         adapter.addMany(state, payload);
       }
     );
+    builder.addCase(
+      getStudentsByGroupIdThunk.fulfilled,
+      (state, { payload, meta }) => {
+        const group = meta.arg.groupId;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { group }));
+        adapter.addMany(state, payload);
+      }
+    );
+    builder.addCase(batchCreateStudentThunk.fulfilled, (state, { payload }) => {
+      adapter.upsertMany(state, payload);
+    });
     builder.addMatcher(
       isAnyOf(
         getStudentWithAuthUserThunk.fulfilled,
@@ -56,15 +60,6 @@ export const slice = createSlice({
       ),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getStudentsByGroupIdThunk.fulfilled,
-        batchCreateStudentThunk.fulfilled
-      ),
-      (state, { payload }) => {
-        adapter.upsertMany(state, payload);
       }
     );
   },

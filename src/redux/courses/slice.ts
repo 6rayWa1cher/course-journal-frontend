@@ -7,6 +7,7 @@ import {
 } from './thunk';
 import { CourseDto, CourseFullDto } from 'models/course';
 import { getAllStudentsByCourseIdThunk } from '@redux/students';
+import { getAllIdsBy } from '@redux/sliceUtils';
 
 export const adapter = createEntityAdapter<CourseDto | CourseFullDto>();
 
@@ -31,7 +32,9 @@ export const slice = createSlice({
     );
     builder.addMatcher(
       isAnyOf(getCourseByEmployeePageThunk.fulfilled),
-      (state, { payload }) => {
+      (state, { payload, meta }) => {
+        const owner = meta.arg.employeeId;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { owner }));
         adapter.upsertMany(state, payload.content);
       }
     );

@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { studentByIdSelector } from '@redux/students';
 import SubTitle from 'components/SubTitle';
-import { range, sumBy, union, without } from 'lodash';
+import { range, sumBy, without } from 'lodash';
 import ScoringStatusIcon from 'pages/SubmissionsPage/ScoringStatusIcon';
 import { ScoringModuleStatus } from 'pages/SubmissionsPage/types';
 import { useCallback, useMemo, useState } from 'react';

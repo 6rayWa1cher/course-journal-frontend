@@ -1,5 +1,5 @@
 import { Container, Grid, Paper } from '@mui/material';
-import { getCourseByIdThunk } from '@redux/courses';
+import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
 import { getCriteriaByCourseIdThunk } from '@redux/criteria';
 import {
   getAllStudentsByCourseIdThunk,
@@ -19,6 +19,7 @@ import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
+  useDocumentTitle,
   useLoadingActionThunk,
   useMySnackbar,
   useNarrowScreen,
@@ -80,6 +81,12 @@ const SubmissionsPage = () => {
     id: item.id,
     name: formatFullNameWithInitials(item),
   }));
+
+  const course = useParamSelector(courseByIdSelector, { courseId });
+  useDocumentTitle(
+    course != null ? `Оценка заданий - "${course.name}"` : 'Оценка заданий'
+  );
+
   const narrowScreen = useNarrowScreen();
 
   return (

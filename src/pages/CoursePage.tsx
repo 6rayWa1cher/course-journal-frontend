@@ -19,6 +19,7 @@ import {
 import { deleteCourseThunk } from '../redux/courses/thunk';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import EditButton from 'components/buttons/EditButton';
 
 const CoursePage = () => {
   const params = useParams();
@@ -67,6 +68,11 @@ const CoursePage = () => {
     [courseId]
   );
 
+  const handleEditClick = useCallback(
+    () => navigate(`/courses/${courseId}/edit`),
+    [navigate, courseId]
+  );
+
   return (
     <>
       <Paper sx={{ p: 2 }}>
@@ -79,6 +85,9 @@ const CoursePage = () => {
                 </Grid>
                 <Grid item xs>
                   <Title>{course?.name}</Title>
+                </Grid>
+                <Grid item>
+                  <EditButton onClick={handleEditClick} />
                 </Grid>
                 <Grid item>
                   <DeleteButtonWithConfirm

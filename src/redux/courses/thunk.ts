@@ -4,6 +4,7 @@ import {
   getCourseByIdApi,
   getCoursesByOwnerApi,
   postCourseApi,
+  putCourseApi,
 } from 'api/courses';
 import { GetCoursesByOwnerIdRequest } from 'api/types';
 import { CourseId, CourseRestDto } from 'models/course';
@@ -32,6 +33,19 @@ export const createCourseThunk = createAxiosAsyncThunk(
   'courses/create',
   async (data: CourseRestDto) => {
     const course = (await postCourseApi(data)).data;
+    return course;
+  }
+);
+
+export interface PutCourseArgs {
+  courseId: CourseId;
+  data: CourseRestDto;
+}
+
+export const putCourseThunk = createAxiosAsyncThunk(
+  'courses/put',
+  async ({ courseId, data }: PutCourseArgs) => {
+    const course = (await putCourseApi(courseId, data)).data;
     return course;
   }
 );

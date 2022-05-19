@@ -38,8 +38,8 @@ import {
   CreateCourseSchemaType,
   createCourseSchema,
 } from 'validation/yup/course';
-import GroupSelector from './GroupSelector';
-import StudentPicker from './StudentPicker';
+import GroupSelector from '../components/GroupSelector';
+import StudentPicker from '../components/forms/StudentPicker';
 
 const CreateCoursePage = () => {
   useDocumentTitle('Создание курса');
