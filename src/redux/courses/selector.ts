@@ -28,3 +28,8 @@ export const coursesByEmployeeIdSelector = createSelector(
       (e): e is CourseDto => e?.owner === employeeId
     )
 );
+
+export const courseNameByIdSelector = createSelector(
+  courseByIdSelector,
+  (course) => course?.name
+);

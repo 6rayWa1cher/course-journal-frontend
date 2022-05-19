@@ -42,3 +42,8 @@ export const tasksByCourseTaskNumberSortSelector = createSelector(
       .filter((task): task is TaskDto => !!task)
       .sort((a, b) => (a.taskNumber ?? 0) - (b.taskNumber ?? 0))
 );
+
+export const taskTitleByIdSelector = createSelector(
+  taskByIdSelector,
+  (task) => task?.title
+);

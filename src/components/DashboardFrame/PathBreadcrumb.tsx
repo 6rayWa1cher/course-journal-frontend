@@ -1,8 +1,10 @@
 import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
+import { courseNameByIdSelector } from '@redux/courses';
 import { employeeInitialsByIdSelector } from '@redux/employees';
 import { facultyNameByIdSelector } from '@redux/faculties';
 import { studentInitialsByIdSelector } from '@redux/students';
+import { taskTitleByIdSelector } from '@redux/tasks';
 import { useMemo } from 'react';
 import { useLocation, Link as RouterLink, useParams } from 'react-router-dom';
 import { useParamSelector } from 'utils/hooks';
@@ -13,6 +15,8 @@ const localizationTable: Record<string, string> = {
   faculties: 'Факультеты',
   students: 'Студенты',
   settings: 'Настройки',
+  courses: 'Курсы',
+  submissions: 'Оценки',
 };
 
 type IdsLocalizationTable = Record<string, string>;
@@ -51,6 +55,12 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
   const student = useParamSelector(studentInitialsByIdSelector, {
     studentId: Number(params.studentId),
   });
+  const course = useParamSelector(courseNameByIdSelector, {
+    courseId: Number(params.courseId),
+  });
+  const task = useParamSelector(taskTitleByIdSelector, {
+    taskId: Number(params.taskId),
+  });
 
   const parts = useMemo(() => {
     const pathname = location.pathname === '/' ? '' : location.pathname;
@@ -60,6 +70,8 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
         [params.facultyId, faculty],
         [params.employeeId, employee],
         [params.studentId, student],
+        [params.courseId, course],
+        [params.taskId, task],
       ].filter(([k, v]) => k != null && v != null)
     );
     return blocks.map((b, i, arr) => ({
@@ -67,13 +79,17 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
       name: localizeName(b, table),
     }));
   }, [
+    course,
     employee,
     faculty,
     location.pathname,
+    params.courseId,
     params.employeeId,
     params.facultyId,
     params.studentId,
+    params.taskId,
     student,
+    task,
   ]);
 
   const crumbs = useMemo(
