@@ -12,7 +12,11 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { adminListItems, secondaryListItems } from './ListItems';
+import {
+  adminListItems,
+  secondaryListItems,
+  teacherListItems,
+} from './ListItems';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useMediaQuery } from '@mui/material';
@@ -152,7 +156,10 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>{role === UserRole.ADMIN && adminListItems}</List>
+          <List>
+            {role === UserRole.ADMIN && adminListItems}
+            {role === UserRole.TEACHER && teacherListItems}
+          </List>
           <Divider />
           <List>{secondaryListItems}</List>
           <Divider />
