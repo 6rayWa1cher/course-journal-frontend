@@ -20,6 +20,7 @@ import { deleteCourseThunk } from '../redux/courses/thunk';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import EditButton from 'components/buttons/EditButton';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const CoursePage = () => {
   const params = useParams();
@@ -63,6 +64,11 @@ const CoursePage = () => {
         title: 'Задания',
         link: `/courses/${courseId}/tasks`,
         Icon: AssignmentIcon,
+      },
+      {
+        title: 'Настройки',
+        link: `/courses/${courseId}/settings`,
+        Icon: SettingsIcon,
       },
     ],
     [courseId]

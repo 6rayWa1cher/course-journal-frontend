@@ -1,4 +1,4 @@
-import { Container, Grid, Paper } from '@mui/material';
+import { Container, Grid, Paper, Typography } from '@mui/material';
 import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
 import { getCriteriaByCourseIdThunk } from '@redux/criteria';
 import {
@@ -107,7 +107,7 @@ const SubmissionsPage = () => {
           </Grid>
           <Grid item xs={12} md={3}>
             <Paper sx={{ p: 2 }}>
-              {narrowScreen ? (
+              {narrowScreen && studentId != null && (
                 <NativeSelector
                   items={studentItems}
                   label="Студенты"
@@ -115,8 +115,25 @@ const SubmissionsPage = () => {
                   onSelect={setStudentId}
                   disabled={disableNavigation}
                 />
-              ) : (
+              )}
+              {narrowScreen && studentId == null && (
+                <>
+                  <Typography variant="h5" color="primary">
+                    Выберите студента
+                  </Typography>
+                  <ListSelector
+                    items={studentItems}
+                    selected={studentId}
+                    onSelect={setStudentId}
+                    disabled={disableNavigation}
+                  />
+                </>
+              )}
+              {!narrowScreen && (
                 <Scrollable height="calc(85vh - 150px)">
+                  <Typography variant="h5" color="primary">
+                    Выберите студента
+                  </Typography>
                   <ListSelector
                     items={studentItems}
                     selected={studentId}
@@ -127,9 +144,9 @@ const SubmissionsPage = () => {
               )}
             </Paper>
           </Grid>
-          <Grid item xs={12} md={9}>
-            <Paper sx={{ p: 2 }}>
-              {studentId != null && (
+          {studentId != null && (
+            <Grid item xs={12} md={9}>
+              <Paper sx={{ p: 2 }}>
                 <PreLoading action={sideLoadingAction}>
                   <ScoringModule
                     courseId={courseId}
@@ -138,9 +155,9 @@ const SubmissionsPage = () => {
                     setStatus={setStatus}
                   />
                 </PreLoading>
-              )}
-            </Paper>
-          </Grid>
+              </Paper>
+            </Grid>
+          )}
         </Grid>
       </PreLoading>
     </Container>

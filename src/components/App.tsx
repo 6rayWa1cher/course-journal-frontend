@@ -1,4 +1,3 @@
-import React from 'react';
 import PreloaderWrapper from './PreloaderWrapper';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -32,6 +31,7 @@ import { ru } from 'date-fns/locale';
 import EditTaskPage from 'pages/EditTaskPage';
 import SubmissionsPage from 'pages/SubmissionsPage';
 import EditCoursePage from 'pages/EditCoursePage';
+import CourseSettingsPage from 'pages/CourseSettingsPage';
 
 const darkTheme = createTheme({
   palette: {
@@ -96,6 +96,7 @@ const App = () => (
                     <Route path=":taskId" element={<EditTaskPage />} />
                   </Route>
                   <Route path="submissions" element={<SubmissionsPage />} />
+                  <Route path="settings" element={<CourseSettingsPage />} />
                 </Route>
               </Route>
 

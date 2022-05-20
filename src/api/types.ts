@@ -119,3 +119,7 @@ export interface SetSubmissionsForCourseAndStudentRequest {
     additionalScore: number;
   }[];
 }
+
+export interface ResolveCourseTokenRequest {
+  token: string;
+}

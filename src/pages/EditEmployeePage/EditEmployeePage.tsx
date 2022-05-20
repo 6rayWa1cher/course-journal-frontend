@@ -82,13 +82,17 @@ const EditEmployeePage = () => {
                 <Title>Редактирование преподавателя</Title>
               </Stack>
             </Grid>
-            <Grid item>
-              <DeleteButtonWithConfirm
-                onDelete={handleDeleteClick}
-                dialogTitle={`Удалить преподавателя ${formatFullNameWithInitials}?`}
-                dialogDescription="Эта операция необратима и приведет к удалению всех курсов преподавателя"
-              />
-            </Grid>
+            {employee != null && (
+              <Grid item>
+                <DeleteButtonWithConfirm
+                  onDelete={handleDeleteClick}
+                  dialogTitle={`Удалить преподавателя ${formatFullNameWithInitials(
+                    employee
+                  )}?`}
+                  dialogDescription="Эта операция необратима и приведет к удалению всех курсов преподавателя"
+                />
+              </Grid>
+            )}
           </Grid>
 
           {employee != null && (

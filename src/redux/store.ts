@@ -14,6 +14,7 @@ import students from './students/slice';
 import tasks from './tasks/slice';
 import criteria from './criteria/slice';
 import submissions from './submissions/slice';
+import courseTokens from './courseTokens/slice';
 
 const store = (() => {
   const reducer = combineReducers({
@@ -28,6 +29,7 @@ const store = (() => {
     students,
     tasks,
     submissions,
+    courseTokens,
   });
 
   const store = configureStore({ reducer });
