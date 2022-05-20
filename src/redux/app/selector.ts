@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { loggedInSelector } from '@redux/auth';
+import { loggedInSelector, loggedInWithSelector } from '@redux/auth';
 import type { RootState } from '@redux/types';
 import { Stage } from './types';
 import { selfAuthUserSelector } from '@redux/authUsers';
@@ -18,8 +18,9 @@ export const errorSelector = createSelector(
 
 const userStageSelector = createSelector(
   selfAuthUserSelector,
-  (authUserDto): Stage => {
-    if (!authUserDto) {
+  loggedInWithSelector,
+  (authUserDto, loggedInMethod): Stage => {
+    if (!authUserDto && loggedInMethod !== 'courseToken') {
       return Stage.UNAUTHORIZED;
     }
     return Stage.AUTHORIZED;

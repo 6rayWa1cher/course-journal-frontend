@@ -1,4 +1,4 @@
-import { authUserIdSelector, loggedInSelector } from '@redux/auth';
+import { authUserIdSelector, loggedInWithSelector } from '@redux/auth';
 import { eraseBag, loadBag } from '@redux/auth/slice';
 import { loadUserDataThunk } from '@redux/authUsers';
 import { createTypedAsyncThunk } from '@redux/utils';
@@ -18,7 +18,8 @@ export const initAppThunk = createTypedAsyncThunk(
       return;
     }
     dispatch(loadBag());
-    if (loggedInSelector(getState())) {
+    const appState = getState();
+    if (loggedInWithSelector(appState) === 'accessToken') {
       const authUserId = authUserIdSelector(getState()) as AuthUserId;
       try {
         await dispatch(loadUserDataThunk({ authUserId })).then(unwrapResult);

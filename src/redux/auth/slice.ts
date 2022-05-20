@@ -4,7 +4,11 @@ import { setBag } from './action';
 import { logoutThunk, loginThunk } from './thunk';
 import { AuthState } from './types';
 
-const initialState: AuthState = { bag: null, currentRequestId: null };
+const initialState: AuthState = {
+  bag: null,
+  courseToken: null,
+  currentRequestId: null,
+};
 
 const slice = createSlice({
   name: 'auth',
@@ -13,6 +17,11 @@ const slice = createSlice({
     loadBag(state) {
       const loaded = loadAuthBag();
       state.bag = loaded;
+      state.courseToken = null;
+    },
+    setCourseToken(state, { payload }: { payload: string }) {
+      state.courseToken = payload;
+      state.bag = null;
     },
     eraseBag(state) {
       state.bag = null;
@@ -48,6 +57,6 @@ const slice = createSlice({
   },
 });
 
-export const { loadBag, eraseBag } = slice.actions;
+export const { loadBag, eraseBag, setCourseToken } = slice.actions;
 
 export default slice.reducer;

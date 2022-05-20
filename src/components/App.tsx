@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 import PreloaderWrapper from './PreloaderWrapper';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -32,6 +33,7 @@ import EditTaskPage from 'pages/EditTaskPage';
 import SubmissionsPage from 'pages/SubmissionsPage';
 import EditCoursePage from 'pages/EditCoursePage';
 import CourseSettingsPage from 'pages/CourseSettingsPage';
+import CourseTokenLoader from './CourseTokenLoader';
 
 const darkTheme = createTheme({
   palette: {
@@ -102,6 +104,7 @@ const App = () => (
 
               <Route path="settings" element={<SettingsPage />} />
             </Route>
+            <Route path="/ct/:token" element={<CourseTokenLoader />} />
             <Route
               element={
                 <StageRoute stage={Stage.UNAUTHORIZED}>
