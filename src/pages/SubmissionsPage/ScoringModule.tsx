@@ -65,7 +65,6 @@ const ScoringModule = ({
           (taskToNumber.get(a.task) ?? 0) - (taskToNumber.get(b.task) ?? 0)
       ),
     };
-    console.log(convertSubs, newSubs, 'newValues: ', newValues);
     return newValues;
   }, [courseId, studentId, submissions, tasks]);
 
@@ -131,10 +130,9 @@ const ScoringModule = ({
   ]);
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = watch((_, { name, type }) => {
       // if react-hook-form emitted the 'change' event on some field,
       // upload changes to the server
-      console.log(value);
       if (type === 'change' && name != null) {
         setStatus(ScoringModuleStatus.WAITING);
         handleSubmit(onSubmitDebounced)();

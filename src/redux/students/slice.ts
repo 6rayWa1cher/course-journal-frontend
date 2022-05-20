@@ -1,6 +1,5 @@
 import { getAllIdsBy } from '@redux/sliceUtils';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
-import { chain, filter } from 'lodash';
 import { StudentDto } from 'models/student';
 import {
   batchCreateStudentThunk,
