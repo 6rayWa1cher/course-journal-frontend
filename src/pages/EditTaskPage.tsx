@@ -45,9 +45,10 @@ const EditTaskPage = () => {
   }, [courseId, taskId, dispatch, enqueueError]);
 
   const course = useParamSelector(courseByIdSelector, { courseId });
+  const task = useParamSelector(taskByIdSelector, { taskId });
   useDocumentTitle(
-    course != null
-      ? `Редактирование задания для курса ${course.name}`
+    course != null && task != null
+      ? `Редактирование - ${task.title} - ${course.name}`
       : 'Редактирование задания'
   );
 
@@ -74,7 +75,6 @@ const EditTaskPage = () => {
     reset,
   } = methods;
 
-  const task = useParamSelector(taskByIdSelector, { taskId });
   const criteria = useParamSelector(criteriaByTaskSelector, { taskId });
   useEffect(
     () =>

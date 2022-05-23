@@ -6,16 +6,30 @@ import {
   getCourseByIdThunk,
 } from './thunk';
 import { CourseDto, CourseFullDto } from 'models/course';
-import { getAllStudentsByCourseIdThunk } from '@redux/students';
+import { getAllStudentsByCourseIdThunk } from '@redux/students/thunk';
 import { getAllIdsBy } from '@redux/sliceUtils';
+import { resolveCourseTokenThunk } from '@redux/courseTokens/thunk';
+import { CourseState } from './types';
+import { initAppThunk } from '@redux/app/thunk';
 
 export const adapter = createEntityAdapter<CourseDto | CourseFullDto>();
 
+const initialState: CourseState = {
+  ...adapter.getInitialState(),
+  resolved: undefined,
+};
+
 export const slice = createSlice({
   name: 'courses',
-  initialState: adapter.getInitialState(),
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(initAppThunk.pending, (state) => {
+      state.resolved = undefined;
+    });
+    builder.addCase(resolveCourseTokenThunk.fulfilled, (state, { payload }) => {
+      state.resolved = payload.id;
+    });
     builder.addCase(deleteCourseThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
     });

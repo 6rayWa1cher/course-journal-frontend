@@ -49,7 +49,7 @@ const CourseSelectorPage = () => {
       }),
     [employeeId, page, search]
   );
-  const loadingAction = useLoadingActionThunk(thunk);
+  const loadingAction = useLoadingActionThunk(thunk, employeeId !== -1);
 
   const courses = useParamSelector(coursesByEmployeeIdSelector, { employeeId });
 

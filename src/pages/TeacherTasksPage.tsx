@@ -13,11 +13,20 @@ import NavListWithAvatars from 'components/NavListWithAvatars';
 import PreLoading from 'components/PreLoading';
 import Title from 'components/Title';
 import { useCallback, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import { useDocumentTitle, useMySnackbar, useParamSelector } from 'utils/hooks';
+import {
+  useBackLocation,
+  useDocumentTitle,
+  useMySnackbar,
+  useParamSelector,
+} from 'utils/hooks';
 
-const TeacherTasksPage = () => {
+export interface TeacherTasksPageProps {
+  readonly?: boolean;
+}
+
+const TeacherTasksPage = ({ readonly = false }: TeacherTasksPageProps) => {
   const params = useParams();
 
   const courseId = Number(params.courseId);
@@ -44,11 +53,12 @@ const TeacherTasksPage = () => {
   useDocumentTitle(
     course != null ? `Задания курса ${course.name}` : 'Задания курса'
   );
+  const pathname = useLocation().pathname;
 
   const navigate = useNavigate();
   const handleAddClick = useCallback(
-    () => navigate(`/courses/${courseId}/tasks/create`),
-    [navigate, courseId]
+    () => navigate(`${pathname}/create`),
+    [navigate, pathname]
   );
 
   const taskItems = useMemo(
@@ -56,10 +66,10 @@ const TeacherTasksPage = () => {
       tasks.map((t) => ({
         id: t.id,
         name: t.title,
-        link: `/courses/${courseId}/tasks/${t.id}`,
+        link: `${pathname}/${t.id}`,
         avatar: t.taskNumber,
       })),
-    [tasks, courseId]
+    [tasks, pathname]
   );
 
   return (
@@ -75,14 +85,16 @@ const TeacherTasksPage = () => {
               spacing={2}
             >
               <Grid item>
-                <BackButton to={`/courses/${courseId}`} />
+                <BackButton />
               </Grid>
               <Grid item xs>
                 <Title>Задания курса {course?.name}</Title>
               </Grid>
-              <Grid item>
-                <AddButton onClick={handleAddClick} />
-              </Grid>
+              {!readonly && (
+                <Grid item>
+                  <AddButton onClick={handleAddClick} />
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12}>
               <NavListWithAvatars items={taskItems} />

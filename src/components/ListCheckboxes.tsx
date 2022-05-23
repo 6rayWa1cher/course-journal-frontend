@@ -30,6 +30,7 @@ export interface ListCheckboxesSelectorProps<
   control: Control<T>;
   listProps?: ListProps;
   selectAll?: boolean;
+  disabled?: boolean;
 }
 
 const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
@@ -38,6 +39,7 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
   control,
   listProps = {},
   selectAll = false,
+  disabled = false,
 }: ListCheckboxesSelectorProps<T, J>) => {
   const { field } = useController({
     control,
@@ -75,7 +77,12 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
         {selectAll && (
           <>
             <ListItem disablePadding>
-              <ListItemButton role={undefined} onClick={handleAllToggle} dense>
+              <ListItemButton
+                role={undefined}
+                onClick={handleAllToggle}
+                disabled={disabled}
+                dense
+              >
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
@@ -92,7 +99,12 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
         )}
         {options.map(({ id, name, subName }) => (
           <ListItem key={id} disablePadding>
-            <ListItemButton role={undefined} onClick={handleToggle(id)} dense>
+            <ListItemButton
+              role={undefined}
+              onClick={handleToggle(id)}
+              disabled={disabled}
+              dense
+            >
               <ListItemIcon>
                 <Checkbox
                   edge="start"

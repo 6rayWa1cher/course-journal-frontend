@@ -1,6 +1,11 @@
-import { authUserIdSelector, loggedInWithSelector } from '@redux/auth';
+import {
+  authUserIdSelector,
+  loggedInWithSelector,
+  courseTokenSelector,
+} from '@redux/auth/selector';
 import { eraseBag, loadBag } from '@redux/auth/slice';
-import { loadUserDataThunk } from '@redux/authUsers';
+import { loadUserDataThunk } from '@redux/authUsers/thunk';
+import { resolveCourseTokenThunk } from '@redux/courseTokens/thunk';
 import { createTypedAsyncThunk } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { AuthUserId } from 'models/authUser';
@@ -17,16 +22,22 @@ export const initAppThunk = createTypedAsyncThunk(
     ) {
       return;
     }
-    dispatch(loadBag());
-    const appState = getState();
-    if (loggedInWithSelector(appState) === 'accessToken') {
-      const authUserId = authUserIdSelector(getState()) as AuthUserId;
-      try {
+    if (loggedInWithSelector(getState()) == null) {
+      dispatch(loadBag());
+    }
+    const authMethod = loggedInWithSelector(getState());
+    console.debug('logged in with', authMethod);
+    try {
+      if (authMethod === 'accessToken') {
+        const authUserId = authUserIdSelector(getState()) as AuthUserId;
         await dispatch(loadUserDataThunk({ authUserId })).then(unwrapResult);
-      } catch (err) {
-        console.log('Emitting logout in response to ', err);
-        dispatch(eraseBag());
+      } else if (authMethod === 'courseToken') {
+        const token = courseTokenSelector(getState()) as string;
+        await dispatch(resolveCourseTokenThunk({ token })).then(unwrapResult);
       }
+    } catch (err) {
+      console.log('Emitting logout in response to ', err);
+      dispatch(eraseBag());
     }
   }
 );

@@ -2,6 +2,7 @@ import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { CriteriaDto, CriteriaId } from 'models/criteria';
 import { taskIdFromParamsSelector } from '@redux/tasks/selector';
+import { sumBy } from 'lodash';
 
 export const criteriaSelector = (state: RootState) => state.criteria;
 
@@ -51,4 +52,18 @@ export const criteriaIdsByTaskSelector = createSelector(
 export const allCriteriaEntitiesSelector = createSelector(
   criteriaSelector,
   (state) => state.entities
+);
+
+export const normalizedCriteriaByTaskSelector = createSelector(
+  criteriaByTaskSelector,
+  (criteria) => {
+    const normalizeConstant = (() => {
+      const sum = sumBy(criteria, 'criteriaPercent');
+      return sum != 0 ? 100 / sum : 0;
+    })();
+    return criteria.map(({ criteriaPercent, ...other }) => ({
+      ...other,
+      criteriaPercent: Math.round(criteriaPercent * normalizeConstant),
+    }));
+  }
 );

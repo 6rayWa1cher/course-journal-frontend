@@ -33,3 +33,8 @@ export const courseNameByIdSelector = createSelector(
   courseByIdSelector,
   (course) => course?.name
 );
+
+export const resolvedCourseIdSelector = createSelector(
+  coursesSelector,
+  (state) => state.resolved
+);

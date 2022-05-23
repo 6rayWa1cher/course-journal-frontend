@@ -125,18 +125,20 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             pr: '24px', // keep right padding when drawer closed
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {role != null && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <PathBreadcrumb largeScreen={largeScreen} sx={{ flexGrow: 1 }} />
           <LogoutButton />
         </Toolbar>

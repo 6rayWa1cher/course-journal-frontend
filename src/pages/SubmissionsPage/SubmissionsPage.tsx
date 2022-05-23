@@ -16,9 +16,10 @@ import PreLoading from 'components/PreLoading';
 import Scrollable from 'components/Scrollable';
 import Title from 'components/Title';
 import { useCallback, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Params, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
+  useBackLocation,
   useDocumentTitle,
   useLoadingActionThunk,
   useMySnackbar,
@@ -31,7 +32,11 @@ import { formatFullNameWithInitials } from 'utils/string';
 import ScoringModule from './ScoringModule';
 import { ScoringModuleStatus } from './types';
 
-const SubmissionsPage = () => {
+export interface SubmissionsPageProps {
+  readonly?: boolean;
+}
+
+const SubmissionsPage = ({ readonly = false }: SubmissionsPageProps) => {
   const params = useParams();
 
   const courseId = Number(params.courseId);
@@ -97,7 +102,7 @@ const SubmissionsPage = () => {
             <Paper sx={{ p: 2 }}>
               <Grid container>
                 <Grid item>
-                  <BackButton to={`/courses/${courseId}`} />
+                  <BackButton />
                 </Grid>
                 <Grid item xs>
                   <Title>Оценка заданий</Title>
@@ -153,6 +158,7 @@ const SubmissionsPage = () => {
                     studentId={studentId}
                     status={status}
                     setStatus={setStatus}
+                    readonly={readonly}
                   />
                 </PreLoading>
               </Paper>

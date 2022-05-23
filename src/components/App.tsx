@@ -34,6 +34,9 @@ import SubmissionsPage from 'pages/SubmissionsPage';
 import EditCoursePage from 'pages/EditCoursePage';
 import CourseSettingsPage from 'pages/CourseSettingsPage';
 import CourseTokenLoader from './CourseTokenLoader';
+import CourseTokenRedirect from './CourseTokenRedirect';
+import CourseTokenCoursePage from 'pages/CourseTokenCoursePage';
+import TaskPage from 'pages/TaskPage';
 
 const darkTheme = createTheme({
   palette: {
@@ -95,7 +98,10 @@ const App = () => (
                   <Route path="tasks">
                     <Route index element={<TeacherTasksPage />} />
                     <Route path="create" element={<CreateTaskPage />} />
-                    <Route path=":taskId" element={<EditTaskPage />} />
+                    <Route path=":taskId">
+                      <Route index element={<TaskPage />} />
+                      <Route path="edit" element={<EditTaskPage />} />
+                    </Route>
                   </Route>
                   <Route path="submissions" element={<SubmissionsPage />} />
                   <Route path="settings" element={<CourseSettingsPage />} />
@@ -104,7 +110,30 @@ const App = () => (
 
               <Route path="settings" element={<SettingsPage />} />
             </Route>
-            <Route path="/ct/:token" element={<CourseTokenLoader />} />
+            <Route
+              path="/ct/:token"
+              element={
+                <CourseTokenLoader>
+                  <MainElement />
+                </CourseTokenLoader>
+              }
+            >
+              <Route index element={<CourseTokenRedirect />} />
+              <Route path="courses">
+                <Route index element={<CourseTokenRedirect />} />
+                <Route path=":courseId">
+                  <Route index element={<CourseTokenCoursePage />} />
+                  <Route path="tasks">
+                    <Route index element={<TeacherTasksPage readonly />} />
+                    <Route path=":taskId" element={<TaskPage readonly />} />
+                  </Route>
+                  <Route
+                    path="submissions"
+                    element={<SubmissionsPage readonly />}
+                  />
+                </Route>
+              </Route>
+            </Route>
             <Route
               element={
                 <StageRoute stage={Stage.UNAUTHORIZED}>

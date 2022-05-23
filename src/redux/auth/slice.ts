@@ -25,12 +25,14 @@ const slice = createSlice({
     },
     eraseBag(state) {
       state.bag = null;
+      state.courseToken = null;
       removeAuthBag();
     },
   },
   extraReducers: (builder) => {
     builder.addCase(logoutThunk.fulfilled, (state) => {
       state.bag = null;
+      state.courseToken = null;
     });
     builder.addCase(setBag, (state, { payload }) => {
       state.bag = payload;

@@ -23,9 +23,10 @@ import { submissionsByStudentAndCourseSelector } from '@redux/submissions';
 import { tasksByCourseSelector } from '@redux/tasks';
 export interface ScoringFormProps {
   status: ScoringModuleStatus;
+  readonly?: boolean;
 }
 
-const ScoringForm = ({ status }: ScoringFormProps) => {
+const ScoringForm = ({ status, readonly = false }: ScoringFormProps) => {
   const { watch, control } = useFormContext<BatchSetSubmissionsSchemaType>();
 
   const { fields: submissionFields } = useFieldArray({
@@ -107,6 +108,7 @@ const ScoringForm = ({ status }: ScoringFormProps) => {
               index={index}
               open={openArray.includes(index)}
               onOpenClick={handleShowClick(index)}
+              readonly={readonly}
               asListItem
             />
           ))}
@@ -119,6 +121,7 @@ const ScoringForm = ({ status }: ScoringFormProps) => {
                 open={openArray.includes(index)}
                 onOpenClick={handleShowClick(index)}
                 index={index}
+                readonly={readonly}
               />
             </Grid>
           ))}

@@ -157,3 +157,13 @@ export function usePrompt(
   );
   return useBlocker(blocker, when);
 }
+
+export const useBackLocation = () => {
+  const location = useLocation();
+  return useMemo(() => {
+    const pathname = location.pathname.endsWith('/')
+      ? location.pathname.substring(0, location.pathname.length - 2)
+      : location.pathname;
+    return pathname.substring(0, pathname.lastIndexOf('/'));
+  }, [location.pathname]);
+};

@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import { useLocation, Link as RouterLink, useParams } from 'react-router-dom';
 import { useParamSelector } from 'utils/hooks';
 
-const localizationTable: Record<string, string> = {
+const localizationTable: Record<string, string | null> = {
   '': 'Журнал курса',
   employees: 'Преподаватели',
   faculties: 'Факультеты',
@@ -17,6 +17,8 @@ const localizationTable: Record<string, string> = {
   settings: 'Настройки',
   courses: 'Курсы',
   submissions: 'Оценки',
+  tasks: 'Задания',
+  ct: null,
 };
 
 type IdsLocalizationTable = Record<string, string>;
@@ -24,8 +26,8 @@ type IdsLocalizationTable = Record<string, string>;
 const localizeName = (
   name: Nullable<string | number>,
   table: IdsLocalizationTable
-): string => {
-  let out = '';
+): string | null => {
+  let out: string | null = '';
   if (Number.isInteger(name)) {
     out = '#' + name;
   }
@@ -74,10 +76,15 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
         [params.taskId, task],
       ].filter(([k, v]) => k != null && v != null)
     );
-    return blocks.map((b, i, arr) => ({
-      path: arr.slice(0, i + 1).join('/') || '/',
-      name: localizeName(b, table),
-    }));
+    return blocks
+      .map((b, i, arr) => ({
+        path: arr.slice(0, i + 1).join('/') || '/',
+        name: localizeName(b, table),
+      }))
+      .filter(({ path, name }) => name != null && path != null)
+      .filter(
+        ({ path }) => params.token == null || !path.endsWith(params.token)
+      );
   }, [
     course,
     employee,
@@ -88,6 +95,7 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
     params.facultyId,
     params.studentId,
     params.taskId,
+    params.token,
     student,
     task,
   ]);

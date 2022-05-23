@@ -25,6 +25,7 @@ export interface ScoringModuleProps {
   courseId: CourseId;
   status: ScoringModuleStatus;
   setStatus: (status: ScoringModuleStatus) => void;
+  readonly?: boolean;
 }
 
 const ScoringModule = ({
@@ -32,6 +33,7 @@ const ScoringModule = ({
   courseId,
   status,
   setStatus,
+  readonly,
 }: ScoringModuleProps) => {
   const tasks = useParamSelector(tasksByCourseTaskNumberSortSelector, {
     courseId,
@@ -101,8 +103,6 @@ const ScoringModule = ({
       } catch (e) {
         defaultErrorEnqueue(e as Error, enqueueError);
         setStatus(ScoringModuleStatus.ERROR);
-      } finally {
-        setStatus(ScoringModuleStatus.COMPLETE);
       }
     },
     [dispatch, enqueueError, setStatus]
@@ -146,7 +146,7 @@ const ScoringModule = ({
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ScoringForm status={status} />
+        <ScoringForm status={status} readonly={readonly} />
       </form>
     </FormProvider>
   );

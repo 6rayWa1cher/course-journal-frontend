@@ -9,7 +9,10 @@ import {
   ListItemText,
   Box,
 } from '@mui/material';
-import { criteriaByTaskSelector } from '@redux/criteria';
+import {
+  criteriaByTaskSelector,
+  normalizedCriteriaByTaskSelector,
+} from '@redux/criteria';
 import { taskByIdSelector } from '@redux/tasks';
 import { Fragment, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -27,6 +30,7 @@ export interface ScoringTaskFormProps {
   asListItem?: boolean;
   open: boolean;
   onOpenClick: () => void;
+  readonly?: boolean;
 }
 
 const ScoringTaskForm = ({
@@ -34,6 +38,7 @@ const ScoringTaskForm = ({
   asListItem = false,
   open,
   onOpenClick,
+  readonly = false,
 }: ScoringTaskFormProps) => {
   const { watch, control } = useFormContext<BatchSetSubmissionsSchemaType>();
 
@@ -41,19 +46,18 @@ const ScoringTaskForm = ({
   const studentId = watch('studentId');
 
   const task = useParamSelector(taskByIdSelector, { taskId });
-  const criteria = useParamSelector(criteriaByTaskSelector, { taskId });
-  const normalizeConstant = useMemo(() => {
-    const sum = sumBy(criteria, 'criteriaPercent');
-    return sum != 0 ? 100 / sum : 0;
-  }, [criteria]);
+  const normalizedCriteria = useParamSelector(
+    normalizedCriteriaByTaskSelector,
+    { taskId }
+  );
   const criteriaItems = useMemo(
     () =>
-      criteria.map((c) => ({
-        id: c.id,
-        name: c.name,
-        subName: `${Math.round(c.criteriaPercent * normalizeConstant)}%`,
+      normalizedCriteria.map(({ id, name, criteriaPercent }) => ({
+        id,
+        name,
+        subName: `${criteriaPercent}%`,
       })),
-    [criteria, normalizeConstant]
+    [normalizedCriteria]
   );
   const submission = useParamSelector(submissionByStudentAndTaskSelector, {
     taskId,
@@ -66,6 +70,7 @@ const ScoringTaskForm = ({
         name={`submissions.${index}.satisfiedCriteria`}
         options={criteriaItems}
         control={control}
+        disabled={readonly}
         selectAll
       />
       {submission != null && (
@@ -78,6 +83,7 @@ const ScoringTaskForm = ({
             type="text"
             size="small"
             control={control}
+            disabled={readonly}
             required
             fullWidth
           />
@@ -92,6 +98,7 @@ const ScoringTaskForm = ({
             margin="normal"
             type="number"
             size="small"
+            disabled={readonly}
             fullWidth
             required
           />
