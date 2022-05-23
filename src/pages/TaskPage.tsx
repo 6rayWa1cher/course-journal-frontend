@@ -19,6 +19,7 @@ import {
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import BackButton from 'components/buttons/BackButton';
+import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm';
 import EditButton from 'components/buttons/EditButton';
 import EmptyListCaption from 'components/EmptyListCaption';
 import PreLoading from 'components/PreLoading';
@@ -30,7 +31,12 @@ import { TaskDto } from 'models/task';
 import { FC, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import { useMySnackbar, useParamSelector, useDocumentTitle } from 'utils/hooks';
+import {
+  useMySnackbar,
+  useParamSelector,
+  useDocumentTitle,
+  useBackLocation,
+} from 'utils/hooks';
 
 const TaskParam: FC<{
   name: string;
@@ -98,16 +104,26 @@ const TaskPage = ({ readonly = false }: TaskPageProps) => {
     () => navigate(`${pathname}/edit`),
     [navigate, pathname]
   );
+  const backPathname = useBackLocation();
   const handleDelete = useCallback(async () => {
     try {
       await dispatch(deleteTaskThunk({ taskId })).then(unwrapResult);
       enqueueSuccess(
         task != null ? `Задание ${task.title} удалено` : 'Задание удалено'
       );
+      navigate(backPathname, { replace: true });
     } catch (e) {
       defaultErrorEnqueue(e as Error, enqueueError);
     }
-  }, [dispatch, enqueueError, enqueueSuccess, task, taskId]);
+  }, [
+    backPathname,
+    dispatch,
+    enqueueError,
+    enqueueSuccess,
+    navigate,
+    task,
+    taskId,
+  ]);
 
   return (
     <Paper sx={{ p: 2 }}>
@@ -123,6 +139,15 @@ const TaskPage = ({ readonly = false }: TaskPageProps) => {
             {!readonly && (
               <Grid item>
                 <EditButton onClick={handleEditClick} />
+              </Grid>
+            )}
+            {!readonly && (
+              <Grid item>
+                <DeleteButtonWithConfirm
+                  onDelete={handleDelete}
+                  dialogTitle={`Удалить задание ${task?.title}`}
+                  dialogDescription="Эта операция необратима и приведет к удалению всех оценок этого задания"
+                />
               </Grid>
             )}
           </Grid>
