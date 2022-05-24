@@ -6,7 +6,7 @@ The frontend-part of the Course Journal project
 
 ## Docker image
 
-Clone the project into your computer:
+Clone the project on your computer:
 
 ```bash
 git clone https://github.com/6rayWa1cher/course-journal-frontend && cd course-journal-frontend
@@ -33,16 +33,16 @@ sudo apt update
 sudo apt install nodejs
 ```
 
-Clone the project into your computer:
+Clone the project on your computer:
 
 ```bash
 git clone https://github.com/6rayWa1cher/course-journal-frontend && cd course-journal-frontend
 ```
 
-Create and fill `.env`:
+Create and fill `.env`. Don't forget to replace the backend placeholder.
 
 ```bash
-REACT_APP_BACKEND_URL=<YOUR_BACKEND_URL>
+echo 'REACT_APP_BACKEND_URL=<YOUR_BACKEND_URL>' > .env
 ```
 
 Install yarn and download dependencies:
