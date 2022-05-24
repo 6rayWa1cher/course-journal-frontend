@@ -18,7 +18,7 @@ Then build an image using the following command. Don't forget to replace the bac
 docker build --build-arg REACT_APP_BACKEND_URL=<YOUR_BACKEND_URL> -t cj_front .
 ```
 
-Finally, start an image:
+Finally, start the image:
 
 ```bash
 docker run -p 80:80 -it cj_front
