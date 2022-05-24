@@ -12,7 +12,7 @@ Clone the project on your computer:
 git clone https://github.com/6rayWa1cher/course-journal-frontend && cd course-journal-frontend
 ```
 
-Then build an image using the following command. Don't forget to replace the backend placeholder.
+Then build an image using the following command. Don't forget to replace the backend placeholder without `<>`.
 
 ```bash
 docker build --build-arg REACT_APP_BACKEND_URL=<YOUR_BACKEND_URL> -t cj_front .
@@ -39,7 +39,7 @@ Clone the project on your computer:
 git clone https://github.com/6rayWa1cher/course-journal-frontend && cd course-journal-frontend
 ```
 
-Create and fill `.env`. Don't forget to replace the backend placeholder.
+Create and fill `.env`. Don't forget to replace the backend placeholder without `<>`.
 
 ```bash
 echo 'REACT_APP_BACKEND_URL=<YOUR_BACKEND_URL>' > .env
