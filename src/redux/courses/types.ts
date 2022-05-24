@@ -1,6 +1,6 @@
-import type { CourseDto, CourseId } from 'models/course';
+import { EntityState } from '@reduxjs/toolkit';
+import type { CourseDto, CourseFullDto, CourseId } from 'models/course';
 
-export interface CourseState {
-  entities: Record<CourseId, CourseDto>;
-  ids: CourseId[];
+export interface CourseState extends EntityState<CourseDto | CourseFullDto> {
+  resolved?: CourseId;
 }

@@ -11,6 +11,7 @@ export interface NativeSelectorProps<T extends NativeSelectorItem> {
   label: string;
   selected: number | null;
   onSelect: (id: number | null) => void;
+  disabled?: boolean;
 }
 
 const NativeSelector = <T extends NativeSelectorItem>({
@@ -18,6 +19,7 @@ const NativeSelector = <T extends NativeSelectorItem>({
   label,
   selected,
   onSelect,
+  disabled = false,
 }: NativeSelectorProps<T>) => {
   const trueSelected = useMemo(
     () => (selected == null ? '' : selected.toString()),
@@ -41,7 +43,7 @@ const NativeSelector = <T extends NativeSelectorItem>({
   );
 
   return (
-    <FormControl fullWidth>
+    <FormControl disabled={disabled} fullWidth>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         {label}
       </InputLabel>

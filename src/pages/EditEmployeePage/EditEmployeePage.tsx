@@ -1,5 +1,4 @@
 import { Container, Grid, Paper, Stack } from '@mui/material';
-import { authUserByEmployeeIdSelector } from '@redux/authUsers';
 import {
   deleteEmployeeThunk,
   employeeByIdSelector,
@@ -22,6 +21,7 @@ import DeleteButtonWithConfirm from 'components/buttons/DeleteButtonWithConfirm'
 import BackButton from 'components/buttons/BackButton';
 import PreLoading from 'components/PreLoading';
 import EditEmployeeModule from './EditEmployeeModule';
+import { authUserByEmployeeIdSelector } from '@redux/selector';
 
 const EditEmployeePage = () => {
   const params = useParams();
@@ -82,13 +82,17 @@ const EditEmployeePage = () => {
                 <Title>Редактирование преподавателя</Title>
               </Stack>
             </Grid>
-            <Grid item>
-              <DeleteButtonWithConfirm
-                onDelete={handleDeleteClick}
-                dialogTitle={`Удалить преподавателя ${formatFullNameWithInitials}?`}
-                dialogDescription="Эта операция необратима и приведет к удалению всех курсов преподавателя"
-              />
-            </Grid>
+            {employee != null && (
+              <Grid item>
+                <DeleteButtonWithConfirm
+                  onDelete={handleDeleteClick}
+                  dialogTitle={`Удалить преподавателя ${formatFullNameWithInitials(
+                    employee
+                  )}?`}
+                  dialogDescription="Эта операция необратима и приведет к удалению всех курсов преподавателя"
+                />
+              </Grid>
+            )}
           </Grid>
 
           {employee != null && (

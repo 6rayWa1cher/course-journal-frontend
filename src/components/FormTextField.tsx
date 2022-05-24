@@ -33,7 +33,7 @@ const FormTextField = <T extends FieldValues, J extends FieldPath<T>>({
       }) => (
         <TextField
           id={name}
-          value={value}
+          value={value ?? ''}
           onChange={onChange}
           onBlur={onBlur}
           inputRef={ref}

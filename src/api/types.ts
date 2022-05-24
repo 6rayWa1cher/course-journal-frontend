@@ -1,8 +1,10 @@
 import type { UserRole } from 'models/authUser';
 import type { CourseDto, CourseId } from 'models/course';
+import { CriteriaId } from 'models/criteria';
 import type { EmployeeRestDto, EmployeeDto, EmployeeId } from 'models/employee';
 import { GroupId } from 'models/group';
 import { StudentId } from 'models/student';
+import { TaskId } from 'models/task';
 
 // GENERIC TYPES
 export type SortType = 'asc' | 'desc';
@@ -73,13 +75,6 @@ export interface GetCoursesByOwnerIdRequest {
   pagination: PageRequest<keyof CourseDto>;
 }
 
-export interface CreateCourseRequest {
-  name: string;
-  owner: number;
-}
-
-export type EditCourseRequest = CreateCourseRequest;
-
 export type GetEmployeesRequest = PageRequest<keyof EmployeeDto>;
 
 export type PutEmployeeRequest = EmployeeRestDto;
@@ -98,11 +93,32 @@ export type CreateAuthUserRequest = AuthUserGenericPart &
 export type PatchAuthUserRequest = Partial<CreateAuthUserRequest>;
 
 export interface BatchCreateStudentRequest {
-  course: CourseId;
   group: GroupId;
   students: {
     firstName: string;
     lastName: string;
     middleName: string | null;
   }[];
+}
+
+export interface SetCriteriaForTaskRequest {
+  criteria: {
+    name: string;
+    criteriaPercent: number;
+  }[];
+}
+
+export interface SetSubmissionsForCourseAndStudentRequest {
+  courseId: CourseId;
+  studentId: StudentId;
+  submissions: {
+    task: TaskId;
+    satisfiedCriteria: CriteriaId[];
+    submittedAt: string;
+    additionalScore: number;
+  }[];
+}
+
+export interface ResolveCourseTokenRequest {
+  token: string;
 }

@@ -34,4 +34,7 @@ export const getFullName = ({
   firstName,
   lastName,
   middleName,
-}: FullName & object) => `${lastName} ${firstName} ${middleName}`;
+}: FullName & object) =>
+  middleName != null
+    ? `${lastName} ${firstName} ${middleName}`
+    : `${lastName} ${firstName}`;

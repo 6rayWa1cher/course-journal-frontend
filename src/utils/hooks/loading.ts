@@ -91,19 +91,22 @@ export type ActionCreator<ReturnType, ThunkArg> = () => AsyncThunkAction<
 >;
 
 export const useLoadingActionThunk = <ReturnType, ThunkArg>(
-  actionCreator: ActionCreator<ReturnType, ThunkArg>
+  actionCreator: ActionCreator<ReturnType, ThunkArg>,
+  when?: boolean
 ) => {
   const { enqueueError } = useMySnackbar();
 
   const dispatch = useAppDispatch();
-  const loadingAction = useCallback(
-    () =>
-      dispatch(actionCreator())
+  const loadingAction = useCallback(() => {
+    if (when == null || when) {
+      return dispatch(actionCreator())
         .then(unwrapResult)
         .catch((e: Error) => {
           defaultErrorEnqueue(e, enqueueError);
-        }),
-    [dispatch, actionCreator, enqueueError]
-  );
+        });
+    } else {
+      return Promise.resolve();
+    }
+  }, [dispatch, actionCreator, enqueueError, when]);
   return loadingAction;
 };

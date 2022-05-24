@@ -12,7 +12,7 @@ import {
 import { createAxiosAsyncThunk } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { setBag } from './action';
-import { loadUserDataThunk } from '@redux/authUsers';
+import { loadUserDataThunk } from '@redux/authUsers/thunk';
 import { LoginRequest } from 'api/types';
 
 export const loginThunk = createAxiosAsyncThunk(

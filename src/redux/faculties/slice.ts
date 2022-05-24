@@ -16,7 +16,7 @@ export const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllFacultiesThunk.fulfilled, (state, { payload }) => {
-      adapter.upsertMany(state, payload);
+      adapter.setAll(state, payload);
     });
     builder.addCase(deleteFacultyThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);

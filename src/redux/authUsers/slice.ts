@@ -2,11 +2,11 @@ import {
   createEmployeeWithAuthUserThunk,
   getEmployeeWithAuthUserThunk,
   putEmployeeWithAuthUserThunk,
-} from '@redux/employees';
+} from '@redux/employees/thunk';
 import {
   getStudentWithAuthUserThunk,
   putStudentWithAuthUserThunk,
-} from '@redux/students';
+} from '@redux/students/thunk';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { AuthUserDto } from 'models/authUser';
 import {

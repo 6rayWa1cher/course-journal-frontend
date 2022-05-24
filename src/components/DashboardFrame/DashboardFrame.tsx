@@ -12,7 +12,11 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { adminListItems, secondaryListItems } from './ListItems';
+import {
+  adminListItems,
+  secondaryListItems,
+  teacherListItems,
+} from './ListItems';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useMediaQuery } from '@mui/material';
@@ -96,9 +100,6 @@ const Drawer = styled(MuiDrawer, {
         duration: theme.transitions.duration.leavingScreen,
       }),
       width: theme.spacing(0),
-      // [theme.breakpoints.up("sm")]: {
-      //   width: theme.spacing(9),
-      // },
     }),
   },
 }));
@@ -124,18 +125,20 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             pr: '24px', // keep right padding when drawer closed
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {role != null && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <PathBreadcrumb largeScreen={largeScreen} sx={{ flexGrow: 1 }} />
           <LogoutButton />
         </Toolbar>
@@ -155,7 +158,10 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>{role === UserRole.ADMIN && adminListItems}</List>
+          <List>
+            {role === UserRole.ADMIN && adminListItems}
+            {role === UserRole.TEACHER && teacherListItems}
+          </List>
           <Divider />
           <List>{secondaryListItems}</List>
           <Divider />

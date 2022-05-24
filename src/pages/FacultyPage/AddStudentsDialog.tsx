@@ -28,8 +28,6 @@ export interface AddStudentsDialogProps {
   setOpen: (open: boolean) => void;
 }
 
-const dummyCourseId = 5; // backend-side bug
-
 const AddStudentsDialog = ({
   groupId,
   open,
@@ -64,7 +62,6 @@ const AddStudentsDialog = ({
           batchCreateStudentThunk({
             students: preparedStudents,
             group: groupId,
-            course: dummyCourseId,
           })
         ).then(unwrapResult);
         enqueueSuccess(`Создано ${students.length} студентов`);
@@ -108,6 +105,7 @@ const AddStudentsDialog = ({
             variant="standard"
             required
             multiline
+            rows={4}
           />
         </DialogContent>
         <DialogActions>

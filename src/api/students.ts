@@ -1,4 +1,5 @@
 import { AxiosPromise } from 'axios';
+import { CourseId } from 'models/course';
 import { GroupId } from 'models/group';
 import { StudentDto, StudentId, StudentRestDto } from 'models/student';
 import { mainAxios } from './helpers/myaxios';
@@ -11,6 +12,11 @@ export const getStudentByIdApi = (
 export const getStudentsByGroupIdApi = (
   groupId: GroupId
 ): AxiosPromise<StudentDto[]> => mainAxios.get(`/students/group/${groupId}`);
+
+export const getAllStudentsByCourseIdApi = (
+  courseId: CourseId
+): AxiosPromise<StudentDto[]> =>
+  mainAxios.get(`/students/course/${courseId}/all`);
 
 export const createStudentApi = (
   data: StudentRestDto
@@ -25,6 +31,5 @@ export const putStudentApi = (
   data: StudentRestDto
 ): AxiosPromise<StudentDto> => mainAxios.put(`/students/${studentId}`, data);
 
-export const deleteStudentApi = (
-  studentId: StudentId
-): AxiosPromise<StudentDto> => mainAxios.delete(`/students/${studentId}`);
+export const deleteStudentApi = (studentId: StudentId): AxiosPromise<void> =>
+  mainAxios.delete(`/students/${studentId}`);

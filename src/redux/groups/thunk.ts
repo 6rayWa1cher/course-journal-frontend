@@ -3,9 +3,11 @@ import {
   createGroupApi,
   deleteGroupApi,
   getGroupByIdApi,
+  getGroupsByCourseIdApi,
   getGroupsByFacultyIdApi,
   putGroupApi,
 } from 'api/groups';
+import { CourseId } from 'models/course';
 import { FacultyId } from 'models/faculty';
 import { GroupId, GroupRestDto } from 'models/group';
 
@@ -26,9 +28,21 @@ export interface GetGroupsByFacultyIdArgs {
 }
 
 export const getGroupsByFacultyIdThunk = createAxiosAsyncThunk(
-  'groups/getAll',
+  'groups/getByFaculty',
   async ({ facultyId }: GetGroupsByFacultyIdArgs) => {
     const data = (await getGroupsByFacultyIdApi(facultyId)).data;
+    return data;
+  }
+);
+
+export interface GetGroupsByCourseIdArgs {
+  courseId: CourseId;
+}
+
+export const getGroupsByCourseIdThunk = createAxiosAsyncThunk(
+  'groups/getByCourse',
+  async ({ courseId }: GetGroupsByCourseIdArgs) => {
+    const data = (await getGroupsByCourseIdApi(courseId)).data;
     return data;
   }
 );

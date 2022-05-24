@@ -1,3 +1,4 @@
+import { parseRuDateTime } from 'utils/date';
 import * as yup from 'yup';
 
 yup.setLocale({
@@ -10,5 +11,12 @@ yup.setLocale({
     email: 'Ожидается правильный email',
   },
 });
+
+export function transformDate(this: any, value: Date, original: string) {
+  if (this.isType(value) && value != null) {
+    return value;
+  }
+  return original ? parseRuDateTime(original) : undefined;
+}
 
 export default yup;
