@@ -15,18 +15,13 @@ import Title from 'components/Title';
 import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
-import {
-  useBackLocation,
-  useDocumentTitle,
-  useMySnackbar,
-  useParamSelector,
-} from 'utils/hooks';
+import { useDocumentTitle, useMySnackbar, useParamSelector } from 'utils/hooks';
 
 export interface TeacherTasksPageProps {
   readonly?: boolean;
 }
 
-const TeacherTasksPage = ({ readonly = false }: TeacherTasksPageProps) => {
+const TaskListPage = ({ readonly = false }: TeacherTasksPageProps) => {
   const params = useParams();
 
   const courseId = Number(params.courseId);
@@ -106,4 +101,4 @@ const TeacherTasksPage = ({ readonly = false }: TeacherTasksPageProps) => {
   );
 };
 
-export default TeacherTasksPage;
+export default TaskListPage;

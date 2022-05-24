@@ -25,11 +25,10 @@ import EmptyListCaption from 'components/EmptyListCaption';
 import PreLoading from 'components/PreLoading';
 import SubTitle from 'components/SubTitle';
 import Title from 'components/Title';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
 import { TaskDto } from 'models/task';
 import { FC, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { formatRuDateTime } from 'utils/date';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useMySnackbar,
@@ -175,13 +174,7 @@ const TaskPage = ({ readonly = false }: TaskPageProps) => {
               <Grid item xs={12} md={6}>
                 <TaskParam
                   name="Мягкий крайний срок"
-                  value={format(
-                    new Date(task.softDeadlineAt),
-                    'dd.MM.yyyy HH:mm',
-                    {
-                      locale: ru,
-                    }
-                  )}
+                  value={formatRuDateTime(task.softDeadlineAt)}
                 />
               </Grid>
             )}
@@ -189,13 +182,7 @@ const TaskPage = ({ readonly = false }: TaskPageProps) => {
               <Grid item xs={12} md={6}>
                 <TaskParam
                   name="Жесткий крайний срок"
-                  value={format(
-                    new Date(task.hardDeadlineAt),
-                    'dd.MM.yyyy HH:mm',
-                    {
-                      locale: ru,
-                    }
-                  )}
+                  value={formatRuDateTime(task.hardDeadlineAt)}
                 />
               </Grid>
             )}

@@ -24,7 +24,7 @@ import CourseSelectorPage from 'pages/CourseSelectorPage';
 import IndexRedirect from './IndexRedirect';
 import CreateCoursePage from 'pages/CreateCoursePage';
 import CoursePage from 'pages/CoursePage';
-import TeacherTasksPage from 'pages/TeacherTasksPage';
+import TaskListPage from 'pages/TaskListPage';
 import CreateTaskPage from 'pages/CreateTaskPage';
 import { LocalizationProvider } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -96,7 +96,7 @@ const App = () => (
                   <Route index element={<CoursePage />} />
                   <Route path="edit" element={<EditCoursePage />} />
                   <Route path="tasks">
-                    <Route index element={<TeacherTasksPage />} />
+                    <Route index element={<TaskListPage />} />
                     <Route path="create" element={<CreateTaskPage />} />
                     <Route path=":taskId">
                       <Route index element={<TaskPage />} />
@@ -124,7 +124,7 @@ const App = () => (
                 <Route path=":courseId">
                   <Route index element={<CourseTokenCoursePage />} />
                   <Route path="tasks">
-                    <Route index element={<TeacherTasksPage readonly />} />
+                    <Route index element={<TaskListPage readonly />} />
                     <Route path=":taskId" element={<TaskPage readonly />} />
                   </Route>
                   <Route

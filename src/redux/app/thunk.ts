@@ -36,7 +36,7 @@ export const initAppThunk = createTypedAsyncThunk(
         await dispatch(resolveCourseTokenThunk({ token })).then(unwrapResult);
       }
     } catch (err) {
-      console.log('Emitting logout in response to ', err);
+      console.warn('Emitting logout in response to ', err);
       dispatch(eraseBag());
     }
   }

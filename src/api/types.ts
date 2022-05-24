@@ -93,7 +93,6 @@ export type CreateAuthUserRequest = AuthUserGenericPart &
 export type PatchAuthUserRequest = Partial<CreateAuthUserRequest>;
 
 export interface BatchCreateStudentRequest {
-  course: CourseId;
   group: GroupId;
   students: {
     firstName: string;

@@ -97,7 +97,7 @@ type NavigationContextWithBlock = ContextType<typeof NavigationContext> & {
 /**
  * @source https://github.com/remix-run/react-router/commit/256cad70d3fd4500b1abcfea66f3ee622fb90874
  */
-export function useBlocker(blocker: Blocker, when = true) {
+export const useBlocker = (blocker: Blocker, when = true) => {
   const { navigator } = useContext(
     NavigationContext
   ) as NavigationContextWithBlock;
@@ -124,12 +124,12 @@ export function useBlocker(blocker: Blocker, when = true) {
 
     return unblock;
   }, [navigator, blocker, when]);
-}
+};
 
 /**
  * @source https://github.com/remix-run/react-router/issues/8139#issuecomment-1021457943
  */
-export function usePrompt(
+export const usePrompt = (
   message:
     | string
     | ((
@@ -137,7 +137,7 @@ export function usePrompt(
         action: Transition['action']
       ) => string),
   when = true
-) {
+) => {
   const blocker = useCallback(
     (tx: Transition) => {
       let response;
@@ -156,7 +156,7 @@ export function usePrompt(
     [message]
   );
   return useBlocker(blocker, when);
-}
+};
 
 export const useBackLocation = () => {
   const location = useLocation();

@@ -19,9 +19,8 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       getGroupsByCourseIdThunk.fulfilled,
-      (state, { payload, meta }) => {
-        const course = meta.arg.courseId;
-        adapter.removeMany(state, getAllIdsBy(state.entities, { course }));
+      (state, { payload }) => {
+        adapter.removeAll(state);
         adapter.addMany(state, payload);
       }
     );

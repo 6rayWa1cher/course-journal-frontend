@@ -2,11 +2,7 @@ import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
 import { SubmissionDto, SubmissionId } from 'models/submission';
 import { studentIdFromParamsSelector } from '@redux/students';
-import {
-  taskByIdSelector,
-  taskIdFromParamsSelector,
-  tasksByCourseSelector,
-} from '@redux/tasks';
+import { taskIdFromParamsSelector, tasksByCourseSelector } from '@redux/tasks';
 import { find } from 'lodash';
 
 export const submissionsSelector = (state: RootState) => state.submissions;
