@@ -37,15 +37,10 @@ import CourseTokenLoader from './CourseTokenLoader';
 import CourseTokenRedirect from './CourseTokenRedirect';
 import CourseTokenCoursePage from 'pages/CourseTokenCoursePage';
 import TaskPage from 'pages/TaskPage';
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
+import LocalThemeProvider from './LocalThemeProvider';
 
 const App = () => (
-  <ThemeProvider theme={darkTheme}>
+  <LocalThemeProvider>
     <LocalizationProvider locale={ru} dateAdapter={AdapterDateFns}>
       <CssBaseline enableColorScheme />
       <PreloaderWrapper>
@@ -150,7 +145,7 @@ const App = () => (
       </PreloaderWrapper>
       <ToastContainer />
     </LocalizationProvider>
-  </ThemeProvider>
+  </LocalThemeProvider>
 );
 
 export default App;

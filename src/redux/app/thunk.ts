@@ -7,6 +7,7 @@ import { eraseBag, loadBag } from '@redux/auth/slice';
 import { loadUserDataThunk } from '@redux/authUsers/thunk';
 import { resolveCourseTokenThunk } from '@redux/courseTokens/thunk';
 import { createTypedAsyncThunk } from '@redux/utils';
+import { loadVisualState } from '@redux/visual/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { AuthUserId } from 'models/authUser';
 import { appSelector } from './selector';
@@ -25,6 +26,7 @@ export const initAppThunk = createTypedAsyncThunk(
     if (loggedInWithSelector(getState()) == null) {
       dispatch(loadBag());
     }
+    dispatch(loadVisualState());
     const authMethod = loggedInWithSelector(getState());
     console.debug('logged in with', authMethod);
     try {
@@ -38,6 +40,7 @@ export const initAppThunk = createTypedAsyncThunk(
     } catch (err) {
       console.warn('Emitting logout in response to ', err);
       dispatch(eraseBag());
+      throw err;
     }
   }
 );

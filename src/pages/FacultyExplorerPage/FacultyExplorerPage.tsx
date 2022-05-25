@@ -22,6 +22,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Title from 'components/Title';
 import { getAllFacultiesThunk } from '@redux/faculties';
 import CreateFacultyDialog from './CreateFacultyDialog';
+import BackButton from 'components/buttons/BackButton';
 
 const FacultyExplorerPage = () => {
   useDocumentTitle('Факультеты');
@@ -55,6 +56,9 @@ const FacultyExplorerPage = () => {
     <Paper sx={{ p: 2 }}>
       <Grid container justifyContent="space-between" spacing={2}>
         <Grid item>
+          <BackButton />
+        </Grid>
+        <Grid item xs>
           <Title>Факультеты</Title>
         </Grid>
         <Grid item>

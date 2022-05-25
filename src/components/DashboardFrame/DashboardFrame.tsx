@@ -24,6 +24,7 @@ import PathBreadcrumb from './PathBreadcrumb';
 import { useSelector } from 'react-redux';
 import { selfAuthUserSelector } from '@redux/authUsers';
 import { UserRole } from 'models/authUser';
+import ThemeToggle from 'components/ThemeToggle';
 
 const Copyright = (props: TypographyProps) => {
   const yearRange = (() => {
@@ -125,20 +126,18 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             pr: '24px', // keep right padding when drawer closed
           }}
         >
-          {role != null && (
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: '36px',
+              ...(open && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
           <PathBreadcrumb largeScreen={largeScreen} sx={{ flexGrow: 1 }} />
           <LogoutButton />
         </Toolbar>
@@ -158,15 +157,22 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>
-            {role === UserRole.ADMIN && adminListItems}
-            {role === UserRole.TEACHER && teacherListItems}
-          </List>
-          <Divider />
-          <List>{secondaryListItems}</List>
-          <Divider />
+          {role != null && (
+            <>
+              <List>
+                {role === UserRole.ADMIN && adminListItems}
+                {role === UserRole.TEACHER && teacherListItems}
+              </List>
+              <Divider />
+              <List>{secondaryListItems}</List>
+              <Divider />
+            </>
+          )}
+          <Container maxWidth="xs" sx={{ pt: 2 }}>
+            <ThemeToggle />
+          </Container>
           <Container maxWidth="xs" sx={{ whiteSpace: 'normal' }}>
-            <Copyright sx={{ pt: 4 }} />
+            <Copyright sx={{ pt: 2 }} />
           </Container>
         </Container>
       </Drawer>

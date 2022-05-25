@@ -15,6 +15,7 @@ import tasks from './tasks/slice';
 import criteria from './criteria/slice';
 import submissions from './submissions/slice';
 import courseTokens from './courseTokens/slice';
+import visual from './visual/slice';
 
 const store = (() => {
   const reducer = combineReducers({
@@ -30,6 +31,7 @@ const store = (() => {
     tasks,
     submissions,
     courseTokens,
+    visual,
   });
 
   const store = configureStore({ reducer });
