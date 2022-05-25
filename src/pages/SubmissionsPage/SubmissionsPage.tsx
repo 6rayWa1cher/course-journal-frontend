@@ -3,7 +3,7 @@ import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
 import { getCriteriaByCourseIdThunk } from '@redux/criteria';
 import {
   getAllStudentsByCourseIdThunk,
-  studentsByCourseSelector,
+  studentsByCourseAlphabeticalSelector,
 } from '@redux/students';
 import { getSubmissionsByCourseAndStudentThunk } from '@redux/submissions';
 import { getTasksByCourseIdThunk } from '@redux/tasks';
@@ -16,10 +16,9 @@ import PreLoading from 'components/PreLoading';
 import Scrollable from 'components/Scrollable';
 import Title from 'components/Title';
 import { useCallback, useState } from 'react';
-import { Params, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
-  useBackLocation,
   useDocumentTitle,
   useLoadingActionThunk,
   useMySnackbar,
@@ -81,7 +80,9 @@ const SubmissionsPage = ({ readonly = false }: SubmissionsPageProps) => {
   );
   const sideLoadingAction = useLoadingActionThunk(sideLoadingThunk);
 
-  const students = useParamSelector(studentsByCourseSelector, { courseId });
+  const students = useParamSelector(studentsByCourseAlphabeticalSelector, {
+    courseId,
+  });
   const studentItems = students.map((item) => ({
     id: item.id,
     name: formatFullNameWithInitials(item),

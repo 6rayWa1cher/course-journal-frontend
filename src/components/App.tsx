@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import MainElement from './MainElement';
 import { Stage } from '@redux/app';
 import Logout from './Logout';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserRole } from 'models/authUser';
 import RoleRoute from './RoleRoute';
 import EmployeeExplorerPage from 'pages/EmployeeExplorerPage';

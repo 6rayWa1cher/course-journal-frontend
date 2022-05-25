@@ -55,6 +55,14 @@ export const studentsByGroupAlphabeticalSelector = createSelector(
       .sort((a, b) => getFullName(a).localeCompare(getFullName(b)))
 );
 
+export const studentsByCourseAlphabeticalSelector = createSelector(
+  studentsByCourseSelector,
+  (students) =>
+    students
+      .filter((student): student is StudentDto => !!student)
+      .sort((a, b) => getFullName(a).localeCompare(getFullName(b)))
+);
+
 export const studentInitialsByIdSelector = createSelector(
   studentByIdSelector,
   (student) => (student != null ? formatFullNameWithInitials(student) : null)

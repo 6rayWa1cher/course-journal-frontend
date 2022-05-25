@@ -2,7 +2,6 @@ import { Paper, Container, Grid } from '@mui/material';
 import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
 import {
   getTasksByCourseIdThunk,
-  tasksByCourseSelector,
   tasksByCourseTaskNumberSortSelector,
 } from '@redux/tasks';
 import { useAppDispatch } from '@redux/utils';

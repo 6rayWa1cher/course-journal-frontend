@@ -9,10 +9,7 @@ import {
   ListItemText,
   Box,
 } from '@mui/material';
-import {
-  criteriaByTaskSelector,
-  normalizedCriteriaByTaskSelector,
-} from '@redux/criteria';
+import { normalizedCriteriaByTaskSelector } from '@redux/criteria';
 import { taskByIdSelector } from '@redux/tasks';
 import { Fragment, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -21,7 +18,6 @@ import { BatchSetSubmissionsSchemaType } from 'validation/yup/submission';
 import ListCheckboxes from 'components/ListCheckboxes';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { submissionByStudentAndTaskSelector } from '@redux/submissions';
-import { sumBy } from 'lodash';
 import FormTextField from 'components/FormTextField';
 import FormDateTimePicker from 'components/FormDateTimePicker';
 

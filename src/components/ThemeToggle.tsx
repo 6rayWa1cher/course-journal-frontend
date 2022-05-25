@@ -12,7 +12,11 @@ const ThemeToggle = () => {
 
   const dispatch = useAppDispatch();
   const handleThemeToggle = useCallback(
-    (_: unknown, mode: ThemeMode) => dispatch(setThemeMode(mode)),
+    (_: unknown, mode: ThemeMode | null) => {
+      if (mode != null) {
+        dispatch(setThemeMode(mode));
+      }
+    },
     [dispatch]
   );
 
