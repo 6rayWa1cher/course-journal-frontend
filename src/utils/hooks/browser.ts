@@ -164,6 +164,7 @@ export const useBackLocation = () => {
     const pathname = location.pathname.endsWith('/')
       ? location.pathname.substring(0, location.pathname.length - 2)
       : location.pathname;
-    return pathname.substring(0, pathname.lastIndexOf('/'));
+    const substring = pathname.substring(0, pathname.lastIndexOf('/'));
+    return substring.length > 0 ? substring : '/';
   }, [location.pathname]);
 };
