@@ -12,6 +12,7 @@ import faculties from './faculties/slice';
 import groups from './groups/slice';
 import students from './students/slice';
 import tasks from './tasks/slice';
+import attendance from './attendance/slice';
 
 const store = (() => {
   const reducer = combineReducers({
@@ -24,6 +25,7 @@ const store = (() => {
     groups,
     students,
     tasks,
+    attendance,
   });
 
   const store = configureStore({ reducer });

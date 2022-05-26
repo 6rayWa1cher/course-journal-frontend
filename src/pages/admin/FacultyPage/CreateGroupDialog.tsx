@@ -27,8 +27,6 @@ export interface CreateGroupDialogProps {
   onSuccess?: (data: GroupDto) => void;
 }
 
-const dummyCourseId = 5; // backend-side bug
-
 const CreateGroupDialog = ({
   facultyId,
   open,
@@ -59,7 +57,6 @@ const CreateGroupDialog = ({
           createGroupThunk({
             ...data,
             faculty: facultyId,
-            course: dummyCourseId,
           })
         ).then(unwrapResult);
         enqueueSuccess(`Группа ${data.name} создана`);

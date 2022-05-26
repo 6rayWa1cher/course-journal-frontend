@@ -1,5 +1,6 @@
 import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
+import { courseNameByIdSelector } from '@redux/courses';
 import { employeeInitialsByIdSelector } from '@redux/employees';
 import { facultyNameByIdSelector } from '@redux/faculties';
 import { studentInitialsByIdSelector } from '@redux/students';
@@ -13,6 +14,8 @@ const localizationTable: Record<string, string> = {
   faculties: 'Факультеты',
   students: 'Студенты',
   settings: 'Настройки',
+  courses: 'Курсы',
+  attendance: 'Посещаемость',
 };
 
 type IdsLocalizationTable = Record<string, string>;
@@ -51,7 +54,9 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
   const student = useParamSelector(studentInitialsByIdSelector, {
     studentId: Number(params.studentId),
   });
-
+  const course = useParamSelector(courseNameByIdSelector, {
+    courseId: Number(params.courseId),
+  });
   const parts = useMemo(() => {
     const pathname = location.pathname === '/' ? '' : location.pathname;
     const blocks = pathname.split('/');
@@ -60,6 +65,7 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
         [params.facultyId, faculty],
         [params.employeeId, employee],
         [params.studentId, student],
+        [params.courseId, course],
       ].filter(([k, v]) => k != null && v != null)
     );
     return blocks.map((b, i, arr) => ({
@@ -73,6 +79,8 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
     params.employeeId,
     params.facultyId,
     params.studentId,
+    params.courseId,
+    course,
     student,
   ]);
 

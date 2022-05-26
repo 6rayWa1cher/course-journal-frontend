@@ -1,6 +1,6 @@
 import { selfAuthUserSelector } from '@redux/authUsers';
 import { UserRole } from 'models/authUser';
-import AdminMainPage from 'pages/AdminMainPage';
+import AdminMainPage from 'pages/admin/AdminMainPage';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 

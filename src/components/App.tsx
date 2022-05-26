@@ -15,27 +15,28 @@ import 'react-toastify/dist/ReactToastify.css';
 import MainElement from './MainElement';
 import { Stage } from '@redux/app';
 import Logout from './Logout';
-import AdminMainPage from 'pages/AdminMainPage';
+import AdminMainPage from 'pages/admin/AdminMainPage';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserRole } from 'models/authUser';
 import RoleRoute from './RoleRoute';
-import EmployeeExplorerPage from 'pages/EmployeeExplorerPage';
-import EditEmployeePage from 'pages/EditEmployeePage';
-import CreateEmployeePage from 'pages/CreateEmployeePage';
-import FacultyExplorerPage from 'pages/FacultyExplorerPage';
-import FacultyPage from 'pages/FacultyPage';
+import EmployeeExplorerPage from 'pages/admin/EmployeeExplorerPage';
+import EditEmployeePage from 'pages/admin/EditEmployeePage';
+import CreateEmployeePage from 'pages/admin/CreateEmployeePage';
+import FacultyExplorerPage from 'pages/admin/FacultyExplorerPage';
+import FacultyPage from 'pages/admin/FacultyPage';
 import { CssBaseline } from '@mui/material';
-import StudentPage from 'pages/StudentPage';
+import StudentPage from 'pages/admin/StudentPage';
 import SettingsPage from 'pages/SettingsPage';
-import CourseSelectorPage from 'pages/CourseSelectorPage';
+import CourseSelectorPage from 'pages/teacher/CourseSelectorPage';
 import IndexRedirect from './IndexRedirect';
-import CreateCoursePage from 'pages/CreateCoursePage';
-import CoursePage from 'pages/CoursePage';
-import TeacherTasksPage from 'pages/TeacherTasksPage';
-import CreateTaskPage from 'pages/CreateTaskPage';
+import CreateCoursePage from 'pages/teacher/CreateCoursePage';
+import CoursePage from 'pages/teacher/CoursePage';
+import TeacherTasksPage from 'pages/teacher/TeacherTasksPage';
+import CreateTaskPage from 'pages/teacher/CreateTaskPage';
 import { LocalizationProvider } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale';
+import AttendanceJournal from 'pages/teacher/AttendanceJournal';
 
 const darkTheme = createTheme({
   palette: {
@@ -97,6 +98,7 @@ const App = () => (
                     <Route index element={<TeacherTasksPage />} />
                     <Route path="create" element={<CreateTaskPage />} />
                   </Route>
+                  <Route path="attendance" element={<AttendanceJournal />} />
                 </Route>
               </Route>
 

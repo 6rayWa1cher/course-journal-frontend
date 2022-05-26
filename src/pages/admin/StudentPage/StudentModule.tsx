@@ -72,7 +72,6 @@ const StudentModule = ({
             firstName,
             middleName,
             lastName,
-            course: student.course,
             group: student.group,
           },
           headman,
@@ -108,7 +107,6 @@ const StudentModule = ({
       dispatch,
       enqueueError,
       enqueueSuccess,
-      student.course,
       student.group,
       student.id,
     ]

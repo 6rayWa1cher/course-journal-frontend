@@ -23,7 +23,7 @@ export const initAppThunk = createTypedAsyncThunk(
       try {
         await dispatch(loadUserDataThunk({ authUserId })).then(unwrapResult);
       } catch (err) {
-        console.log('Emitting logout in response to ', err);
+        console.error('Emitting logout in response to ', err);
         dispatch(eraseBag());
       }
     }

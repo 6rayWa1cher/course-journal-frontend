@@ -1,11 +1,9 @@
-import { CourseId } from './course';
 import { GroupId } from './group';
 
 export type StudentId = number;
 
 export interface StudentDto {
   id: StudentId;
-  course: CourseId;
   group: GroupId;
   firstName: string;
   lastName: string;

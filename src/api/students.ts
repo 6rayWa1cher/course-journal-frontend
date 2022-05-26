@@ -1,4 +1,5 @@
 import { AxiosPromise } from 'axios';
+import { CourseId } from 'models/course';
 import { GroupId } from 'models/group';
 import { StudentDto, StudentId, StudentRestDto } from 'models/student';
 import { mainAxios } from './helpers/myaxios';
@@ -11,6 +12,11 @@ export const getStudentByIdApi = (
 export const getStudentsByGroupIdApi = (
   groupId: GroupId
 ): AxiosPromise<StudentDto[]> => mainAxios.get(`/students/group/${groupId}`);
+
+export const getStudentsByCourseIdApi = (
+  courseId: CourseId
+): AxiosPromise<StudentDto[]> =>
+  mainAxios.get(`/students/course/${courseId}/all`);
 
 export const createStudentApi = (
   data: StudentRestDto

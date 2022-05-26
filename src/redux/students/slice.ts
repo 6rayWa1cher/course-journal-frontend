@@ -1,3 +1,4 @@
+import { getCourseByIdWithItsStudentsThunk } from '@redux/courses';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { StudentDto } from 'models/student';
 import {
@@ -47,6 +48,13 @@ export const slice = createSlice({
       ),
       (state, { payload }) => {
         adapter.upsertMany(state, payload);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(getCourseByIdWithItsStudentsThunk.fulfilled),
+      (state, { payload }) => {
+        const students = payload.students;
+        if (students != null) adapter.upsertMany(state, students);
       }
     );
   },

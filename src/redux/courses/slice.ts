@@ -4,10 +4,11 @@ import {
   deleteCourseThunk,
   getCourseByEmployeePageThunk,
   getCourseByIdThunk,
+  getCourseByIdWithItsStudentsThunk,
 } from './thunk';
-import { CourseDto } from 'models/course';
+import { CourseDto, CourseFullDto } from 'models/course';
 
-export const adapter = createEntityAdapter<CourseDto>();
+export const adapter = createEntityAdapter<CourseDto | CourseFullDto>();
 
 export const slice = createSlice({
   name: 'courses',
@@ -27,6 +28,12 @@ export const slice = createSlice({
       isAnyOf(createCourseThunk.fulfilled, getCourseByIdThunk.fulfilled),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(getCourseByIdWithItsStudentsThunk.fulfilled),
+      (state, { payload }) => {
+        adapter.upsertOne(state, payload.course);
       }
     );
   },

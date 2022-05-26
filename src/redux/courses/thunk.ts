@@ -5,6 +5,8 @@ import {
   getCoursesByOwnerApi,
   postCourseApi,
 } from 'api/courses';
+import { isAxiosError } from 'api/helpers/utils';
+import { getStudentsByCourseIdApi } from 'api/students';
 import { GetCoursesByOwnerIdRequest } from 'api/types';
 import { CourseId, CourseRestDto } from 'models/course';
 
@@ -25,6 +27,22 @@ export const getCourseByIdThunk = createAxiosAsyncThunk(
   async ({ courseId }: CourseIdOnly) => {
     const data = (await getCourseByIdApi(courseId)).data;
     return data;
+  }
+);
+
+export const getCourseByIdWithItsStudentsThunk = createAxiosAsyncThunk(
+  'course/getWithItsStudents',
+  async ({ courseId }: CourseIdOnly) => {
+    const course = (await getCourseByIdApi(courseId)).data;
+    try {
+      const students = (await getStudentsByCourseIdApi(courseId)).data;
+      return { course, students };
+    } catch (e) {
+      if (isAxiosError(e) && e.response?.status === 404) {
+        return { course };
+      }
+      throw e;
+    }
   }
 );
 

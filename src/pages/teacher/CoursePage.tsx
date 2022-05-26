@@ -16,10 +16,11 @@ import {
   useMySnackbar,
   useParamSelector,
 } from 'utils/hooks';
-import { deleteCourseThunk } from '../redux/courses/thunk';
+import { deleteCourseThunk } from '../../redux/courses/thunk';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 const CoursePage = () => {
   const params = useParams();
@@ -63,6 +64,11 @@ const CoursePage = () => {
         title: 'Задания',
         link: `/courses/${courseId}/tasks`,
         Icon: AssignmentIcon,
+      },
+      {
+        title: 'Журнал посемости',
+        link: `/courses/${courseId}/attendance`,
+        Icon: MenuBookIcon,
       },
     ],
     [courseId]
