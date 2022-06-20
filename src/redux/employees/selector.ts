@@ -9,6 +9,7 @@ export const employeeIdFromParamsSelector = (
   _: unknown,
   { employeeId }: { employeeId?: EmployeeId }
 ) => employeeId ?? -1;
+
 export const employeeIdsFromParamsSelector = (
   _: unknown,
   { ids }: { ids: EmployeeId[] }

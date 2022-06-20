@@ -6,12 +6,13 @@ import { compact } from 'lodash';
 import { StudentDto, StudentId } from 'models/student';
 import { formatFullNameWithInitials, getFullName } from 'utils/string';
 
-const studentsSelector = (state: RootState) => state.students;
+export const studentsSelector = (state: RootState) => state.students;
 
 export const studentIdFromParamsSelector = (
   _: unknown,
   { studentId }: { studentId?: StudentId }
 ) => studentId ?? -1;
+
 export const studentIdsFromParamsSelector = (
   _: unknown,
   { ids }: { ids: StudentId[] }

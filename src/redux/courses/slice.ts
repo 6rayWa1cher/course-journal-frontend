@@ -3,6 +3,7 @@ import {
   createCourseThunk,
   deleteCourseThunk,
   getCourseByEmployeePageThunk,
+  getCourseByGroupPageThunk,
   getCourseByIdThunk,
   getCourseByIdWithItsStudentsThunk,
 } from './thunk';
@@ -49,6 +50,14 @@ export const slice = createSlice({
       isAnyOf(getCourseByEmployeePageThunk.fulfilled),
       (state, { payload, meta }) => {
         const owner = meta.arg.employeeId;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { owner }));
+        adapter.upsertMany(state, payload.content);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(getCourseByGroupPageThunk.fulfilled),
+      (state, { payload }) => {
+        const owner = payload.content[0].owner;
         adapter.removeMany(state, getAllIdsBy(state.entities, { owner }));
         adapter.upsertMany(state, payload.content);
       }

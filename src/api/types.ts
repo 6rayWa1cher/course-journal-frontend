@@ -75,6 +75,11 @@ export interface GetCoursesByOwnerIdRequest {
   pagination: PageRequest<keyof CourseDto>;
 }
 
+export interface GetCoursesByGroupIdRequest {
+  groupId: GroupId;
+  pagination: PageRequest<keyof CourseDto>;
+}
+
 export type GetEmployeesRequest = PageRequest<keyof EmployeeDto>;
 
 export type PutEmployeeRequest = EmployeeRestDto;

@@ -9,6 +9,7 @@ export const groupIdFromParamsSelector = (
   _: unknown,
   { groupId }: { groupId?: GroupId }
 ) => groupId ?? -1;
+
 export const groupIdsFromParamsSelector = (
   _: unknown,
   { ids }: { ids: GroupId[] }

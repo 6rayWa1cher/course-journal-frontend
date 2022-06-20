@@ -13,6 +13,7 @@ const IndexRedirect = () => {
     <>
       {userRole === UserRole.ADMIN && <AdminMainPage />}
       {userRole === UserRole.TEACHER && <Navigate to="/courses" replace />}
+      {userRole === UserRole.HEADMAN && <Navigate to="/headman" replace />}
       {courseToken !== null && <Navigate to={`/ct/${courseToken}/`} replace />}
     </>
   );

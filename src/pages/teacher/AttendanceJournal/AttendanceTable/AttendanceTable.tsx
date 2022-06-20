@@ -7,7 +7,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button, styled } from '@mui/material';
-import SelectCell from './SelectCell';
 import {
   AttendanceTableBodyElement,
   AttendanceTableConflict,
@@ -22,6 +21,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddButton from 'components/buttons/AddButton';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import SelectCell from 'components/SelectCell';
 
 interface AttendanceTableProps {
   table: AttendanceTableDto;

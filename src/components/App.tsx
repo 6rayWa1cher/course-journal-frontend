@@ -38,6 +38,7 @@ import CourseTokenCoursePage from 'pages/CourseTokenCoursePage';
 import TaskPage from 'pages/TaskPage';
 import LocalThemeProvider from './LocalThemeProvider';
 import AttendanceJournal from 'pages/teacher/AttendanceJournal';
+import HeadmanCourseSelectorPage from 'pages/headman/HeadmanCourseSelectorPage';
 
 const App = () => (
   <LocalThemeProvider>
@@ -102,6 +103,17 @@ const App = () => (
                   <Route path="submissions" element={<SubmissionsPage />} />
                   <Route path="settings" element={<CourseSettingsPage />} />
                 </Route>
+              </Route>
+
+              <Route
+                path="headman"
+                element={
+                  <RoleRoute role={UserRole.HEADMAN} fallback="/">
+                    <Outlet />
+                  </RoleRoute>
+                }
+              >
+                <Route index element={<HeadmanCourseSelectorPage />} />
               </Route>
 
               <Route path="settings" element={<SettingsPage />} />

@@ -18,18 +18,20 @@ import {
 } from 'api/attendance';
 import * as fns from 'date-fns';
 import { StudentId } from 'models/student';
-import { Button, Modal, Typography, styled } from '@mui/material';
-import { Box } from '@mui/system';
 import { postAttendanceTable } from '@redux/attendance/thunk';
 import { useAppDispatch } from '@redux/utils';
-import { FormProvider, useForm } from 'react-hook-form';
 import {
   CreateDateClassNumberAttendance,
   createDateClassNumberAttendance,
 } from 'validation/yup/attendance';
 import { yupResolver } from '@hookform/resolvers/yup';
-import AttendanceTimeForm from 'components/forms/AttendanceTimeForm';
 import { getClassNumberByTime } from 'utils/date';
+import SetStudentsAttendancesModal from 'components/modals/SetStudentsAttendancesModal';
+import AddNewAttendanceModal from 'components/modals/AddNewAttendanceModal';
+import { useForm } from 'react-hook-form';
+import { UserRole } from 'models/authUser';
+import { selfAuthUserSelector } from '@redux/authUsers';
+import { useSelector } from 'react-redux';
 
 async function getAttendanceTableByCourse({
   courseId,
@@ -68,9 +70,9 @@ async function getAttendanceTableConflictsByCourse({
     return { conflicts: [] };
   }
 }
-
 const AttendanceJournal = () => {
   const params = useParams();
+  const role = useSelector(selfAuthUserSelector)?.userRole;
 
   const methods = useForm<CreateDateClassNumberAttendance>({
     resolver: yupResolver(createDateClassNumberAttendance),
@@ -83,8 +85,6 @@ const AttendanceJournal = () => {
       ),
     },
   });
-
-  const { handleSubmit, reset } = methods;
 
   const courseId = Number(params.courseId);
 
@@ -125,9 +125,10 @@ const AttendanceJournal = () => {
     conflicts: [],
   });
 
-  const [isAddModalOpened, setIsAddModalOpened] = useState(false);
+  const [isAddModalOpened, setIsSetStudentAttendancesModalOpened] =
+    useState(false);
 
-  const [isAddNewAttendanceDateOpened, setIsAddNewAttendanceDateOpened] =
+  const [isAddNewAttendanceModalOpened, setIsAddNewAttendanceModalOpened] =
     useState(false);
 
   const [currentStudentIndexInModal, setCurrentStudentIndexInModal] =
@@ -184,10 +185,6 @@ const AttendanceJournal = () => {
     outline: 'none',
   };
 
-  const TopMarginedButton = styled(Button)`
-    margin-top: 20px;
-  `;
-
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     const newDate = fns.addDays(firstSeptemberStartWeek, newPage * 7);
@@ -219,6 +216,17 @@ const AttendanceJournal = () => {
   ) => {
     setTable((prev) => {
       const newTable = { ...prev };
+      if (fns.isAfter(Date.now(), Date.parse(date))) {
+        alert('Нельзя изменять будущую посещаемость.');
+        return newTable;
+      }
+      if (
+        role === UserRole.HEADMAN &&
+        fns.isSameWeek(Date.parse(date), Date.now())
+      ) {
+        alert('Староста не может изменять посещаемость за предыдущие недели.');
+        return newTable;
+      }
       const newTableHeader: AttendanceTableHeaderElement = {
         date,
         classNumber,
@@ -264,11 +272,11 @@ const AttendanceJournal = () => {
   };
 
   const handleOpenAddModal = () => {
-    setIsAddModalOpened(true);
+    setIsSetStudentAttendancesModalOpened(true);
   };
 
   const handleOpenNewDayModal = () => {
-    setIsAddNewAttendanceDateOpened(true);
+    setIsAddNewAttendanceModalOpened(true);
   };
 
   const onSubmit = (data: CreateDateClassNumberAttendance) => {
@@ -281,14 +289,14 @@ const AttendanceJournal = () => {
       data.classNumber,
       fns.format(date, 'yyyy-MM-dd')
     );
-    setIsAddNewAttendanceDateOpened(false);
+    setIsAddNewAttendanceModalOpened(false);
     handleOpenAddModal();
   };
 
   const handleCloseAddModal = () => {
     setCurrentStudentIndexInModal(0);
     setCurrentAttendanceIndexInModal(0);
-    setIsAddModalOpened(false);
+    setIsSetStudentAttendancesModalOpened(false);
   };
 
   return (
@@ -306,63 +314,22 @@ const AttendanceJournal = () => {
           conflicts={conflictsDto.conflicts}
           onSaveButtonClick={handleSaveTable}
         />
-        <Modal
-          open={isAddModalOpened}
+        <SetStudentsAttendancesModal
+          isSetStudentAttendancesModalOpened={isAddModalOpened}
           onClose={() => handleCloseAddModal()}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              {table.body[currentStudentIndexInModal]?.studentName}
-            </Typography>
-            <TopMarginedButton
-              variant="outlined"
-              color="success"
-              onClick={() => handleAddAttendanceToStudent('ATTENDED')}
-            >
-              Присутствует
-            </TopMarginedButton>
-            <TopMarginedButton
-              variant="outlined"
-              color="error"
-              onClick={() => handleAddAttendanceToStudent('ABSEND')}
-            >
-              Отсутствует
-            </TopMarginedButton>
-            <TopMarginedButton
-              variant="outlined"
-              color="info"
-              onClick={() => handleAddAttendanceToStudent('SERIOUS_REASON')}
-            >
-              Уважительная причина
-            </TopMarginedButton>
-          </Box>
-        </Modal>
-        <Modal
-          open={isAddNewAttendanceDateOpened}
-          onClose={() => setIsAddNewAttendanceDateOpened(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Выберите пару и введите дату
-                </Typography>
-                <AttendanceTimeForm />
-                <TopMarginedButton
-                  variant="outlined"
-                  color="info"
-                  type="submit"
-                >
-                  Выбрать
-                </TopMarginedButton>
-              </form>
-            </FormProvider>
-          </Box>
-        </Modal>
+          studentName={table.body[currentStudentIndexInModal]?.studentName}
+          style={style}
+          onAddAttendance={(attendanceType: string) =>
+            handleAddAttendanceToStudent(attendanceType)
+          }
+        />
+        <AddNewAttendanceModal
+          isAddNewAttendanceModalOpened={isAddNewAttendanceModalOpened}
+          onClose={() => setIsAddNewAttendanceModalOpened(false)}
+          style={style}
+          methods={methods}
+          onSubmit={onSubmit}
+        />
       </PreLoading>
     </>
   );
