@@ -1,22 +1,17 @@
 import { Paper, Container, Grid, Pagination } from '@mui/material';
 import { getCourseByGroupPageThunk } from '@redux/courses';
-import {
-  coursesByGroupIdSelector,
-  selfGroupSelector,
-  selfStudentSelector,
-} from '@redux/selector';
+import { coursesByGroupIdSelector, selfStudentSelector } from '@redux/selector';
 import { getStudentsByGroupIdThunk } from '@redux/students';
 import { unwrapResult } from '@reduxjs/toolkit';
 import AddButton from 'components/buttons/AddButton';
 import NavListWithAvatars from 'components/NavListWithAvatars';
 import PreLoading from 'components/PreLoading';
 import Title from 'components/Title';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useDocumentTitle,
-  useLoadingActionThunk,
   useMySnackbar,
   useNumberSearchState,
   useParamSelector,
