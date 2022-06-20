@@ -1,7 +1,6 @@
 import {
   Checkbox,
   Divider,
-  FormControlLabel,
   List,
   ListItem,
   ListItemButton,
@@ -9,7 +8,7 @@ import {
   ListItemText,
   ListProps,
 } from '@mui/material';
-import { difference, intersection, remove, union, without } from 'lodash';
+import { difference, intersection, union, without } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import {
   FieldValues,
@@ -25,11 +24,13 @@ export interface ListCheckboxesSelectorProps<
   options: {
     id: number;
     name: string;
+    subName?: string;
   }[];
   name: J;
   control: Control<T>;
   listProps?: ListProps;
   selectAll?: boolean;
+  disabled?: boolean;
 }
 
 const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
@@ -38,6 +39,7 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
   control,
   listProps = {},
   selectAll = false,
+  disabled = false,
 }: ListCheckboxesSelectorProps<T, J>) => {
   const { field } = useController({
     control,
@@ -75,7 +77,12 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
         {selectAll && (
           <>
             <ListItem disablePadding>
-              <ListItemButton role={undefined} onClick={handleAllToggle} dense>
+              <ListItemButton
+                role={undefined}
+                onClick={handleAllToggle}
+                disabled={disabled}
+                dense
+              >
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
@@ -90,9 +97,14 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
             <Divider variant="middle" />
           </>
         )}
-        {options.map(({ id, name }) => (
+        {options.map(({ id, name, subName }) => (
           <ListItem key={id} disablePadding>
-            <ListItemButton role={undefined} onClick={handleToggle(id)} dense>
+            <ListItemButton
+              role={undefined}
+              onClick={handleToggle(id)}
+              disabled={disabled}
+              dense
+            >
               <ListItemIcon>
                 <Checkbox
                   edge="start"
@@ -100,7 +112,7 @@ const ListCheckboxes = <T extends FieldValues, J extends FieldPath<T>>({
                   disableRipple
                 />
               </ListItemIcon>
-              <ListItemText primary={name} />
+              <ListItemText primary={name} secondary={subName} />
             </ListItemButton>
           </ListItem>
         ))}

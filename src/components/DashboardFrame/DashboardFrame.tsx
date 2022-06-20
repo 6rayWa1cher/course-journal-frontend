@@ -12,7 +12,11 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { adminListItems, secondaryListItems } from './ListItems';
+import {
+  adminListItems,
+  secondaryListItems,
+  teacherListItems,
+} from './ListItems';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useMediaQuery } from '@mui/material';
@@ -20,6 +24,7 @@ import PathBreadcrumb from './PathBreadcrumb';
 import { useSelector } from 'react-redux';
 import { selfAuthUserSelector } from '@redux/authUsers';
 import { UserRole } from 'models/authUser';
+import ThemeToggle from 'components/ThemeToggle';
 
 const Copyright = (props: TypographyProps) => {
   const yearRange = (() => {
@@ -152,12 +157,22 @@ const DashboardContent = ({ children }: DashboardFrameProps) => {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List>{role === UserRole.ADMIN && adminListItems}</List>
-          <Divider />
-          <List>{secondaryListItems}</List>
-          <Divider />
+          {role != null && (
+            <>
+              <List>
+                {role === UserRole.ADMIN && adminListItems}
+                {role === UserRole.TEACHER && teacherListItems}
+              </List>
+              <Divider />
+              <List>{secondaryListItems}</List>
+              <Divider />
+            </>
+          )}
+          <Container maxWidth="xs" sx={{ pt: 2 }}>
+            <ThemeToggle />
+          </Container>
           <Container maxWidth="xs" sx={{ whiteSpace: 'normal' }}>
-            <Copyright sx={{ pt: 4 }} />
+            <Copyright sx={{ pt: 2 }} />
           </Container>
         </Container>
       </Drawer>

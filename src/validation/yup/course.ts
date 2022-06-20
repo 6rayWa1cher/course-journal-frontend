@@ -1,3 +1,4 @@
+import { CourseId } from 'models/course';
 import { StudentId } from 'models/student';
 import yup from './utils';
 
@@ -13,5 +14,15 @@ export const createCourseSchema = yup
   .object({
     name,
     students,
+  })
+  .required();
+
+export interface EditCourseSchemaType extends CreateCourseSchemaType {
+  courseId: CourseId;
+}
+
+export const editCourseSchema = createCourseSchema
+  .shape({
+    courseId: yup.number().required(),
   })
   .required();

@@ -1,5 +1,9 @@
 import { Paper, Container, Grid } from '@mui/material';
-import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
+import {
+  courseByIdSelector,
+  deleteCourseThunk,
+  getCourseByIdThunk,
+} from '@redux/courses';
 import { useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import BackButton from 'components/buttons/BackButton';
@@ -16,10 +20,10 @@ import {
   useMySnackbar,
   useParamSelector,
 } from 'utils/hooks';
-import { deleteCourseThunk } from '../../redux/courses/thunk';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import EditButton from 'components/buttons/EditButton';
+import SettingsIcon from '@mui/icons-material/Settings';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 const CoursePage = () => {
@@ -70,8 +74,18 @@ const CoursePage = () => {
         link: `/courses/${courseId}/attendance`,
         Icon: MenuBookIcon,
       },
+      {
+        title: 'Настройки',
+        link: `/courses/${courseId}/settings`,
+        Icon: SettingsIcon,
+      },
     ],
     [courseId]
+  );
+
+  const handleEditClick = useCallback(
+    () => navigate(`/courses/${courseId}/edit`),
+    [navigate, courseId]
   );
 
   return (
@@ -86,6 +100,9 @@ const CoursePage = () => {
                 </Grid>
                 <Grid item xs>
                   <Title>{course?.name}</Title>
+                </Grid>
+                <Grid item>
+                  <EditButton onClick={handleEditClick} />
                 </Grid>
                 <Grid item>
                   <DeleteButtonWithConfirm

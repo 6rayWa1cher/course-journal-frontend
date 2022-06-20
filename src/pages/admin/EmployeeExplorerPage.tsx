@@ -17,6 +17,7 @@ import { Page } from 'api/types';
 import AddButton from 'components/buttons/AddButton';
 import PreLoading from 'components/PreLoading';
 import NavListWithAvatars from 'components/NavListWithAvatars';
+import BackButton from 'components/buttons/BackButton';
 
 const EmployeeExplorerPage = () => {
   useDocumentTitle('Преподаватели');
@@ -76,8 +77,11 @@ const EmployeeExplorerPage = () => {
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Grid container justifyContent="space-between" spacing={2}>
+      <Grid container spacing={2}>
         <Grid item>
+          <BackButton />
+        </Grid>
+        <Grid item xs>
           <Title>Преподаватели</Title>
         </Grid>
         <Grid item>

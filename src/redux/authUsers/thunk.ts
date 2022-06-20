@@ -12,7 +12,7 @@ import { getEmployeeByIdThunk } from '@redux/employees';
 import { EmployeeId } from 'models/employee';
 import { CreateAuthUserRequest, PatchAuthUserRequest } from 'api/types';
 import { StudentId } from 'models/student';
-import { getStudentByIdThunk } from '@redux/students';
+import { getStudentByIdThunk } from '@redux/students/thunk';
 
 export interface GetAuthUserByIdArgs {
   authUserId: AuthUserId;

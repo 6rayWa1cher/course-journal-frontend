@@ -1,4 +1,5 @@
 import { createAxiosAsyncThunk } from '@redux/utils';
+import { createCriteriaApi, setCriteriaForTaskApi } from 'api/criteria';
 import {
   createTaskApi,
   deleteTaskApi,
@@ -7,6 +8,7 @@ import {
   putTaskApi,
 } from 'api/tasks';
 import { CourseId } from 'models/course';
+import { CriteriaDto } from 'models/criteria';
 import { TaskId, TaskRestDto } from 'models/task';
 
 export interface TaskByIdArgs {
@@ -41,6 +43,51 @@ export const createTaskThunk = createAxiosAsyncThunk(
   }
 );
 
+export interface CreateTaskWithCriteriaArgs {
+  task: TaskRestDto;
+  criteria: {
+    name: string;
+    criteriaPercent: number;
+  }[];
+}
+
+export const createTaskWithCriteriaThunk = createAxiosAsyncThunk(
+  'tasks/createWithCriteria',
+  async ({ task, criteria }: CreateTaskWithCriteriaArgs) => {
+    const savedTask = (await createTaskApi(task)).data;
+    const taskId = savedTask.id;
+    const savedCriteria: CriteriaDto[] = [];
+    try {
+      for (const criteriaReqData of criteria) {
+        const req = {
+          ...criteriaReqData,
+          task: taskId,
+        };
+        const criteriaResData = (await createCriteriaApi(req)).data;
+        savedCriteria.push(criteriaResData);
+      }
+    } catch (e) {
+      await deleteTaskApi(taskId);
+      throw e;
+    }
+    return { task: savedTask, criteria: savedCriteria };
+  }
+);
+
+export interface PutTaskWithCriteriaArgs extends CreateTaskWithCriteriaArgs {
+  taskId: TaskId;
+}
+
+export const putTaskWithCriteriaThunk = createAxiosAsyncThunk(
+  'tasks/putWithCriteria',
+  async ({ task, taskId, criteria }: PutTaskWithCriteriaArgs) => {
+    const savedTask = (await putTaskApi(taskId, task)).data;
+    const savedCriteria = (await setCriteriaForTaskApi(taskId, { criteria }))
+      .data;
+    return { task: savedTask, criteria: savedCriteria };
+  }
+);
+
 export interface PutTaskArgs {
   taskId: TaskId;
   data: TaskRestDto;
@@ -53,6 +100,7 @@ export const putTaskThunk = createAxiosAsyncThunk(
     return task;
   }
 );
+
 export type DeleteTaskArgs = TaskByIdArgs;
 
 export const deleteTaskThunk = createAxiosAsyncThunk(

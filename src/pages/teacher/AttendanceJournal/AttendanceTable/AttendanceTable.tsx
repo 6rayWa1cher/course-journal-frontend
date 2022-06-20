@@ -1,23 +1,59 @@
-import { StudentDto } from 'models/student';
 import * as React from 'react';
-import Table, { tableClasses } from '@mui/material/Table';
+import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material';
+import { Button, styled } from '@mui/material';
 import SelectCell from './SelectCell';
 import {
   AttendanceTableBodyElement,
+  AttendanceTableConflict,
   AttendanceTableDto,
-  AttendanceTableHeaderElement,
+  AttendanceTableType,
 } from 'models/attendance';
+import * as fns from 'date-fns';
+import { useMemo } from 'react';
+import { StudentId } from 'models/student';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import AddButton from 'components/buttons/AddButton';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 interface AttendanceTableProps {
   table: AttendanceTableDto;
+  handleChangeAttendance: (
+    studentId: StudentId,
+    index: number,
+    attendanceType: string
+  ) => void;
+  count: number;
+  page: number;
+  onPageChange: (newPage: number) => void;
+  fromDate: string;
+  toDate: string;
+  onAddClick: () => void;
+  conflicts: AttendanceTableConflict[];
+  onSaveButtonClick: () => void;
 }
+
+const dayOfWeekParser = {
+  '1': 'Понедельник',
+  '2': 'Вторник',
+  '3': 'Среда',
+  '4': 'Четверг',
+  '5': 'Пятница',
+  '6': 'Суббота',
+  '0': 'Воскресенье',
+};
+
+type SplitedTableHeaderElement = {
+  date: string;
+  classes: number[];
+};
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.root}`]: {
@@ -25,59 +61,131 @@ const StyledTableCell = styled(TableCell)(() => ({
   },
 }));
 
-const LeftBorderedTable = styled(Table)(() => ({
-  [`&.${tableClasses.root}`]: {
-    borderLeft: '1px solid rgba(81, 81, 81, 1)',
-  },
-}));
+const RightMarginedButton = styled(Button)`
+  margin-right: 10px;
+`;
 
-const AttendanceTable = ({ table }: AttendanceTableProps) => {
-  console.log(table.header);
+const AttendanceTable: React.FC<AttendanceTableProps> = ({
+  table,
+  handleChangeAttendance,
+  count,
+  page,
+  onPageChange,
+  fromDate,
+  toDate,
+  onAddClick,
+  conflicts,
+  onSaveButtonClick,
+}) => {
+  const splitCoursesByDates = useMemo<SplitedTableHeaderElement[]>(() => {
+    const header = table.header;
+    if (header.length === 0) {
+      return [];
+    }
+    let date = header[0].date;
+    const splitedHeader = [];
+    let classes: number[] = [];
+    for (const headerElement of header) {
+      if (headerElement.date === date) {
+        classes.push(headerElement.classNumber);
+      } else {
+        splitedHeader.push({
+          date: date,
+          classes: classes,
+        });
+        classes = [headerElement.classNumber];
+        date = headerElement.date;
+      }
+    }
+    splitedHeader.push({
+      date: date,
+      classes: classes,
+    });
+    return splitedHeader;
+  }, [table]);
+  const handleFirstPageClick = () => {
+    onPageChange(0);
+  };
+
+  const handlePrevPageClick = () => {
+    onPageChange(page - 1);
+  };
+
+  const handleNextPageClick = () => {
+    onPageChange(page + 1);
+  };
+
+  const handleLastPageClick = () => {
+    onPageChange(count);
+  };
+
+  const handleAlertConflict = (
+    teacherName: string | undefined,
+    courseName: string | undefined
+  ) => {
+    alert(
+      'Данный студент уже присутсвовал на паре "' +
+        courseName +
+        '" у преподавателя ' +
+        teacherName +
+        '.'
+    );
+  };
+
+  const FlexDiv = styled('div')`
+    margin: 10px 40px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+  `;
+
+  const CenteredTextDiv = styled('div')`
+    text-align: center;
+    margin-right: 10px;
+    margin-left: 10px;
+    height: min-content;
+  `;
+
+  const splitedCourses: SplitedTableHeaderElement[] = splitCoursesByDates;
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">Группа</TableCell>
-            <TableCell>Имя студента</TableCell>
-            <TableCell colSpan={1000} align="center" padding="none">
-              <LeftBorderedTable padding="none">
-                <TableBody>
-                  <TableRow>
-                    <StyledTableCell align="center" colSpan={100}>
-                      Посещаемость
-                    </StyledTableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="center" colSpan={2}>
-                      10.05.2022
-                    </TableCell>
-                    <TableCell align="center" colSpan={1}>
-                      12.05.2022
-                    </TableCell>
-                    <TableCell align="center" colSpan={2}>
-                      17.05.2022
-                    </TableCell>
-                    <TableCell align="center" colSpan={1}>
-                      19.05.2022
-                    </TableCell>
-                    <TableCell align="center" colSpan={2}>
-                      24.05.2022
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="center">2</TableCell>
-                    <TableCell align="center">3</TableCell>
-                    <TableCell align="center">1</TableCell>
-                    <TableCell align="center">2</TableCell>
-                    <TableCell align="center">3</TableCell>
-                    <TableCell align="center">1</TableCell>
-                    <TableCell align="center">2</TableCell>
-                    <TableCell align="center">3</TableCell>
-                  </TableRow>
-                </TableBody>
-              </LeftBorderedTable>
+            <StyledTableCell align="center" colSpan={100}>
+              Посещаемость
+            </StyledTableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell sx={{ height: '80.5px' }} align="center" colSpan={2}>
+              {fromDate} &mdash; {toDate}
             </TableCell>
+            {splitedCourses.map((course, index) => (
+              <TableCell
+                key={index}
+                align="center"
+                colSpan={course.classes.length}
+              >
+                {course.date} <br />{' '}
+                {dayOfWeekParser[fns.getDay(fns.parseISO(course.date))]}
+              </TableCell>
+            ))}
+          </TableRow>
+          <TableRow>
+            <TableCell align="center" sx={{ width: 100 }}>
+              Группа
+            </TableCell>
+            <TableCell>Имя студента</TableCell>
+            {splitedCourses.map((course, index) =>
+              course.classes.map((c, index2) => (
+                <TableCell
+                  align="center"
+                  key={index.toString() + index2.toString()}
+                >
+                  {c} пара
+                </TableCell>
+              ))
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,18 +198,84 @@ const AttendanceTable = ({ table }: AttendanceTableProps) => {
                 {body.studentGroup}
               </TableCell>
               <TableCell>{body.studentName}</TableCell>
-              <SelectCell />
-              <SelectCell />
-              <SelectCell />
-              <SelectCell />
-              <SelectCell />
-              <SelectCell />
-              <SelectCell />
-              <SelectCell />
+              {body.attendances.map((attendance, index) => {
+                const conflict = conflicts.find(
+                  (conflict) =>
+                    conflict.attendedDate === table.header[index].date &&
+                    conflict.attendedClass ===
+                      table.header[index].classNumber &&
+                    conflict.studentId === body.studentId
+                );
+                return (
+                  <SelectCell
+                    key={index}
+                    value={
+                      attendance !== null
+                        ? AttendanceTableType[attendance]
+                        : AttendanceTableType['null']
+                    }
+                    handleAdditionChange={(attendance: string) => {
+                      handleChangeAttendance(body.studentId, index, attendance);
+                    }}
+                    handleAlertConflict={() =>
+                      handleAlertConflict(
+                        conflict?.conflictedTeacherFullName,
+                        conflict?.conflictedCourseName
+                      )
+                    }
+                    disabled={
+                      conflicts.find(
+                        (conflict) =>
+                          conflict.attendedDate === table.header[index].date &&
+                          conflict.attendedClass ===
+                            table.header[index].classNumber &&
+                          conflict.studentId === body.studentId
+                      ) !== undefined
+                    }
+                  />
+                );
+              })}
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <FlexDiv>
+        <RightMarginedButton
+          variant="contained"
+          color="success"
+          onClick={onSaveButtonClick}
+        >
+          Сохранить изменения
+        </RightMarginedButton>
+        <CenteredTextDiv>
+          {page} из {count}
+        </CenteredTextDiv>
+        <RightMarginedButton
+          onClick={handleFirstPageClick}
+          disabled={0 === page}
+        >
+          <KeyboardDoubleArrowLeftIcon />
+        </RightMarginedButton>
+        <RightMarginedButton
+          onClick={handlePrevPageClick}
+          disabled={0 === page}
+        >
+          <ArrowBackIcon />
+        </RightMarginedButton>
+        <RightMarginedButton
+          onClick={handleNextPageClick}
+          disabled={count === page}
+        >
+          <ArrowForwardIcon />
+        </RightMarginedButton>
+        <RightMarginedButton
+          onClick={handleLastPageClick}
+          disabled={count === page}
+        >
+          <KeyboardDoubleArrowRightIcon />
+        </RightMarginedButton>
+        <AddButton onClick={onAddClick} />
+      </FlexDiv>
     </TableContainer>
   );
 };

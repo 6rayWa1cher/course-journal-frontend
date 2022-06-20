@@ -1,9 +1,11 @@
+import { getAllIdsBy } from '@redux/sliceUtils';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { GroupDto } from 'models/group';
 import {
   createGroupThunk,
   deleteGroupThunk,
   getGroupByIdThunk,
+  getGroupsByCourseIdThunk,
   getGroupsByFacultyIdThunk,
   putGroupThunk,
 } from './thunk';
@@ -16,8 +18,17 @@ export const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(
-      getGroupsByFacultyIdThunk.fulfilled,
+      getGroupsByCourseIdThunk.fulfilled,
       (state, { payload }) => {
+        adapter.removeAll(state);
+        adapter.addMany(state, payload);
+      }
+    );
+    builder.addCase(
+      getGroupsByFacultyIdThunk.fulfilled,
+      (state, { payload, meta }) => {
+        const faculty = meta.arg.facultyId;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { faculty }));
         adapter.upsertMany(state, payload);
       }
     );

@@ -13,7 +13,7 @@ export const getStudentsByGroupIdApi = (
   groupId: GroupId
 ): AxiosPromise<StudentDto[]> => mainAxios.get(`/students/group/${groupId}`);
 
-export const getStudentsByCourseIdApi = (
+export const getAllStudentsByCourseIdApi = (
   courseId: CourseId
 ): AxiosPromise<StudentDto[]> =>
   mainAxios.get(`/students/course/${courseId}/all`);
@@ -31,6 +31,5 @@ export const putStudentApi = (
   data: StudentRestDto
 ): AxiosPromise<StudentDto> => mainAxios.put(`/students/${studentId}`, data);
 
-export const deleteStudentApi = (
-  studentId: StudentId
-): AxiosPromise<StudentDto> => mainAxios.delete(`/students/${studentId}`);
+export const deleteStudentApi = (studentId: StudentId): AxiosPromise<void> =>
+  mainAxios.delete(`/students/${studentId}`);

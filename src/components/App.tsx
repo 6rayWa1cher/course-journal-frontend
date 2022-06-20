@@ -1,12 +1,6 @@
-import React from 'react';
+/* eslint-disable react/jsx-no-undef */
 import PreloaderWrapper from './PreloaderWrapper';
-import {
-  BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import StageRoute from './StageRoute';
 import LoginPage from 'pages/LoginPage';
@@ -15,8 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import MainElement from './MainElement';
 import { Stage } from '@redux/app';
 import Logout from './Logout';
-import AdminMainPage from 'pages/admin/AdminMainPage';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserRole } from 'models/authUser';
 import RoleRoute from './RoleRoute';
 import EmployeeExplorerPage from 'pages/admin/EmployeeExplorerPage';
@@ -29,23 +21,26 @@ import StudentPage from 'pages/admin/StudentPage';
 import SettingsPage from 'pages/SettingsPage';
 import CourseSelectorPage from 'pages/teacher/CourseSelectorPage';
 import IndexRedirect from './IndexRedirect';
-import CreateCoursePage from 'pages/teacher/CreateCoursePage';
+import CreateCoursePage from 'pages/CreateCoursePage';
 import CoursePage from 'pages/teacher/CoursePage';
-import TeacherTasksPage from 'pages/teacher/TeacherTasksPage';
+import TaskListPage from 'pages/TaskListPage';
 import CreateTaskPage from 'pages/teacher/CreateTaskPage';
 import { LocalizationProvider } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale';
+import EditTaskPage from 'pages/EditTaskPage';
+import SubmissionsPage from 'pages/SubmissionsPage';
+import EditCoursePage from 'pages/EditCoursePage';
+import CourseSettingsPage from 'pages/CourseSettingsPage';
+import CourseTokenLoader from './CourseTokenLoader';
+import CourseTokenRedirect from './CourseTokenRedirect';
+import CourseTokenCoursePage from 'pages/CourseTokenCoursePage';
+import TaskPage from 'pages/TaskPage';
+import LocalThemeProvider from './LocalThemeProvider';
 import AttendanceJournal from 'pages/teacher/AttendanceJournal';
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
-
 const App = () => (
-  <ThemeProvider theme={darkTheme}>
+  <LocalThemeProvider>
     <LocalizationProvider locale={ru} dateAdapter={AdapterDateFns}>
       <CssBaseline enableColorScheme />
       <PreloaderWrapper>
@@ -94,15 +89,46 @@ const App = () => (
                 <Route path="create" element={<CreateCoursePage />} />
                 <Route path=":courseId">
                   <Route index element={<CoursePage />} />
+                  <Route path="edit" element={<EditCoursePage />} />
                   <Route path="tasks">
-                    <Route index element={<TeacherTasksPage />} />
+                    <Route index element={<TaskListPage />} />
                     <Route path="create" element={<CreateTaskPage />} />
+                    <Route path=":taskId">
+                      <Route index element={<TaskPage />} />
+                      <Route path="edit" element={<EditTaskPage />} />
+                    </Route>
                   </Route>
                   <Route path="attendance" element={<AttendanceJournal />} />
+                  <Route path="submissions" element={<SubmissionsPage />} />
+                  <Route path="settings" element={<CourseSettingsPage />} />
                 </Route>
               </Route>
 
               <Route path="settings" element={<SettingsPage />} />
+            </Route>
+            <Route
+              path="/ct/:token"
+              element={
+                <CourseTokenLoader>
+                  <MainElement />
+                </CourseTokenLoader>
+              }
+            >
+              <Route index element={<CourseTokenRedirect />} />
+              <Route path="courses">
+                <Route index element={<CourseTokenRedirect />} />
+                <Route path=":courseId">
+                  <Route index element={<CourseTokenCoursePage />} />
+                  <Route path="tasks">
+                    <Route index element={<TaskListPage readonly />} />
+                    <Route path=":taskId" element={<TaskPage readonly />} />
+                  </Route>
+                  <Route
+                    path="submissions"
+                    element={<SubmissionsPage readonly />}
+                  />
+                </Route>
+              </Route>
             </Route>
             <Route
               element={
@@ -120,7 +146,7 @@ const App = () => (
       </PreloaderWrapper>
       <ToastContainer />
     </LocalizationProvider>
-  </ThemeProvider>
+  </LocalThemeProvider>
 );
 
 export default App;

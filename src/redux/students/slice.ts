@@ -1,10 +1,12 @@
 import { getCourseByIdWithItsStudentsThunk } from '@redux/courses';
+import { getAllIdsBy } from '@redux/sliceUtils';
 import { createSlice, createEntityAdapter, isAnyOf } from '@reduxjs/toolkit';
 import { StudentDto } from 'models/student';
 import {
   batchCreateStudentThunk,
   createStudentThunk,
   deleteStudentThunk,
+  getAllStudentsByCourseIdThunk,
   getStudentByIdThunk,
   getStudentsByGroupIdThunk,
   getStudentWithAuthUserThunk,
@@ -21,6 +23,24 @@ export const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(deleteStudentThunk.fulfilled, (state, { payload }) => {
       adapter.removeOne(state, payload);
+    });
+    builder.addCase(
+      getAllStudentsByCourseIdThunk.fulfilled,
+      (state, { payload }) => {
+        adapter.removeAll(state);
+        adapter.addMany(state, payload);
+      }
+    );
+    builder.addCase(
+      getStudentsByGroupIdThunk.fulfilled,
+      (state, { payload, meta }) => {
+        const group = meta.arg.groupId;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { group }));
+        adapter.addMany(state, payload);
+      }
+    );
+    builder.addCase(batchCreateStudentThunk.fulfilled, (state, { payload }) => {
+      adapter.upsertMany(state, payload);
     });
     builder.addMatcher(
       isAnyOf(

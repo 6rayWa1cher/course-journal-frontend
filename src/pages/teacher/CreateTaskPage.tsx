@@ -1,23 +1,28 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Paper, Container, Grid, Divider, LinearProgress } from '@mui/material';
 import { courseByIdSelector, getCourseByIdThunk } from '@redux/courses';
+import {
+  CreateTaskWithCriteriaArgs,
+  createTaskWithCriteriaThunk,
+} from '@redux/tasks';
+import { useAppDispatch } from '@redux/utils';
+import { unwrapResult } from '@reduxjs/toolkit';
 import BackButton from 'components/buttons/BackButton';
 import ClearSubmitButtons from 'components/ClearSubmitButtons';
 import TaskForm from 'components/forms/TaskForm';
 import PreLoading from 'components/PreLoading';
 import Title from 'components/Title';
+import { pick } from 'lodash';
 import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useDocumentTitle,
   useLoadingActionThunk,
+  useMySnackbar,
   useParamSelector,
 } from 'utils/hooks';
-import {
-  CreateCourseSchemaType,
-  createCourseSchema,
-} from 'validation/yup/course';
 import { createTaskSchema, CreateTaskSchemaType } from 'validation/yup/task';
 
 const CreateTaskPage = () => {
@@ -52,14 +57,43 @@ const CreateTaskPage = () => {
   });
   const {
     handleSubmit,
-    control,
     formState: { isSubmitting },
-    watch,
   } = methods;
 
+  const dispatch = useAppDispatch();
+  const { enqueueError, enqueueSuccess } = useMySnackbar();
+  const navigate = useNavigate();
   const onSubmit = useCallback(
-    (data: CreateTaskSchemaType) => console.log('submitted', data),
-    []
+    async (data: CreateTaskSchemaType) => {
+      try {
+        const req: CreateTaskWithCriteriaArgs = {
+          task: {
+            ...pick(data, [
+              'title',
+              'description',
+              'maxScore',
+              'announced',
+              'deadlinesEnabled',
+              'maxPenaltyPercent',
+            ]),
+            course: courseId,
+            softDeadlineAt: data.softDeadlineAt?.toISOString(),
+            hardDeadlineAt: data.hardDeadlineAt?.toISOString(),
+          },
+          criteria: data.criteria,
+        };
+        const { task } = await dispatch(createTaskWithCriteriaThunk(req)).then(
+          unwrapResult
+        );
+        const taskId = task.id;
+        enqueueSuccess(`Задание ${task.title} создано`);
+        navigate(`/courses/${courseId}/tasks/${taskId}`);
+        return task;
+      } catch (e) {
+        defaultErrorEnqueue(e as Error, enqueueError);
+      }
+    },
+    [courseId, dispatch, enqueueError, enqueueSuccess, navigate]
   );
 
   return (

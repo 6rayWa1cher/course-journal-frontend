@@ -1,49 +1,82 @@
-import { MenuItem, Select, SelectChangeEvent, TableCell } from '@mui/material';
+import {
+  Button,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TableCell,
+} from '@mui/material';
 import { AttendanceTableType } from 'models/attendance';
-import { memo, useMemo, useState } from 'react';
+import React, { memo } from 'react';
+import WarningAmberSharp from '@mui/icons-material/WarningAmberSharp';
+
+interface SelectCellProps {
+  handleAdditionChange: (attendance: string) => void;
+  value: string;
+  disabled: boolean;
+  handleAlertConflict: () => void;
+}
 
 const selectList = [
   AttendanceTableType.SERIOUS_REASON,
   AttendanceTableType.ATTENDED,
-  AttendanceTableType.ABSEND,
+  AttendanceTableType.null,
 ];
 
 const sx = { padding: '0px' };
 
-const SelectCell = () => {
-  const [selected, setSelected] = useState(
-    AttendanceTableType.ATTENDED.toString()
-  );
-
-  const handleChange = (e: SelectChangeEvent) => {
-    setSelected(e.target.value);
+const SelectCell: React.FC<SelectCellProps> = ({
+  handleAdditionChange,
+  value,
+  disabled,
+  handleAlertConflict,
+}) => {
+  const handleChange = (e: SelectChangeEvent<string>) => {
+    handleAdditionChange(AttendanceTableType[e.target.value]);
   };
 
-  const renderComponent = useMemo(
-    () => (
-      <Select
-        IconComponent={() => null}
-        inputProps={{
-          sx: {
-            padding: '10px !important',
-            width: '13px',
-          },
-        }}
-        onChange={handleChange}
-        value={selected}
-      >
-        {selectList.map((select, index) => (
-          <MenuItem value={select} key={index}>
-            {select}
-          </MenuItem>
-        ))}
-      </Select>
-    ),
-    [selected]
-  );
   return (
     <TableCell sx={sx} align="center">
-      {renderComponent}
+      {disabled ? (
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handleAlertConflict}
+          sx={{
+            overflow: 'hidden',
+            width: '33px',
+            padding: '10px',
+            minWidth: '0px',
+          }}
+        >
+          <WarningAmberSharp />
+        </Button>
+      ) : (
+        <Select
+          IconComponent={() => null}
+          inputProps={{
+            sx: {
+              padding: '10px !important',
+              width: '13px',
+              border: disabled ? '2px solid red' : '',
+            },
+          }}
+          MenuProps={{
+            sx: {
+              borderColor: 'red',
+            },
+          }}
+          onChange={handleChange}
+          value={disabled ? '' : value}
+          displayEmpty={disabled}
+          disabled={disabled}
+        >
+          {selectList.map((select, index) => (
+            <MenuItem value={select} key={index}>
+              {select}
+            </MenuItem>
+          ))}
+        </Select>
+      )}
     </TableCell>
   );
 };

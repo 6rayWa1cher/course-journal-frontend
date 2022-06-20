@@ -1,4 +1,3 @@
-import { Checkbox, FormControlLabel } from '@mui/material';
 import {
   getStudentsByGroupIdThunk,
   studentsByGroupAlphabeticalSelector,

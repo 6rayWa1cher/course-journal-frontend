@@ -9,6 +9,7 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ClassIcon from '@mui/icons-material/Class';
 
 export const mainListItems = (
   <div>
@@ -46,6 +47,17 @@ export const adminListItems = (
         <AccountBalanceIcon />
       </ListItemIcon>
       <ListItemText primary="Факультеты" />
+    </ListItem>
+  </>
+);
+
+export const teacherListItems = (
+  <>
+    <ListItem button component={Link} to="/courses">
+      <ListItemIcon>
+        <ClassIcon />
+      </ListItemIcon>
+      <ListItemText primary="Курсы" />
     </ListItem>
   </>
 );

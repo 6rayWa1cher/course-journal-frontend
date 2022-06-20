@@ -6,11 +6,20 @@ export enum AttendanceType {
   ATTENDED = 'ATTENDED',
 }
 
-export enum AttendanceTableType {
-  SERIOUS_REASON = 'У',
-  ATTENDED = 'П',
-  ABSEND = 'О',
-}
+export const BackToAttendanceType: Record<string, AttendanceType | null> = {
+  SERIOUS_REASON: AttendanceType.SERIOUS_REASON,
+  ATTENDED: AttendanceType.ATTENDED,
+  ABSEND: null,
+};
+
+export const AttendanceTableType: Record<string, string> = {
+  SERIOUS_REASON: 'У',
+  ATTENDED: 'П',
+  null: 'О',
+  О: 'ABSEND',
+  П: 'ATTENDED',
+  У: 'SERIOUS_REASON',
+};
 
 export type AttendanceId = number;
 
@@ -37,7 +46,7 @@ export type AttendanceTableHeaderElement = {
 
 export type AttendanceTableBodyElement = {
   studentId: StudentId;
-  attendances: AttendanceType[];
+  attendances: (AttendanceType | null)[];
   studentGroup: number;
   studentName: string;
 };
@@ -47,7 +56,27 @@ export type AttendanceTableDto = {
   header: AttendanceTableHeaderElement[];
 };
 
+export type AttendanceTableConflict = {
+  conflictedTeacherFullName: string;
+  conflictedCourseName: string;
+  studentId: number;
+  attendedDate: string;
+  attendedClass: number;
+  attendanceType: AttendanceType;
+};
+
+export type AttendanceConflictListDto = {
+  conflicts: AttendanceTableConflict[];
+};
+
 export interface GetAttendanceTableProps {
+  courseId: CourseId;
+  fromDate: string;
+  toDate: string;
+}
+
+export interface PostAttendanceTableProps {
+  table: AttendanceTableDto;
   courseId: CourseId;
   fromDate: string;
   toDate: string;

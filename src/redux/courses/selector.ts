@@ -21,12 +21,6 @@ export const courseByIdSelector = createSelector(
   (state, courseId) => state.entities[courseId] as CourseFullDto
 );
 
-export const courseNameByIdSelector = createSelector(
-  coursesSelector,
-  courseIdFromParamsSelector,
-  (state, courseId) => state.entities[courseId]?.name
-);
-
 export const coursesByEmployeeIdSelector = createSelector(
   coursesSelector,
   employeeIdFromParamsSelector,
@@ -34,4 +28,14 @@ export const coursesByEmployeeIdSelector = createSelector(
     Object.values(state.entities).filter(
       (e): e is CourseDto => e?.owner === employeeId
     )
+);
+
+export const courseNameByIdSelector = createSelector(
+  courseByIdSelector,
+  (course) => course?.name
+);
+
+export const resolvedCourseIdSelector = createSelector(
+  coursesSelector,
+  (state) => state.resolved
 );

@@ -18,7 +18,9 @@ import { isSerializedAxiosError, useAppDispatch } from '@redux/utils';
 import { unwrapResult } from '@reduxjs/toolkit';
 import BackButton from 'components/buttons/BackButton';
 import ClearSubmitButtons from 'components/ClearSubmitButtons';
+import StudentPicker from 'components/forms/StudentPicker';
 import FormTextField from 'components/FormTextField';
+import GroupSelector from 'components/GroupSelector';
 import SubTitle from 'components/SubTitle';
 import Title from 'components/Title';
 import { GroupId } from 'models/group';
@@ -38,8 +40,6 @@ import {
   CreateCourseSchemaType,
   createCourseSchema,
 } from 'validation/yup/course';
-import GroupSelector from './GroupSelector';
-import StudentPicker from './StudentPicker';
 
 const CreateCoursePage = () => {
   useDocumentTitle('Создание курса');

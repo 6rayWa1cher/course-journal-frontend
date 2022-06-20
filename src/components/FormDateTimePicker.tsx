@@ -23,6 +23,7 @@ const FormDateTimePicker = <T extends FieldValues, J extends FieldPath<T>>({
   control,
   controllerProps = {},
   dateTimePickerProps = {},
+  disabled = false,
   ...props
 }: FormDateTimePickerProps<T, J> & TextFieldProps) => {
   return (
@@ -37,6 +38,7 @@ const FormDateTimePicker = <T extends FieldValues, J extends FieldPath<T>>({
           mask="__.__.____ __:__"
           value={value as Date | null}
           onChange={onChange}
+          disabled={disabled}
           renderInput={(params: TextFieldProps) => (
             <TextField
               id={name}
@@ -46,6 +48,7 @@ const FormDateTimePicker = <T extends FieldValues, J extends FieldPath<T>>({
               inputRef={ref}
               error={!!error}
               helperText={error ? error.message : null}
+              disabled={disabled}
               {...params}
               {...props}
             />

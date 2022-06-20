@@ -6,6 +6,8 @@ import {
   AttendanceRestDto,
   AttendanceTableDto,
   GetAttendanceTableProps,
+  AttendanceConflictListDto,
+  PostAttendanceTableProps,
 } from 'models/attendance';
 import { mainAxios } from './helpers/myaxios';
 
@@ -40,4 +42,24 @@ export const getAttendanceTableByCourseAndDatePeriodApi = ({
 }: GetAttendanceTableProps): AxiosPromise<AttendanceTableDto> =>
   mainAxios.get(
     `/attendances/table/${courseId}?fromDate=${fromDate}&toDate=${toDate}`
+  );
+
+export const getAttendanceTableConflictsByCourseAndDatePeriodApi = ({
+  courseId,
+  fromDate,
+  toDate,
+}: GetAttendanceTableProps): AxiosPromise<AttendanceConflictListDto> =>
+  mainAxios.get(
+    `/attendances/conflicts/${courseId}?fromDate=${fromDate}&toDate=${toDate}`
+  );
+
+export const postAttendanceTableApi = ({
+  table,
+  courseId,
+  fromDate,
+  toDate,
+}: PostAttendanceTableProps) =>
+  mainAxios.post(
+    `/attendances/table/${courseId}?fromDate=${fromDate}&toDate=${toDate}`,
+    table
   );
