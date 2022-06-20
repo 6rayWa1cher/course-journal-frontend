@@ -2,11 +2,14 @@ import { createAxiosAsyncThunk } from '@redux/utils';
 import {
   getAttendanceByIdApi,
   getAttendanceTableByCourseAndDatePeriodApi,
+  getAttendanceTableByCourseAndGroupAndDatePeriodApi,
   getAttendanceTableConflictsByCourseAndDatePeriodApi,
+  getAttendanceTableConflictsByCourseAndGroupAndDatePeriodApi,
   postAttendanceTableApi,
 } from 'api/attendance';
 import {
   AttendanceId,
+  GetAttendanceTableAsHeadmanProps,
   GetAttendanceTableProps,
   PostAttendanceTableProps,
 } from 'models/attendance';
@@ -54,3 +57,45 @@ export const postAttendanceTable = createAxiosAsyncThunk(
     await postAttendanceTableApi({ table, courseId, fromDate, toDate });
   }
 );
+
+export const getAttendanceTableByCourseAndDatePeriodAsHeadman =
+  createAxiosAsyncThunk(
+    'attendances/table',
+    async ({
+      courseId,
+      groupId,
+      fromDate,
+      toDate,
+    }: GetAttendanceTableAsHeadmanProps) => {
+      const data = (
+        await getAttendanceTableByCourseAndGroupAndDatePeriodApi({
+          courseId,
+          groupId,
+          fromDate,
+          toDate,
+        })
+      ).data;
+      return data;
+    }
+  );
+
+export const getAttendanceTableConflictsByCourseAndDatePerionAsHeadman =
+  createAxiosAsyncThunk(
+    'attendances/conflicts',
+    async ({
+      courseId,
+      groupId,
+      fromDate,
+      toDate,
+    }: GetAttendanceTableAsHeadmanProps) => {
+      const data = (
+        await getAttendanceTableConflictsByCourseAndGroupAndDatePeriodApi({
+          courseId,
+          groupId,
+          fromDate,
+          toDate,
+        })
+      ).data;
+      return data;
+    }
+  );

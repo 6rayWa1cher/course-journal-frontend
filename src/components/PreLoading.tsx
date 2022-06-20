@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { useLoadingPlain } from 'utils/hooks';
 
 export interface PreLoadingProps<Returned> {
-  action: () => Promise<Returned | void>;
+  action: () => Promise<Returned | null | undefined | void>;
   render?: (value: Returned) => React.ReactElement;
   onNotFound?: React.ReactElement;
   onLoading?: React.ReactElement;

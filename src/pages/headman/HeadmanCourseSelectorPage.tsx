@@ -7,6 +7,7 @@ import NavListWithAvatars from 'components/NavListWithAvatars';
 import PreLoading from 'components/PreLoading';
 import Title from 'components/Title';
 import { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useDocumentTitle,

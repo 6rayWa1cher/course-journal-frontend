@@ -2,7 +2,7 @@ import { getCourseByIdWithItsStudentsThunk } from '@redux/courses';
 import PreLoading from 'components/PreLoading';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useLoadingActionThunk } from 'utils/hooks';
+import { useLoadingActionThunk, useTypedSelector } from 'utils/hooks';
 import AttendanceTable from './AttendanceTable';
 import {
   AttendanceConflictListDto,
@@ -10,11 +10,14 @@ import {
   AttendanceTableDto,
   AttendanceTableHeaderElement,
   BackToAttendanceType,
+  GetAttendanceTableAsHeadmanProps,
   GetAttendanceTableProps,
 } from 'models/attendance';
 import {
   getAttendanceTableByCourseAndDatePeriodApi,
+  getAttendanceTableByCourseAndGroupAndDatePeriodApi,
   getAttendanceTableConflictsByCourseAndDatePeriodApi,
+  getAttendanceTableConflictsByCourseAndGroupAndDatePeriodApi,
 } from 'api/attendance';
 import * as fns from 'date-fns';
 import { StudentId } from 'models/student';
@@ -31,7 +34,7 @@ import AddNewAttendanceModal from 'components/modals/AddNewAttendanceModal';
 import { useForm } from 'react-hook-form';
 import { UserRole } from 'models/authUser';
 import { selfAuthUserSelector } from '@redux/authUsers';
-import { useSelector } from 'react-redux';
+import { selfGroupSelector } from '@redux/selector';
 
 async function getAttendanceTableByCourse({
   courseId,
@@ -70,9 +73,52 @@ async function getAttendanceTableConflictsByCourse({
     return { conflicts: [] };
   }
 }
+
+async function getAttendanceTableByCourseAndGroup({
+  courseId,
+  groupId,
+  fromDate,
+  toDate,
+}: GetAttendanceTableAsHeadmanProps) {
+  try {
+    const table: AttendanceTableDto = (
+      await getAttendanceTableByCourseAndGroupAndDatePeriodApi({
+        courseId,
+        groupId,
+        fromDate,
+        toDate,
+      })
+    ).data;
+    return table;
+  } catch (e) {
+    return { header: [], body: [] };
+  }
+}
+
+async function getAttendanceTableConflictsByCourseAndGroup({
+  courseId,
+  groupId,
+  fromDate,
+  toDate,
+}: GetAttendanceTableAsHeadmanProps) {
+  try {
+    const data: AttendanceConflictListDto = (
+      await getAttendanceTableConflictsByCourseAndGroupAndDatePeriodApi({
+        courseId,
+        groupId,
+        fromDate,
+        toDate,
+      })
+    ).data;
+    return data;
+  } catch (e) {
+    return { conflicts: [] };
+  }
+}
+
 const AttendanceJournal = () => {
   const params = useParams();
-  const role = useSelector(selfAuthUserSelector)?.userRole;
+  const role = useTypedSelector(selfAuthUserSelector)?.userRole;
 
   const methods = useForm<CreateDateClassNumberAttendance>({
     resolver: yupResolver(createDateClassNumberAttendance),
@@ -87,6 +133,7 @@ const AttendanceJournal = () => {
   });
 
   const courseId = Number(params.courseId);
+  const groupId = useTypedSelector(selfGroupSelector)?.id as number;
 
   const thunk = useCallback(
     () => getCourseByIdWithItsStudentsThunk({ courseId }),
@@ -137,20 +184,40 @@ const AttendanceJournal = () => {
     useState(0);
 
   useEffect(() => {
-    getAttendanceTableByCourse({
-      courseId,
-      fromDate,
-      toDate,
-    }).then((value) => {
-      setTable(value);
-    });
-    getAttendanceTableConflictsByCourse({
-      courseId,
-      fromDate,
-      toDate,
-    }).then((value) => {
-      setConflictsDto(value);
-    });
+    if (role === UserRole.TEACHER) {
+      getAttendanceTableByCourse({
+        courseId,
+        fromDate,
+        toDate,
+      }).then((value) => {
+        setTable(value);
+      });
+      getAttendanceTableConflictsByCourse({
+        courseId,
+        fromDate,
+        toDate,
+      }).then((value) => {
+        setConflictsDto(value);
+      });
+    } else if (role === UserRole.HEADMAN) {
+      console.log(groupId);
+      getAttendanceTableByCourseAndGroup({
+        courseId,
+        groupId,
+        fromDate,
+        toDate,
+      }).then((value) => {
+        setTable(value);
+      });
+      getAttendanceTableConflictsByCourseAndGroup({
+        courseId,
+        groupId,
+        fromDate,
+        toDate,
+      }).then((value) => {
+        setConflictsDto(value);
+      });
+    }
   }, [courseId, fromDate, toDate]);
 
   const handleChangeAttendanceInTable = (

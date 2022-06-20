@@ -1,5 +1,6 @@
 import { StudentId } from './student';
 import { CourseId } from './course';
+import { GroupId } from './group';
 
 export enum AttendanceType {
   SERIOUS_REASON = 'SERIOUS_REASON',
@@ -71,6 +72,13 @@ export type AttendanceConflictListDto = {
 
 export interface GetAttendanceTableProps {
   courseId: CourseId;
+  fromDate: string;
+  toDate: string;
+}
+
+export interface GetAttendanceTableAsHeadmanProps {
+  courseId: CourseId;
+  groupId: GroupId;
   fromDate: string;
   toDate: string;
 }
