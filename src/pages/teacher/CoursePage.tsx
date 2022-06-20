@@ -70,7 +70,7 @@ const CoursePage = () => {
         Icon: AssignmentIcon,
       },
       {
-        title: 'Журнал посемости',
+        title: 'Журнал посещаемости',
         link: `/courses/${courseId}/attendance`,
         Icon: MenuBookIcon,
       },
