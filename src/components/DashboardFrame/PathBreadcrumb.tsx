@@ -16,6 +16,7 @@ const localizationTable: Record<string, string | null> = {
   students: 'Студенты',
   settings: 'Настройки',
   courses: 'Курсы',
+  attendance: 'Посещаемость',
   submissions: 'Оценки',
   tasks: 'Задания',
   ct: null,
@@ -86,7 +87,6 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
         ({ path }) => params.token == null || !path.endsWith(params.token)
       );
   }, [
-    course,
     employee,
     faculty,
     location.pathname,
@@ -94,6 +94,7 @@ const PathBreadcrumb = ({ largeScreen = true, sx }: PathBreadcrumbProps) => {
     params.employeeId,
     params.facultyId,
     params.studentId,
+    course,
     params.taskId,
     params.token,
     student,

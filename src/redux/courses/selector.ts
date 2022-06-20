@@ -1,7 +1,7 @@
 import { employeeIdFromParamsSelector } from '@redux/employees';
 import type { RootState } from '@redux/types';
 import { createSelector } from '@reduxjs/toolkit';
-import { CourseDto, CourseId } from 'models/course';
+import { CourseDto, CourseFullDto, CourseId } from 'models/course';
 
 export const coursesSelector = (state: RootState) => state.courses;
 
@@ -9,6 +9,7 @@ export const courseIdFromParamsSelector = (
   _: unknown,
   { courseId }: { courseId: CourseId }
 ) => courseId;
+
 export const courseIdsFromParamsSelector = (
   _: unknown,
   { ids }: { ids: CourseId[] }
@@ -17,7 +18,7 @@ export const courseIdsFromParamsSelector = (
 export const courseByIdSelector = createSelector(
   coursesSelector,
   courseIdFromParamsSelector,
-  (state, courseId) => state.entities[courseId]
+  (state, courseId) => state.entities[courseId] as CourseFullDto
 );
 
 export const coursesByEmployeeIdSelector = createSelector(

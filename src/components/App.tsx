@@ -11,20 +11,20 @@ import { Stage } from '@redux/app';
 import Logout from './Logout';
 import { UserRole } from 'models/authUser';
 import RoleRoute from './RoleRoute';
-import EmployeeExplorerPage from 'pages/EmployeeExplorerPage';
-import EditEmployeePage from 'pages/EditEmployeePage';
-import CreateEmployeePage from 'pages/CreateEmployeePage';
-import FacultyExplorerPage from 'pages/FacultyExplorerPage';
-import FacultyPage from 'pages/FacultyPage';
+import EmployeeExplorerPage from 'pages/admin/EmployeeExplorerPage';
+import EditEmployeePage from 'pages/admin/EditEmployeePage';
+import CreateEmployeePage from 'pages/admin/CreateEmployeePage';
+import FacultyExplorerPage from 'pages/admin/FacultyExplorerPage';
+import FacultyPage from 'pages/admin/FacultyPage';
 import { CssBaseline } from '@mui/material';
-import StudentPage from 'pages/StudentPage';
+import StudentPage from 'pages/admin/StudentPage';
 import SettingsPage from 'pages/SettingsPage';
-import CourseSelectorPage from 'pages/CourseSelectorPage';
+import CourseSelectorPage from 'pages/teacher/CourseSelectorPage';
 import IndexRedirect from './IndexRedirect';
 import CreateCoursePage from 'pages/CreateCoursePage';
-import CoursePage from 'pages/CoursePage';
+import CoursePage from 'pages/teacher/CoursePage';
 import TaskListPage from 'pages/TaskListPage';
-import CreateTaskPage from 'pages/CreateTaskPage';
+import CreateTaskPage from 'pages/teacher/CreateTaskPage';
 import { LocalizationProvider } from '@mui/lab';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale';
@@ -37,6 +37,8 @@ import CourseTokenRedirect from './CourseTokenRedirect';
 import CourseTokenCoursePage from 'pages/CourseTokenCoursePage';
 import TaskPage from 'pages/TaskPage';
 import LocalThemeProvider from './LocalThemeProvider';
+import AttendanceJournal from 'pages/teacher/AttendanceJournal';
+import HeadmanCourseSelectorPage from 'pages/headman/HeadmanCourseSelectorPage';
 
 const App = () => (
   <LocalThemeProvider>
@@ -97,8 +99,23 @@ const App = () => (
                       <Route path="edit" element={<EditTaskPage />} />
                     </Route>
                   </Route>
+                  <Route path="attendance" element={<AttendanceJournal />} />
                   <Route path="submissions" element={<SubmissionsPage />} />
                   <Route path="settings" element={<CourseSettingsPage />} />
+                </Route>
+              </Route>
+
+              <Route
+                path="headman"
+                element={
+                  <RoleRoute role={UserRole.HEADMAN} fallback="/">
+                    <Outlet />
+                  </RoleRoute>
+                }
+              >
+                <Route index element={<HeadmanCourseSelectorPage />} />
+                <Route path=":courseId">
+                  <Route path="attendance" element={<AttendanceJournal />} />
                 </Route>
               </Route>
 

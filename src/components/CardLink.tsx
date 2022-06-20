@@ -47,12 +47,12 @@ const CardLink = ({ title, link, Icon }: CardLinkProps) => {
             </Box>
           </CardMedia>
         </CardContent>
-        <CardActions>
-          <Button onClick={handleClick} size="small">
-            Перейти
-          </Button>
-        </CardActions>
       </CardActionArea>
+      <CardActions>
+        <Button onClick={handleClick} size="small">
+          Перейти
+        </Button>
+      </CardActions>
     </Card>
   );
 };

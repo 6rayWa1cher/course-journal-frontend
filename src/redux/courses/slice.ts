@@ -3,7 +3,9 @@ import {
   createCourseThunk,
   deleteCourseThunk,
   getCourseByEmployeePageThunk,
+  getCourseByGroupPageThunk,
   getCourseByIdThunk,
+  getCourseByIdWithItsStudentsThunk,
 } from './thunk';
 import { CourseDto, CourseFullDto } from 'models/course';
 import { getAllStudentsByCourseIdThunk } from '@redux/students/thunk';
@@ -53,9 +55,23 @@ export const slice = createSlice({
       }
     );
     builder.addMatcher(
+      isAnyOf(getCourseByGroupPageThunk.fulfilled),
+      (state, { payload }) => {
+        const owner = payload.content[0].owner;
+        adapter.removeMany(state, getAllIdsBy(state.entities, { owner }));
+        adapter.upsertMany(state, payload.content);
+      }
+    );
+    builder.addMatcher(
       isAnyOf(createCourseThunk.fulfilled, getCourseByIdThunk.fulfilled),
       (state, { payload }) => {
         adapter.upsertOne(state, payload);
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(getCourseByIdWithItsStudentsThunk.fulfilled),
+      (state, { payload }) => {
+        adapter.upsertOne(state, payload.course);
       }
     );
   },

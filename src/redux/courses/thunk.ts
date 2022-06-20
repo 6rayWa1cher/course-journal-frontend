@@ -2,17 +2,31 @@ import { createAxiosAsyncThunk } from '@redux/utils';
 import {
   deleteCourseApi,
   getCourseByIdApi,
+  getCoursesByGroupApi,
   getCoursesByOwnerApi,
   postCourseApi,
   putCourseApi,
 } from 'api/courses';
-import { GetCoursesByOwnerIdRequest } from 'api/types';
+import { isAxiosError } from 'api/helpers/utils';
+import { getAllStudentsByCourseIdApi } from 'api/students';
+import {
+  GetCoursesByGroupIdRequest,
+  GetCoursesByOwnerIdRequest,
+} from 'api/types';
 import { CourseId, CourseRestDto } from 'models/course';
 
 export const getCourseByEmployeePageThunk = createAxiosAsyncThunk(
   'courses/getSelfPage',
   async (args: GetCoursesByOwnerIdRequest) => {
     const data = (await getCoursesByOwnerApi(args)).data;
+    return data;
+  }
+);
+
+export const getCourseByGroupPageThunk = createAxiosAsyncThunk(
+  'courses/getPageByGroup',
+  async (args: GetCoursesByGroupIdRequest) => {
+    const data = (await getCoursesByGroupApi(args)).data;
     return data;
   }
 );
@@ -26,6 +40,22 @@ export const getCourseByIdThunk = createAxiosAsyncThunk(
   async ({ courseId }: CourseIdOnly) => {
     const data = (await getCourseByIdApi(courseId)).data;
     return data;
+  }
+);
+
+export const getCourseByIdWithItsStudentsThunk = createAxiosAsyncThunk(
+  'course/getWithItsStudents',
+  async ({ courseId }: CourseIdOnly) => {
+    const course = (await getCourseByIdApi(courseId)).data;
+    try {
+      const students = (await getAllStudentsByCourseIdApi(courseId)).data;
+      return { course, students };
+    } catch (e) {
+      if (isAxiosError(e) && e.response?.status === 404) {
+        return { course };
+      }
+      throw e;
+    }
   }
 );
 

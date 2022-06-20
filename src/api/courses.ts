@@ -7,7 +7,11 @@ import type {
 } from 'models/course';
 import { mainAxios } from './helpers/myaxios';
 import { preparePageRequest } from './helpers/preparers';
-import type { Page, GetCoursesByOwnerIdRequest } from './types';
+import type {
+  Page,
+  GetCoursesByOwnerIdRequest,
+  GetCoursesByGroupIdRequest,
+} from './types';
 
 export const getCoursesByOwnerApi = ({
   employeeId,
@@ -32,3 +36,11 @@ export const putCourseApi = (
 
 export const deleteCourseApi = (id: CourseId): AxiosPromise<void> =>
   mainAxios.delete(`/courses/${id}`);
+
+export const getCoursesByGroupApi = ({
+  groupId,
+  pagination,
+}: GetCoursesByGroupIdRequest): AxiosPromise<Page<CourseDto>> =>
+  mainAxios.get(`/courses/group/${groupId}`, {
+    params: { ...preparePageRequest(pagination) },
+  });
