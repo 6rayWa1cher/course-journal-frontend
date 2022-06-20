@@ -70,12 +70,10 @@ export const coursesByGroupIdSelector = createSelector(
   studentsByGroupSelector,
   (state, students) => {
     const studentsIds = students.map((student) => student.id);
-    console.log(studentsIds);
     return Object.values(state.entities)
-      .filter(
-        (courseFullDto): courseFullDto is CourseFullDto =>
-          courseFullDto != null && 'students' in courseFullDto
-      )
+      .filter((courseFullDto): courseFullDto is CourseFullDto => {
+        return courseFullDto != null && 'students' in courseFullDto;
+      })
       .filter((courseFullDto) =>
         isArrayOfNumbersContainsElementFromOtherArray(
           studentsIds,

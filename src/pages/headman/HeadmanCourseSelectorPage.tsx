@@ -1,22 +1,15 @@
 import { Paper, Container, Grid, Pagination } from '@mui/material';
 import { getCourseByGroupPageThunk } from '@redux/courses';
-import {
-  coursesByGroupIdSelector,
-  selfGroupSelector,
-  selfStudentSelector,
-} from '@redux/selector';
+import { coursesByGroupIdSelector, selfStudentSelector } from '@redux/selector';
 import { getStudentsByGroupIdThunk } from '@redux/students';
 import { unwrapResult } from '@reduxjs/toolkit';
-import AddButton from 'components/buttons/AddButton';
 import NavListWithAvatars from 'components/NavListWithAvatars';
 import PreLoading from 'components/PreLoading';
 import Title from 'components/Title';
-import { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useMemo } from 'react';
 import { defaultErrorEnqueue } from 'utils/errorProcessor';
 import {
   useDocumentTitle,
-  useLoadingActionThunk,
   useMySnackbar,
   useNumberSearchState,
   useParamSelector,
@@ -68,16 +61,10 @@ const HeadmanCourseSelectorPage = () => {
       courses?.map((c) => ({
         id: c.id,
         name: c.name,
-        link: `/courses/${c.id}`,
+        link: `/headman/${c.id}/attendance`,
         avatar: getFirstCapitalSymbols(c.name, 2),
       })),
     [courses]
-  );
-
-  const navigate = useNavigate();
-  const handleAddClick = useCallback(
-    () => navigate('/courses/create'),
-    [navigate]
   );
 
   return (
@@ -90,9 +77,6 @@ const HeadmanCourseSelectorPage = () => {
               <Grid container justifyContent="space-between" spacing={2}>
                 <Grid item>
                   <Title>Курсы</Title>
-                </Grid>
-                <Grid item>
-                  <AddButton onClick={handleAddClick} />
                 </Grid>
               </Grid>
               <NavListWithAvatars items={items} />

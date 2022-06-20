@@ -114,6 +114,9 @@ const App = () => (
                 }
               >
                 <Route index element={<HeadmanCourseSelectorPage />} />
+                <Route path=":courseId">
+                  <Route path="attendance" element={<AttendanceJournal />} />
+                </Route>
               </Route>
 
               <Route path="settings" element={<SettingsPage />} />
