@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -14,7 +13,6 @@ import {
   AttendanceTableType,
 } from 'models/attendance';
 import * as fns from 'date-fns';
-import { useMemo } from 'react';
 import { StudentId } from 'models/student';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -22,6 +20,9 @@ import AddButton from 'components/buttons/AddButton';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import SelectCell from 'components/SelectCell';
+import { Box } from '@mui/system';
+import { useMemo } from 'react';
+import CustomDay from 'components/CustomDay';
 
 interface AttendanceTableProps {
   table: AttendanceTableDto;
@@ -38,6 +39,8 @@ interface AttendanceTableProps {
   onAddClick: () => void;
   conflicts: AttendanceTableConflict[];
   onSaveButtonClick: () => void;
+  onChangeWeek: (date: string) => void;
+  date: Date;
 }
 
 const dayOfWeekParser = {
@@ -76,6 +79,8 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
   onAddClick,
   conflicts,
   onSaveButtonClick,
+  onChangeWeek,
+  date,
 }) => {
   const splitCoursesByDates = useMemo<SplitedTableHeaderElement[]>(() => {
     const header = table.header;
@@ -117,6 +122,10 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 
   const handleLastPageClick = () => {
     onPageChange(count);
+  };
+
+  const handleChangeWeek = (date: Date) => {
+    onChangeWeek(fns.format(date, 'yyyy-MM-dd'));
   };
 
   const handleAlertConflict = (
@@ -247,6 +256,32 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
         >
           Сохранить изменения
         </RightMarginedButton>
+        <CustomDay
+          date={date}
+          onChange={handleChangeWeek}
+          mask=""
+          renderInput={({ inputRef, inputProps, InputProps }) => (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                marginRight: '20px',
+              }}
+            >
+              <input
+                ref={inputRef}
+                {...inputProps}
+                onChange={() => null}
+                style={{
+                  zIndex: Number.MIN_SAFE_INTEGER,
+                  width: '0',
+                  height: '50px',
+                }}
+              />
+              {InputProps?.endAdornment}
+            </Box>
+          )}
+        />
         <CenteredTextDiv>
           {page} из {count}
         </CenteredTextDiv>

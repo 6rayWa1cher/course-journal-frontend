@@ -149,7 +149,7 @@ const AttendanceJournal = () => {
     { weekStartsOn: 1 }
   );
 
-  const [date, setFromDate] = useState(
+  const [date, setDate] = useState(
     fns.startOfWeek(Date.now(), { weekStartsOn: 1 })
   );
 
@@ -255,7 +255,7 @@ const AttendanceJournal = () => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     const newDate = fns.addDays(firstSeptemberStartWeek, newPage * 7);
-    setFromDate(newDate);
+    setDate(newDate);
   };
 
   const handleAddAttendanceToStudent = (attendanceType: string) => {
@@ -283,7 +283,7 @@ const AttendanceJournal = () => {
   ) => {
     setTable((prev) => {
       const newTable = { ...prev };
-      if (fns.isAfter(Date.now(), Date.parse(date))) {
+      if (fns.isAfter(Date.parse(date), Date.now())) {
         alert('Нельзя изменять будущую посещаемость.');
         return newTable;
       }
@@ -307,6 +307,12 @@ const AttendanceJournal = () => {
       }
       let indexToPush = newTable.header.length;
       while (indexToPush !== -1) {
+        if (indexToPush === 0) {
+          newTable.header.unshift(newTableHeader);
+          newTable.body.forEach((element) => {
+            element.attendances.unshift(null);
+          });
+        }
         if (date > newTable.header[indexToPush - 1].date) {
           newTable.header.splice(indexToPush, 0, newTableHeader);
           setCurrentAttendanceIndexInModal(indexToPush);
@@ -366,6 +372,12 @@ const AttendanceJournal = () => {
     setIsSetStudentAttendancesModalOpened(false);
   };
 
+  const handleChangeWeek = (date: string) => {
+    setDate(
+      fns.startOfWeek(date ? Date.parse(date) : Date.now(), { weekStartsOn: 1 })
+    );
+  };
+
   return (
     <>
       <PreLoading action={loadingAction}>
@@ -380,6 +392,8 @@ const AttendanceJournal = () => {
           onAddClick={handleOpenNewDayModal}
           conflicts={conflictsDto.conflicts}
           onSaveButtonClick={handleSaveTable}
+          onChangeWeek={handleChangeWeek}
+          date={date}
         />
         <SetStudentsAttendancesModal
           isSetStudentAttendancesModalOpened={isAddModalOpened}
