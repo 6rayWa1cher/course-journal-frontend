@@ -1,6 +1,8 @@
 import { Button, Modal, Typography, styled } from '@mui/material';
 import { Box } from '@mui/system';
-import AttendanceTimeForm from 'components/forms/AttendanceTimeForm';
+import AttendanceTimeForm, {
+  AttendanceTimeFormProps,
+} from 'components/forms/AttendanceTimeForm';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
 import { CreateDateClassNumberAttendance } from 'validation/yup/attendance';
 
@@ -10,6 +12,7 @@ interface AddNewAttendanceModalProps {
   style: object;
   methods: UseFormReturn<CreateDateClassNumberAttendance, any>;
   onSubmit: (data: CreateDateClassNumberAttendance) => void;
+  attendanceTimeFormProps?: AttendanceTimeFormProps;
 }
 
 const AddNewAttendanceModal = ({
@@ -18,6 +21,7 @@ const AddNewAttendanceModal = ({
   style,
   methods,
   onSubmit,
+  attendanceTimeFormProps = {},
 }: AddNewAttendanceModalProps) => {
   const TopMarginedButton = styled(Button)`
     margin-top: 20px;
@@ -37,7 +41,7 @@ const AddNewAttendanceModal = ({
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Выберите пару и введите дату
             </Typography>
-            <AttendanceTimeForm />
+            <AttendanceTimeForm {...attendanceTimeFormProps} />
             <TopMarginedButton variant="outlined" color="info" type="submit">
               Выбрать
             </TopMarginedButton>

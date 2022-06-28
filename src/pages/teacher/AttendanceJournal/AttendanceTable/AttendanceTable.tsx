@@ -108,6 +108,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
     });
     return splitedHeader;
   }, [table]);
+
   const handleFirstPageClick = () => {
     onPageChange(0);
   };
@@ -124,8 +125,8 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
     onPageChange(count);
   };
 
-  const handleChangeWeek = (date: Date) => {
-    onChangeWeek(fns.format(date, 'yyyy-MM-dd'));
+  const handleChangeWeek = (date: Date | null) => {
+    onChangeWeek(fns.format(date ?? Date.now(), 'yyyy-MM-dd'));
   };
 
   const handleAlertConflict = (
@@ -241,6 +242,12 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
                           conflict.studentId === body.studentId
                       ) !== undefined
                     }
+                    blocked={!fns.isSameWeek(Date.now(), date)}
+                    selectList={[
+                      AttendanceTableType.SERIOUS_REASON,
+                      AttendanceTableType.ATTENDED,
+                      AttendanceTableType.null,
+                    ]}
                   />
                 );
               })}
@@ -258,8 +265,10 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
         </RightMarginedButton>
         <CustomDay
           date={date}
+          value={date}
           onChange={handleChangeWeek}
           mask=""
+          shouldDisableDate={(date: Date) => fns.isFuture(date)}
           renderInput={({ inputRef, inputProps, InputProps }) => (
             <Box
               sx={{
@@ -299,13 +308,13 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
         </RightMarginedButton>
         <RightMarginedButton
           onClick={handleNextPageClick}
-          disabled={count === page}
+          disabled={count === page || fns.isFuture(fns.addDays(date, 7))}
         >
           <ArrowForwardIcon />
         </RightMarginedButton>
         <RightMarginedButton
           onClick={handleLastPageClick}
-          disabled={count === page}
+          disabled={count === page || fns.isFuture(fns.addDays(date, 7))}
         >
           <KeyboardDoubleArrowRightIcon />
         </RightMarginedButton>

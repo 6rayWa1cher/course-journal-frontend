@@ -1,6 +1,4 @@
-import { getCourseByIdWithItsStudentsThunk } from '@redux/courses';
-import PreLoading from 'components/PreLoading';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLoadingActionThunk, useTypedSelector } from 'utils/hooks';
 import AttendanceTable from './AttendanceTable';
@@ -35,6 +33,8 @@ import { useForm } from 'react-hook-form';
 import { UserRole } from 'models/authUser';
 import { selfAuthUserSelector } from '@redux/authUsers';
 import { selfGroupSelector } from '@redux/selector';
+import { getCourseByIdThunk } from '@redux/courses';
+import PreLoading from 'components/PreLoading';
 
 async function getAttendanceTableByCourse({
   courseId,
@@ -133,16 +133,11 @@ const AttendanceJournal = () => {
   });
 
   const courseId = Number(params.courseId);
-  const groupId = useTypedSelector(selfGroupSelector)?.id as number;
-
-  const thunk = useCallback(
-    () => getCourseByIdWithItsStudentsThunk({ courseId }),
-    [courseId]
-  );
-
-  const loadingAction = useLoadingActionThunk(thunk);
-
+  const groupId = useRef<number>(useTypedSelector(selfGroupSelector) as number);
   const dispatch = useAppDispatch();
+
+  const thunk = useCallback(() => getCourseByIdThunk({ courseId }), [courseId]);
+  const loadingAction = useLoadingActionThunk(thunk);
 
   const firstSeptemberStartWeek = fns.startOfWeek(
     new Date(new Date(Date.now()).getFullYear() - 1, 8, 1),
@@ -200,10 +195,9 @@ const AttendanceJournal = () => {
         setConflictsDto(value);
       });
     } else if (role === UserRole.HEADMAN) {
-      console.log(groupId);
       getAttendanceTableByCourseAndGroup({
         courseId,
-        groupId,
+        groupId: groupId.current,
         fromDate,
         toDate,
       }).then((value) => {
@@ -211,14 +205,14 @@ const AttendanceJournal = () => {
       });
       getAttendanceTableConflictsByCourseAndGroup({
         courseId,
-        groupId,
+        groupId: groupId.current,
         fromDate,
         toDate,
       }).then((value) => {
         setConflictsDto(value);
       });
     }
-  }, [courseId, fromDate, toDate]);
+  }, [courseId, fromDate, toDate, role]);
 
   const handleChangeAttendanceInTable = (
     studentId: StudentId,
@@ -253,8 +247,12 @@ const AttendanceJournal = () => {
   };
 
   const handlePageChange = (newPage: number) => {
+    let newDate = fns.addDays(firstSeptemberStartWeek, newPage * 7);
+    if (fns.isFuture(newDate)) {
+      newDate = fns.startOfWeek(Date.now(), { weekStartsOn: 1 });
+      newPage = fns.differenceInCalendarWeeks(newDate, firstSeptemberStartWeek);
+    }
     setPage(newPage);
-    const newDate = fns.addDays(firstSeptemberStartWeek, newPage * 7);
     setDate(newDate);
   };
 
@@ -289,8 +287,9 @@ const AttendanceJournal = () => {
       }
       if (
         role === UserRole.HEADMAN &&
-        fns.isSameWeek(Date.parse(date), Date.now())
+        !fns.isSameWeek(Date.parse(date), Date.now())
       ) {
+        console.log(fns.isSameWeek(Date.parse(date), Date.now()));
         alert('Староста не может изменять посещаемость за предыдущие недели.');
         return newTable;
       }
@@ -303,6 +302,7 @@ const AttendanceJournal = () => {
         newTable.body.forEach((element) => {
           element.attendances.push(null);
         });
+        handleOpenAddModal(0);
         return newTable;
       }
       let indexToPush = newTable.header.length;
@@ -315,7 +315,7 @@ const AttendanceJournal = () => {
         }
         if (date > newTable.header[indexToPush - 1].date) {
           newTable.header.splice(indexToPush, 0, newTableHeader);
-          setCurrentAttendanceIndexInModal(indexToPush);
+          handleOpenAddModal(indexToPush);
           break;
         } else if (date === newTable.header[indexToPush - 1].date) {
           while (classNumber < newTable.header[indexToPush - 1].classNumber) {
@@ -331,7 +331,7 @@ const AttendanceJournal = () => {
             return newTable;
           } else {
             newTable.header.splice(indexToPush, 0, newTableHeader);
-            setCurrentAttendanceIndexInModal(indexToPush);
+            handleOpenAddModal(indexToPush);
             break;
           }
         }
@@ -344,7 +344,8 @@ const AttendanceJournal = () => {
     });
   };
 
-  const handleOpenAddModal = () => {
+  const handleOpenAddModal = (indexToPush: number) => {
+    setCurrentAttendanceIndexInModal(indexToPush);
     setIsSetStudentAttendancesModalOpened(true);
   };
 
@@ -363,7 +364,6 @@ const AttendanceJournal = () => {
       fns.format(date, 'yyyy-MM-dd')
     );
     setIsAddNewAttendanceModalOpened(false);
-    handleOpenAddModal();
   };
 
   const handleCloseAddModal = () => {
@@ -376,6 +376,17 @@ const AttendanceJournal = () => {
     setDate(
       fns.startOfWeek(date ? Date.parse(date) : Date.now(), { weekStartsOn: 1 })
     );
+  };
+
+  const checkWhichDatesIsDisabledToAddNewAttendance = (date: Date) => {
+    if (role === UserRole.HEADMAN) {
+      return (
+        fns.isFuture(date) ||
+        !fns.isSameWeek(date, Date.now(), { weekStartsOn: 1 })
+      );
+    } else {
+      return fns.isFuture(date);
+    }
   };
 
   return (
@@ -405,6 +416,9 @@ const AttendanceJournal = () => {
           }
         />
         <AddNewAttendanceModal
+          attendanceTimeFormProps={{
+            shouldDisableDate: checkWhichDatesIsDisabledToAddNewAttendance,
+          }}
           isAddNewAttendanceModalOpened={isAddNewAttendanceModalOpened}
           onClose={() => setIsAddNewAttendanceModalOpened(false)}
           style={style}

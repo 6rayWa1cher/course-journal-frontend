@@ -15,10 +15,10 @@ export const BackToAttendanceType: Record<string, AttendanceType | null> = {
 
 export const AttendanceTableType: Record<string, string> = {
   SERIOUS_REASON: 'У',
-  ATTENDED: 'П',
-  null: 'О',
-  О: 'ABSEND',
-  П: 'ATTENDED',
+  ATTENDED: '+',
+  null: '',
+  '': 'ABSEND',
+  '+': 'ATTENDED',
   У: 'SERIOUS_REASON',
 };
 

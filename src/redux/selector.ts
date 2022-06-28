@@ -52,7 +52,7 @@ export const selfGroupSelector = createSelector(
     const studentId = authUser?.student;
     const student =
       studentId != undefined ? students.entities[studentId] : null;
-    return student != null ? groups.entities[student.group] : null;
+    return student != null ? student.group : null;
   }
 );
 

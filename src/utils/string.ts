@@ -38,7 +38,3 @@ export const getFullName = ({
   middleName != null
     ? `${lastName} ${firstName} ${middleName}`
     : `${lastName} ${firstName}`;
-
-export const dateToLocalDateString = (date: Date) => {
-  console.log(date.getDate);
-};

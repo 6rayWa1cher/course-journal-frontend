@@ -19,6 +19,7 @@ const localizationTable: Record<string, string | null> = {
   attendance: 'Посещаемость',
   submissions: 'Оценки',
   tasks: 'Задания',
+  headman: 'Староста',
   ct: null,
 };
 

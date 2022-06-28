@@ -5,7 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import * as fns from 'date-fns';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 
 type CustomPickerDayProps = PickersDayProps<Date> & {
   dayIsBetween: boolean;
@@ -13,13 +13,14 @@ type CustomPickerDayProps = PickersDayProps<Date> & {
   isLastDay: boolean;
 };
 
-type CustomDayProps = {
+type CustomDayProps = DatePickerProps<Date, Date> & {
   date: Date;
   onChange: (date: Date) => void;
   renderInput: (
     props: TextFieldProps
   ) => React.ReactElement<any, string | React.JSXElementConstructor<any>>;
   mask: string;
+  shouldDisableDate: (date: Date) => boolean;
 };
 
 const CustomPickersDay = styled(PickersDay, {
@@ -44,7 +45,12 @@ const CustomPickersDay = styled(PickersDay, {
   }),
 })) as React.ComponentType<CustomPickerDayProps>;
 
-const CustomDay = ({ date, onChange, renderInput, mask }: CustomDayProps) => {
+const CustomDay = ({
+  date,
+  onChange,
+  renderInput,
+  ...other
+}: CustomDayProps) => {
   const renderWeekPickerDay = (
     day: Date,
     selectedDates: Array<Date | null>,
@@ -79,11 +85,10 @@ const CustomDay = ({ date, onChange, renderInput, mask }: CustomDayProps) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
-        value={date}
         onChange={handleChange}
         renderDay={renderWeekPickerDay}
         renderInput={renderInput}
-        mask={mask}
+        {...other}
       />
     </LocalizationProvider>
   );

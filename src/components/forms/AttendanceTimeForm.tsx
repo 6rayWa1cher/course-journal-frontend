@@ -4,7 +4,13 @@ import FormTextField from 'components/FormTextField';
 import { useFormContext } from 'react-hook-form';
 import { CreateDateClassNumberAttendance } from 'validation/yup/attendance';
 
-const AttendanceTimeForm = () => {
+export type AttendanceTimeFormProps = {
+  shouldDisableDate?: (date: Date) => boolean;
+};
+
+const AttendanceTimeForm = ({
+  shouldDisableDate = () => false,
+}: AttendanceTimeFormProps) => {
   const { control } = useFormContext<CreateDateClassNumberAttendance>();
 
   return (
@@ -33,6 +39,9 @@ const AttendanceTimeForm = () => {
             control={control}
             required
             fullWidth
+            datePickerProps={{
+              shouldDisableDate: shouldDisableDate,
+            }}
           />
         </Grid>
       </Grid>

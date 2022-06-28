@@ -14,13 +14,9 @@ interface SelectCellProps {
   value: string;
   disabled: boolean;
   handleAlertConflict: () => void;
+  blocked: boolean;
+  selectList: string[];
 }
-
-const selectList = [
-  AttendanceTableType.SERIOUS_REASON,
-  AttendanceTableType.ATTENDED,
-  AttendanceTableType.null,
-];
 
 const sx = { padding: '0px' };
 
@@ -29,6 +25,12 @@ const SelectCell: React.FC<SelectCellProps> = ({
   value,
   disabled,
   handleAlertConflict,
+  blocked,
+  selectList = [
+    AttendanceTableType.SERIOUS_REASON,
+    AttendanceTableType.ATTENDED,
+    AttendanceTableType.null,
+  ],
 }) => {
   const handleChange = (e: SelectChangeEvent<string>) => {
     handleAdditionChange(AttendanceTableType[e.target.value]);
@@ -68,7 +70,7 @@ const SelectCell: React.FC<SelectCellProps> = ({
           onChange={handleChange}
           value={disabled ? '' : value}
           displayEmpty={disabled}
-          disabled={disabled}
+          disabled={blocked}
         >
           {selectList.map((select, index) => (
             <MenuItem value={select} key={index}>
