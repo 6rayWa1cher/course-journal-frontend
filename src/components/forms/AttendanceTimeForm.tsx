@@ -1,3 +1,4 @@
+import { DatePickerProps } from '@mui/lab';
 import { Grid } from '@mui/material';
 import FormDatePicker from 'components/FormDatePicker';
 import FormTextField from 'components/FormTextField';
@@ -5,11 +6,11 @@ import { useFormContext } from 'react-hook-form';
 import { CreateDateClassNumberAttendance } from 'validation/yup/attendance';
 
 export type AttendanceTimeFormProps = {
-  shouldDisableDate?: (date: Date) => boolean;
+  datePickerProps?: Partial<DatePickerProps<Date>>;
 };
 
 const AttendanceTimeForm = ({
-  shouldDisableDate = () => false,
+  datePickerProps = {},
 }: AttendanceTimeFormProps) => {
   const { control } = useFormContext<CreateDateClassNumberAttendance>();
 
@@ -39,9 +40,7 @@ const AttendanceTimeForm = ({
             control={control}
             required
             fullWidth
-            datePickerProps={{
-              shouldDisableDate: shouldDisableDate,
-            }}
+            datePickerProps={datePickerProps}
           />
         </Grid>
       </Grid>

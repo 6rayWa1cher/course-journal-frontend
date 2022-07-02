@@ -26,7 +26,7 @@ import {
   createDateClassNumberAttendance,
 } from 'validation/yup/attendance';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getClassNumberByTime } from 'utils/date';
+import { getClassNumberByTime, getFirstSeptemberDate } from 'utils/date';
 import SetStudentsAttendancesModal from 'components/modals/SetStudentsAttendancesModal';
 import AddNewAttendanceModal from 'components/modals/AddNewAttendanceModal';
 import { useForm } from 'react-hook-form';
@@ -74,7 +74,7 @@ async function getAttendanceTableConflictsByCourse({
   }
 }
 
-async function getAttendanceTableByCourseAndGroup({
+async function getAttendanceTableAsHeadman({
   courseId,
   groupId,
   fromDate,
@@ -95,7 +95,7 @@ async function getAttendanceTableByCourseAndGroup({
   }
 }
 
-async function getAttendanceTableConflictsByCourseAndGroup({
+async function getAttendanceTableConflictsAsHeadman({
   courseId,
   groupId,
   fromDate,
@@ -140,7 +140,7 @@ const AttendanceJournal = () => {
   const loadingAction = useLoadingActionThunk(thunk);
 
   const firstSeptemberStartWeek = fns.startOfWeek(
-    new Date(new Date(Date.now()).getFullYear() - 1, 8, 1),
+    getFirstSeptemberDate(new Date(Date.now())),
     { weekStartsOn: 1 }
   );
 
@@ -195,7 +195,7 @@ const AttendanceJournal = () => {
         setConflictsDto(value);
       });
     } else if (role === UserRole.HEADMAN) {
-      getAttendanceTableByCourseAndGroup({
+      getAttendanceTableAsHeadman({
         courseId,
         groupId: groupId.current,
         fromDate,
@@ -203,7 +203,7 @@ const AttendanceJournal = () => {
       }).then((value) => {
         setTable(value);
       });
-      getAttendanceTableConflictsByCourseAndGroup({
+      getAttendanceTableConflictsAsHeadman({
         courseId,
         groupId: groupId.current,
         fromDate,
@@ -373,19 +373,24 @@ const AttendanceJournal = () => {
   };
 
   const handleChangeWeek = (date: string) => {
+    setPage(fns.differenceInWeeks(Date.parse(date), firstSeptemberStartWeek));
     setDate(
       fns.startOfWeek(date ? Date.parse(date) : Date.now(), { weekStartsOn: 1 })
     );
   };
 
   const checkWhichDatesIsDisabledToAddNewAttendance = (date: Date) => {
+    const dateNow = new Date(Date.now());
     if (role === UserRole.HEADMAN) {
       return (
         fns.isFuture(date) ||
-        !fns.isSameWeek(date, Date.now(), { weekStartsOn: 1 })
+        !fns.isSameWeek(date, dateNow, { weekStartsOn: 1 })
       );
     } else {
-      return fns.isFuture(date);
+      return fns.isBefore(
+        date,
+        getFirstSeptemberDate(dateNow) || fns.isFuture(date)
+      );
     }
   };
 
@@ -416,8 +421,9 @@ const AttendanceJournal = () => {
           }
         />
         <AddNewAttendanceModal
-          attendanceTimeFormProps={{
+          datePickerProps={{
             shouldDisableDate: checkWhichDatesIsDisabledToAddNewAttendance,
+            views: ['day'],
           }}
           isAddNewAttendanceModalOpened={isAddNewAttendanceModalOpened}
           onClose={() => setIsAddNewAttendanceModalOpened(false)}

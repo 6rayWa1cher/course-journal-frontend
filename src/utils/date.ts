@@ -10,7 +10,18 @@ export const formatRuDateTime = (dateString: string) =>
 export const parseRuDateTime = (dateString: string) =>
   parse(dateString, 'dd.MM.yyyy HH:mm', new Date(), { locale: ru });
 
-export const getClassNumberByTime = (hours: number, minutes: number) => {
+export const getFirstSeptemberDate = (date: Date): Date => {
+  return new Date(
+    date.getMonth() > 8 ? date.getFullYear() : date.getFullYear() - 1,
+    8,
+    1
+  );
+};
+
+export const getClassNumberByTime = (
+  hours: number,
+  minutes: number
+): number => {
   const classStarts = [
     [8, 30],
     [10, 15],

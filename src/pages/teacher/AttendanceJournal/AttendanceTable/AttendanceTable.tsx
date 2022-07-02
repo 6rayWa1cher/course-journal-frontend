@@ -21,8 +21,9 @@ import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import SelectCell from 'components/SelectCell';
 import { Box } from '@mui/system';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import CustomDay from 'components/CustomDay';
+import { getFirstSeptemberDate } from 'utils/date';
 
 interface AttendanceTableProps {
   table: AttendanceTableDto;
@@ -82,6 +83,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
   onChangeWeek,
   date,
 }) => {
+  const [pickDateValue, setPickDateValue] = useState(date);
   const splitCoursesByDates = useMemo<SplitedTableHeaderElement[]>(() => {
     const header = table.header;
     if (header.length === 0) {
@@ -127,6 +129,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 
   const handleChangeWeek = (date: Date | null) => {
     onChangeWeek(fns.format(date ?? Date.now(), 'yyyy-MM-dd'));
+    setPickDateValue(date ?? new Date(Date.now()));
   };
 
   const handleAlertConflict = (
@@ -265,10 +268,14 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
         </RightMarginedButton>
         <CustomDay
           date={date}
-          value={date}
+          value={pickDateValue}
           onChange={handleChangeWeek}
+          views={['day']}
           mask=""
-          shouldDisableDate={(date: Date) => fns.isFuture(date)}
+          shouldDisableDate={(date: Date) =>
+            fns.isFuture(date) ||
+            fns.isBefore(date, getFirstSeptemberDate(new Date(Date.now())))
+          }
           renderInput={({ inputRef, inputProps, InputProps }) => (
             <Box
               sx={{
